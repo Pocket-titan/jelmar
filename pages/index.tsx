@@ -112,14 +112,14 @@ const Arrow = (props: SVGAttributes<SVGElement>) => (
     {...props}
   >
     <g
-      stroke-width="10"
+      strokeWidth="10"
       stroke="var(--color-gray-400)"
       fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       // transform="matrix(-0.5150380749100543,0.8571673007021123,-0.8571673007021123,-0.5150380749100543,785.8821502448666,263.14830968317676)"
     >
-      <path d="M 1209 0 Q 693 702 450 400.6022" marker-end="url(#SvgjsMarker1999)"></path>
+      <path d="M 1209 0 Q 693 702 450 400.6022" markerEnd="url(#SvgjsMarker1999)"></path>
     </g>
     <defs>
       <marker
@@ -134,11 +134,11 @@ const Arrow = (props: SVGAttributes<SVGElement>) => (
         <polyline
           points="0,3.5 3.5,1.75 0,0"
           fill="none"
-          stroke-width="1.1666666666666667"
+          strokeWidth="1.1666666666666667"
           stroke="var(--color-gray-400)"
-          stroke-linecap="round"
+          strokeLinecap="round"
           transform="matrix(1,0,0,1,1.1666666666666667,1.75)"
-          stroke-linejoin="round"
+          strokeLinejoin="round"
         ></polyline>
       </marker>
     </defs>
@@ -261,7 +261,7 @@ const Home = () => {
               }}
             >
               <path
-                fill-opacity="1"
+                fillOpacity="1"
                 d={
                   "M 0 26.7 L 90 37.4 C 180 47.7 360 69.7 540 58.7 C 720 47.7 900 5.7 1080 0 C 1260 -5.3 1440 26.7 1620 48 C 1800 69.7 1980 79.7 2070 85.4 L 2160 90.7 L 2160 100 L 2070 100 C 1980 100 1800 100 1620 100 C 1440 100 1260 100 1080 100 C 900 100 720 100 540 100 C 360 100 180 100 90 100 L 0 100 Z"
                 }

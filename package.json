@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "yarn run build-script; next dev",
+    "build": "yarn run build-script; next build",
     "start": "next start",
     "lint": "next lint",
     "build-script": "cd ts/script && webpack && mv script.js ../../public/script.js"

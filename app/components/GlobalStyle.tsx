@@ -1,7 +1,6 @@
 import { css, Global } from "@emotion/react";
 import { TRANSITION_DURATION, VARIABLES } from "@ts/theme";
 import { keysToVariables } from "@ts/utils";
-import { useConfig } from "./ConfigProvider";
 
 const styles = css`
 /* Font */
@@ -64,6 +63,11 @@ ul {
 }
 
 /* Custom */
+html {
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
 body {
   color: var(--color-text);
   background: var(--color-background);
@@ -140,6 +144,11 @@ button {
 code {
   font-family: var(--font-monospace), monospace !important;
   font-weight: 450 !important;
+}
+
+/* Math */
+mtable {
+  display: block;
 }
 `;
 

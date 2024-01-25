@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import theme from "@ts/theme";
 import ConfigProvider from "@app/components/ConfigProvider";
 import GlobalStyle from "@components/GlobalStyle";
+import "./global.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
