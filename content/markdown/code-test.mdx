@@ -1,0 +1,91 @@
+---
+date: 2023-10-19
+title: code test
+---
+
+# Code Test
+
+JSX:
+
+```jsx
+import React from 'react';
+
+async function test() {
+  console.log('test');
+}
+
+const App = () => {
+  return (
+    <div>
+      <h1>Code Test</h1>
+    </div>
+  );
+};
+```
+
+TSX:
+
+```tsx
+import React from 'react';
+
+type Thing = {
+  [key: string]: string;
+}
+
+async function test(props: Thing) {
+  console.log('test');
+} satisfies Thing;
+
+const App = () => {
+  return (
+    <div>
+      <h1>Code Test</h1>
+    </div>
+  );
+};
+```
+
+Python:
+
+```python
+import numpy as np
+import os
+
+x = np.array([1, 2, 3])
+
+def test(dir: str, obj: dict):
+  print('test')
+  return 0
+
+
+class Test(dict):
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self['test'] = 'test'
+
+  @property
+  def test(self):
+    return self['test']
+```
+
+Rust:
+
+```rust
+use std::collections::HashMap;
+
+struct Test {
+  test: String,
+}
+
+impl Test {
+  fn new() -> Self {
+    Self {
+      test: String::from("test"),
+    }
+  }
+}
+
+fn main() {
+  println!("Hello, world!");
+}
+```
