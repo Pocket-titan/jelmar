@@ -18,10 +18,8 @@
     "@react-spring/web": "^9.7.3",
     "codemirror": "^6.0.1",
     "dedent": "^1.5.1",
-    "esbuild": "^0.19.12",
     "front-matter": "^4.0.2",
     "lodash": "^4.17.21",
-    "mdx-bundler": "^10.0.1",
     "next": "14.0.4",
     "next-mdx-remote": "^4.4.1",
     "react": "^18",
@@ -31,7 +29,7 @@
     "sharp": "^0.33.2",
     "styled-components": "^6.1.8",
     "temml": "^0.10.21",
-    "terser": "^5.27.0"
+    "raw-loader": "^4.0.2"
   },
   "devDependencies": {
     "@michijs/htmltype": "^0.2.9",
@@ -40,7 +38,6 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "raw-loader": "^4.0.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5",
     "webpack": "^5.89.0",

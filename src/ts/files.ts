@@ -57,7 +57,6 @@ async function readMarkdownFile(file: string) {
 
   const mdx = await serialize<Record<string, unknown>, Frontmatter>(source, {
     parseFrontmatter: true,
-
     mdxOptions: {
       remarkPlugins: [remarkMath],
     },

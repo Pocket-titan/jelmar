@@ -44,8 +44,6 @@ const DarkModeToggle = ({
 } & HTMLAttributes<HTMLDivElement>) => {
   const { colorMode, setColorMode } = useConfig();
 
-  console.log(`colorMode`, colorMode);
-
   const isDark = colorMode === "dark";
 
   const svgSpring = useSpring({

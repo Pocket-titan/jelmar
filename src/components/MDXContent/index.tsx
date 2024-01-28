@@ -43,12 +43,12 @@ const components: MDXRemoteProps["components"] = {
 
     return <div {...props}> {children}</div>;
   },
-  span: ({ children, ...props }) => {
+  span: ({ ...props }) => {
     if (props.className && props.className.includes("math-inline")) {
-      return <Math inline>{children}</Math>;
+      return <Math inline>{props.children}</Math>;
     }
 
-    return <span {...props}> {children}</span>;
+    return <span {...props} />;
   },
 };
 
