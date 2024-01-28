@@ -27,9 +27,9 @@ const ContentWrapper = styled(MaxWidthWrapper)`
   max-width: 1100px;
 `;
 
-const Article = styled.article<{ toc: boolean }>`
-  flex: 1 1 ${(p) => (p.toc ? "800px" : "100%")};
-  max-width: min(${(p) => (p.toc ? "800px" : "100%")}, 100%);
+const Article = styled.article<{ $toc: boolean }>`
+  flex: 1 1 ${(p) => (p.$toc ? "800px" : "100%")};
+  max-width: min(${(p) => (p.$toc ? "800px" : "100%")}, 100%);
 `;
 
 const Sidebar = styled.aside`
@@ -129,7 +129,7 @@ const ArticleLayout = ({
               <TableOfContents headings={headings} />
             </Sidebar>
           )}
-          <Article toc={toc}>{children}</Article>
+          <Article $toc={toc}>{children}</Article>
         </ContentWrapper>
         {/* End content */}
       </Main>

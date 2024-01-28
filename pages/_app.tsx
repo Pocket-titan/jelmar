@@ -16,12 +16,14 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
-    <ThemeProvider theme={theme}>
-      <ConfigProvider>
-        <Component {...pageProps} />
-        <GlobalStyle />
-      </ConfigProvider>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <ConfigProvider>
+          <GlobalStyle />
+          <Component {...pageProps} />
+        </ConfigProvider>
+      </ThemeProvider>
+    </>
   );
 };
 

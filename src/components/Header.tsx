@@ -52,29 +52,29 @@ const Left = styled.div`
   justify-content: flex-start;
 `;
 
-const Center = styled.div<{ platform: "mobile" | "desktop" }>`
+const Center = styled.div<{ $platform: "mobile" | "desktop" }>`
   flex: 1;
   display: flex;
   justify-content: center;
 
-  ${({ platform, theme }) =>
-    (platform === "mobile" || platform === "desktop") &&
+  ${({ $platform, theme }) =>
+    ($platform === "mobile" || $platform === "desktop") &&
     `
-    @media ${platform === "mobile" ? theme.breakpoints.desktop : theme.breakpoints.mobile} {
+    @media ${$platform === "mobile" ? theme.breakpoints.desktop : theme.breakpoints.mobile} {
       display: none;
     }
   `}
 `;
 
-const Right = styled.div<{ platform: "mobile" | "desktop" }>`
+const Right = styled.div<{ $platform: "mobile" | "desktop" }>`
   flex: 1;
   display: flex;
   justify-content: flex-end;
 
-  ${({ platform, theme }) =>
-    (platform === "mobile" || platform === "desktop") &&
+  ${({ $platform, theme }) =>
+    ($platform === "mobile" || $platform === "desktop") &&
     `
-    @media ${platform === "mobile" ? theme.breakpoints.desktop : theme.breakpoints.mobile} {
+    @media ${$platform === "mobile" ? theme.breakpoints.desktop : theme.breakpoints.mobile} {
       display: none;
     }
   `}
@@ -100,15 +100,15 @@ const Header = () => {
         </NextLink>
       </Left>
 
-      <Center platform="desktop">
+      <Center $platform="desktop">
         <Nav links={links} />
       </Center>
 
-      <Right platform="desktop">
+      <Right $platform="desktop">
         <DarkModeToggle />
       </Right>
 
-      <Right platform="mobile">
+      <Right $platform="mobile">
         <Portal id="mobile-nav">
           <MobileNav links={links} />
         </Portal>

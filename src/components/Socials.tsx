@@ -14,7 +14,7 @@ const XLogo = (props: SVGAttributes<SVGElement>) => (
   </svg>
 );
 
-const Wrapper = styled.div<{ color: string; hoverColor: string }>`
+const Wrapper = styled.div<{ $color: string; $hoverColor: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,11 +22,11 @@ const Wrapper = styled.div<{ color: string; hoverColor: string }>`
 
   svg {
     transition: fill 200ms ease 0s;
-    fill: ${(p) => p.color};
+    fill: ${(p) => p.$color};
   }
 
   svg:hover {
-    fill: ${(p) => p.hoverColor};
+    fill: ${(p) => p.$hoverColor};
   }
 `;
 
@@ -54,7 +54,7 @@ const Socials = ({
   style?: CSSProperties;
 }>) => {
   return (
-    <Wrapper style={style} color={color} hoverColor={hoverColor}>
+    <Wrapper style={style} $color={color} $hoverColor={hoverColor}>
       {socials.map(({ icon: Icon, url, alt }) => (
         <SocialLink href={url} title={alt} key={alt}>
           <Icon aria-label={alt} />

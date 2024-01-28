@@ -8,33 +8,6 @@ import { BREAKPOINTS } from "src/ts/theme";
 import { roundTo } from "src/ts/utils";
 import Button from "src/components/Button";
 
-// const Button = styled.button`
-//   display: block;
-//   margin: 0;
-//   padding: 4px;
-//   border: none;
-//   background: transparent;
-//   cursor: pointer;
-//   text-align: left;
-//   font: inherit;
-
-//   opacity: 0.8;
-//   border-radius: 5px;
-
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-
-//   &:focus {
-//     outline: 2px auto var(--primary)
-//     outline-offset: 2px;
-//   }
-
-//   &:focus:not(.focus-visible) {
-//     outline: none;
-//   }
-// `;
-
 const Wrapper = styled(Button)`
   opacity: 0.7;
   position: relative;
@@ -70,6 +43,8 @@ const DarkModeToggle = ({
   prefersReducedMotion?: boolean;
 } & HTMLAttributes<HTMLDivElement>) => {
   const { colorMode, setColorMode } = useConfig();
+
+  console.log(`colorMode`, colorMode);
 
   const isDark = colorMode === "dark";
 

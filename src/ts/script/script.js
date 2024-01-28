@@ -170,7 +170,7 @@ var VARIABLES = {
     },
 };
 var TRANSITION_DURATION = 350;
-var THEME_KEY = "prefers-dark";
+var THEME_KEY = "theme";
 var THEME_CSS_PROP = "--".concat(THEME_KEY);
 var BREAKPOINT_SIZES = {
     xs: 320,
@@ -309,8 +309,8 @@ var roundTo = function (number, places) {
 ;// CONCATENATED MODULE: ./script.ts
 
 
-function setInitialPrefersDark() {
-    function getInitialPrefersDark() {
+function setInitialColorMode() {
+    function getInitialColorMode() {
         var preference = window.localStorage.getItem(THEME_KEY);
         var hasPreference = typeof preference === "string";
         if (hasPreference) {
@@ -324,10 +324,10 @@ function setInitialPrefersDark() {
         }
         return "light";
     }
-    var prefersDark = getInitialPrefersDark();
-    var colorMode = prefersDark ? "dark" : "light";
+    var colorMode = getInitialColorMode();
+    var prefersDark = colorMode === "dark";
     var root = document.documentElement;
-    root.style.setProperty(THEME_CSS_PROP, prefersDark);
+    root.style.setProperty(THEME_CSS_PROP, colorMode);
     root.setAttribute("data-color-mode", colorMode);
     var colors = prefersDark ? DARK_COLORS : LIGHT_COLORS;
     Object.entries(keysToVariables(colors, "color")).forEach(function (_a) {
@@ -335,7 +335,7 @@ function setInitialPrefersDark() {
         root.style.setProperty(name, color);
     });
 }
-setInitialPrefersDark();
+setInitialColorMode();
 
 /******/ })()
 ;

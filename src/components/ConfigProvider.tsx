@@ -52,7 +52,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
     let root = window.document.documentElement;
 
     const localColorValue =
-      root.style.getPropertyValue(THEME_CSS_PROP) === "true" ? "dark" : "light";
+      root.style.getPropertyValue(THEME_CSS_PROP) === "dark" ? "dark" : "light";
 
     if (localColorValue !== initialColorMode) {
       _setColorMode(localColorValue);
@@ -60,32 +60,32 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const setColorMode = useCallback(
-    (value: ColorMode) => {
+    (colorMode: ColorMode) => {
       if (!allowColorTransitions) {
         setAllowColorTransitions(true);
       }
 
-      let root = window.document.documentElement;
-      root.setAttribute("data-color-mode", value);
+      const prefersDark = colorMode === "dark";
 
-      const prefersDark = value === "dark";
+      let root = window.document.documentElement;
+      root.setAttribute("data-color-mode", colorMode);
 
       let body = window.document.body;
       if (body.classList.contains(prefersDark ? "light" : "dark")) {
         body.classList.remove(prefersDark ? "light" : "dark");
       }
-      body.classList.add(value);
+      body.classList.add(colorMode);
 
       body.classList.add("has-transition");
 
-      root.style.setProperty(THEME_CSS_PROP, prefersDark.toString());
+      root.style.setProperty(THEME_CSS_PROP, colorMode);
       const newColors = prefersDark ? DARK_COLORS : LIGHT_COLORS;
 
       Object.entries(keysToVariables(newColors, "color")).forEach(([name, color]) => {
         root.style.setProperty(name, color);
       });
 
-      _setColorMode(value);
+      _setColorMode(colorMode);
 
       // This is really ghetto, but it works: we do this to prevent the transition
       // from occurring between navigating pages.
@@ -97,7 +97,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
         body.classList.remove("has-transition");
       }, TRANSITION_DURATION * 1.5);
 
-      localStorage.setItem(THEME_KEY, prefersDark.toString());
+      localStorage.setItem(THEME_KEY, colorMode);
     },
     [allowColorTransitions]
   );

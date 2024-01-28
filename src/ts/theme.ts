@@ -208,7 +208,7 @@ export const VARIABLES = {
 
 export const TRANSITION_DURATION = 350;
 
-export const THEME_KEY = "prefers-dark";
+export const THEME_KEY = "theme";
 export const THEME_CSS_PROP = `--${THEME_KEY}`;
 
 export const BREAKPOINT_SIZES = {

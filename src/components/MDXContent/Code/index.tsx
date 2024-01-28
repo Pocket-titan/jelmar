@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { stringifyChildren } from "src/ts/utils";
 import { useEditor } from "src/ts/hooks";
 import { syntaxColors } from "./highlighting";
-import { TRANSITION_DURATION } from "src/ts/theme";
+import { SHADOWS, TRANSITION_DURATION } from "src/ts/theme";
 import { languages } from "./languages";
 
 const Code = ({
@@ -75,6 +75,7 @@ const EditorWrapper = styled.div`
   color: var(--color-code-mono-1);
   background: var(--color-code-base);
   transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
+  box-shadow: ${SHADOWS.low};
 
   padding: 1em 1.25em;
   border-radius: 0.5em;

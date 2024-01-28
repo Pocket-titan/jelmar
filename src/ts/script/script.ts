@@ -1,8 +1,8 @@
 import { DARK_COLORS, LIGHT_COLORS, THEME_KEY, THEME_CSS_PROP } from "ts/theme";
 import { keysToVariables } from "ts/utils";
 
-function setInitialPrefersDark() {
-  function getInitialPrefersDark() {
+function setInitialColorMode() {
+  function getInitialColorMode() {
     const preference = window.localStorage.getItem(THEME_KEY);
     const hasPreference = typeof preference === "string";
 
@@ -21,11 +21,11 @@ function setInitialPrefersDark() {
     return "light";
   }
 
-  const prefersDark = getInitialPrefersDark();
-  const colorMode = prefersDark ? "dark" : "light";
+  const colorMode = getInitialColorMode();
+  const prefersDark = colorMode === "dark";
 
   const root = document.documentElement;
-  root.style.setProperty(THEME_CSS_PROP, prefersDark);
+  root.style.setProperty(THEME_CSS_PROP, colorMode);
   root.setAttribute("data-color-mode", colorMode);
 
   const colors = prefersDark ? DARK_COLORS : LIGHT_COLORS;
@@ -34,4 +34,4 @@ function setInitialPrefersDark() {
   });
 }
 
-setInitialPrefersDark();
+setInitialColorMode();
