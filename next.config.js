@@ -3,6 +3,22 @@ const nextConfig = {
   experimental: {
     esmExternals: "loose",
   },
+  compiler: {
+    styledComponents: true,
+  },
+  // webpack: function (config, { isServer, webpack }) {
+  //   // if (!isServer) {
+  //   //   config.plugins.push(new webpack.IgnorePlugin({ resourceRegExp: /temml/ }));
+  //   // }
+  //   // return config;
+  // },
 };
 
-module.exports = nextConfig;
+if (process.env.ANALYZE) {
+  const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    enabled: process.env.ANALYZE === "true",
+  });
+  module.exports = withBundleAnalyzer(nextConfig);
+} else {
+  module.exports = nextConfig;
+}

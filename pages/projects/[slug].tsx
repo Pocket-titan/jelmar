@@ -1,4 +1,4 @@
-import DefaultLayout from "@app/layouts/DefaultLayout";
+import DefaultLayout from "src/layouts/DefaultLayout";
 
 const Project = () => {
   return <DefaultLayout>project</DefaultLayout>;

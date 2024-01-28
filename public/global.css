@@ -1,0 +1,23 @@
+html[data-color-mode="dark"] {
+  background: hsl(223, 28%, 13%);
+}
+
+html[data-color-mode="light"] {
+  background: white;
+}
+
+/* Font */
+@font-face {
+  font-family: "Wotfard";
+  src: url("/fonts/wotfard-regular-webfont.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Fira Code";
+  src: url("/fonts/FiraCode-VF.woff2") format("woff2");
+  font-display: fallback;
+  /* font-style: normal; */
+}

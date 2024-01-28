@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
-import DefaultLayout from "@app/layouts/DefaultLayout";
-import MaxWidthWrapper from "@components/MaxWidthWrapper";
-import Face from "@components/Face";
-import { BREAKPOINTS, BREAKPOINT_SIZES } from "@ts/theme";
-import Socials from "@components/Socials";
-import Link from "@components/Link";
+import styled from "styled-components";
+import DefaultLayout from "src/layouts/DefaultLayout";
+import MaxWidthWrapper from "src/components/MaxWidthWrapper";
+import Face from "src/components/Face";
+import { BREAKPOINTS, BREAKPOINT_SIZES } from "src/ts/theme";
+import Socials from "src/components/Socials";
+import Link from "src/components/Link";
 import { SVGAttributes } from "react";
 
 const WAVE_HEIGHT = 74;

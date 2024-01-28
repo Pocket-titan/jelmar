@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import Image from "next/image";
-import DefaultLayout from "@app/layouts/DefaultLayout";
-import ContentGrid from "@components/ContentGrid";
-import MaxWidthWrapper from "@components/MaxWidthWrapper";
-import Link from "@components/Link";
-import { capitalize } from "@ts/utils";
+import DefaultLayout from "src/layouts/DefaultLayout";
+import ContentGrid from "src/components/ContentGrid";
+import MaxWidthWrapper from "src/components/MaxWidthWrapper";
+import Link from "src/components/Link";
+import { capitalize } from "src/ts/utils";
 
 const projects: {
   title: string;

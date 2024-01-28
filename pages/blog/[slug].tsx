@@ -1,13 +1,18 @@
 import type { InferGetStaticPropsType, GetStaticProps, GetStaticPaths } from "next";
-import ArticleLayout from "@app/layouts/ArticleLayout";
-import { readFile, readFiles } from "@ts/files";
+import ArticleLayout from "layouts/ArticleLayout";
+import { readFile, readFiles } from "src/ts/files";
+import MDXContent from "src/components/MDXContent";
 
 type Params = {
   slug: string;
 };
 
 const Post = ({ mdx }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  return <ArticleLayout mdx={mdx} />;
+  return (
+    <ArticleLayout frontmatter={mdx.frontmatter}>
+      <MDXContent {...mdx} />
+    </ArticleLayout>
+  );
 };
 
 export const getStaticProps = (async (context) => {
