@@ -2,6 +2,7 @@ import { ReactElement, ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import { Analytics } from "@vercel/analytics/react";
 import theme from "src/ts/theme";
 import ConfigProvider from "src/components/ConfigProvider";
 import GlobalStyle from "src/components/GlobalStyle";
@@ -21,6 +22,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <ConfigProvider>
           <GlobalStyle />
           <Component {...pageProps} />
+          <Analytics />
         </ConfigProvider>
       </ThemeProvider>
     </>

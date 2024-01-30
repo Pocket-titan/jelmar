@@ -89,10 +89,12 @@ export const LIGHT_COLORS = {
   errorBackground: "hsla(340deg, 95%, 43%, 0.1)",
   success: "hsl(160deg, 100%, 40%)",
   successBackground: "hsla(160deg, 100%, 40%, 0.1)",
-  alert: "hsl(37deg, 100%, 50%)",
-  alertBackground: "hsla(52deg, 100%, 50%, 0.25)",
+  warning: "hsl(37deg, 100%, 50%)",
+  warningBackground: "hsla(52deg, 100%, 50%, 0.25)",
   info: "var(--color-primary)",
   infoBackground: "hsl(210deg, 55%, 92%)",
+  danger: "hsl(8, 100%, 57%)",
+  dangerBackground: "hsla(17, 85%, 87%, 0.7)",
 };
 
 // // Atom one dark
@@ -169,10 +171,12 @@ export const DARK_COLORS = {
   errorBackground: "hsla(340deg, 95%, 43%, 0.1)",
   success: "hsl(160deg, 100%, 40%)",
   successBackground: "hsla(160deg, 100%, 40%, 0.1)",
-  alert: "hsl(30deg, 100%, 50%)",
-  alertBackground: "hsl(40deg 13% 13%)",
+  warning: "hsl(30deg, 100%, 50%)",
+  warningBackground: "hsl(40deg, 17%, 21%)",
   info: "hsl(230deg, 100%, 69%)",
-  infoBackground: "var(--color-muted)",
+  infoBackground: "hsl(223deg, 31%, 24%)",
+  danger: "hsl(0deg 81.28% 58.63%)",
+  dangerBackground: "hsl(6.65deg 25.19% 23.95%)",
 };
 
 export const SHADOWS = {
@@ -203,6 +207,10 @@ export const VARIABLES = {
       medium: 500,
       bold: 600,
     },
+  },
+  scrollbar: {
+    width: "12px",
+    height: "12px",
   },
 };
 

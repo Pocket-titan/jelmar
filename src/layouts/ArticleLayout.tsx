@@ -143,7 +143,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: 100vw;
+  width: calc(100vw - var(--scrollbar-width));
   transition: background ${TRANSITION_DURATION}ms ease 0s;
 `;
 

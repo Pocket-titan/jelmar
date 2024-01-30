@@ -24,10 +24,6 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
-  html, body {
-    height: 100%;
-  }
-
   img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;

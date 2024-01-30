@@ -2,7 +2,7 @@ import { MDXRemote, type MDXRemoteSerializeResult, type MDXRemoteProps } from "n
 import Code from "./Code";
 import Math from "./Math";
 import Note from "./Note";
-import remarkMath from "remark-math";
+import Image from "./Image";
 
 export type Frontmatter = {
   title: string;
@@ -19,6 +19,7 @@ const components: MDXRemoteProps["components"] = {
   Code,
   Math,
   Note,
+  Image,
   pre: ({ children, ...props }) => {
     if (
       children &&

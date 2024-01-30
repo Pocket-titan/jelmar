@@ -92,8 +92,8 @@ export const SuccessNote = styled(BaseWrapper)`
 `;
 
 export const WarningNote = styled(BaseWrapper)`
-  background: var(--color-alert-background);
-  border-color: var(--color-alert);
+  background: var(--color-warning-background);
+  border-color: var(--color-warning);
 `;
 
 export const DangerNote = styled(BaseWrapper)`
@@ -135,14 +135,14 @@ const IconWrapper = styled.div`
   }
 
   .note-warning & {
-    color: var(--color-alert);
+    color: var(--color-warning);
     border-radius: 25% 25%;
     left: -1.5px;
   }
 
   .note-danger & {
     color: var(--color-danger);
-    border-radius: 25% 25%;
+    /* border-radius: 45% 45%; */
     left: -1.5px;
   }
 `;
