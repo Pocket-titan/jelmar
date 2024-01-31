@@ -41,7 +41,7 @@ const Background = styled.div`
   z-index: 1;
   background: var(--color-blurred-background);
   backdrop-filter: blur(8px);
-  transition: opacity 500ms;
+  transition: opacity 500ms, background 350ms ease 0s;
 `;
 
 function useScrollDisabler(disabled: boolean) {
@@ -108,7 +108,14 @@ const MobileNav = ({ links }: { links: { path: string; Component: ComponentType 
   return (
     <>
       <Trigger
-        onClick={(event: any) => {
+        style={
+          isOpen
+            ? {
+                right: "calc(32px + var(--scrollbar-width))",
+              }
+            : {}
+        }
+        onClick={(event) => {
           event.preventDefault();
           setIsOpen(!isOpen);
         }}
@@ -155,7 +162,7 @@ const MobileNav = ({ links }: { links: { path: string; Component: ComponentType 
               transition: `opacity 250ms ${isOpen ? 500 : 0}ms`,
             }}
           >
-            <DarkModeToggle tabIndex={isOpen ? 0 : -1} />
+            <DarkModeToggle size={32} tabIndex={isOpen ? 0 : -1} />
           </Bottom>
         </Nav>
       </Modal>
@@ -186,6 +193,8 @@ const NavLink = styled(Link)`
   color: var(--color-text);
   font-weight: var(--font-weight-medium);
   font-size: 28px;
+
+  transition: color 350ms ease 0s;
 
   &.active {
     color: var(--color-primary);

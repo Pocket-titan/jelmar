@@ -4,6 +4,9 @@ import { CSSProperties } from "react";
 
 const Outer = styled.footer`
   transition: background 350ms ease 0s;
+
+  width: 100vw;
+  /* padding-left: calc(var(--scrollbar-width) - (100vw - 100%)); */
 `;
 
 const Inner = styled.div`

@@ -86,7 +86,7 @@ const DarkModeToggle = ({
         setColorMode(isDark ? "light" : "dark");
       }}
     >
-      <MoonOrSun width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={svgSpring}>
+      <MoonOrSun width={size} height={size} viewBox={`0 0 18 18`} style={svgSpring}>
         {/* Moon mask (takes "bite" out of Sun) */}
         <mask id={`moon-mask-${id}`}>
           <rect x="0" y="0" width={size} height={size} fill="#FFF" />

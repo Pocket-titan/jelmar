@@ -57,13 +57,13 @@ export const BaseWrapper = styled.aside`
   padding-right: 32px;
   padding-bottom: 24px;
   font-size: 1rem;
-  margin-top: 48px;
-  margin-bottom: 64px;
+  margin-top: 28px;
+  margin-bottom: 28px;
   border-left: 3px solid;
   border-radius: 4px;
   transition: background ${TRANSITION_DURATION}ms ease 0s;
 
-  @media ${(p) => p.theme.breakpoints?.smAndSmaller} {
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
     padding-left: 16px;
     padding-right: 16px;
     margin-left: -12px;
@@ -71,7 +71,7 @@ export const BaseWrapper = styled.aside`
     border-radius: 2px;
   }
 
-  @media (min-width: 686px) {
+  @media (min-width: 1111px) {
     margin-left: -32px;
     margin-right: -32px;
   }
@@ -118,7 +118,7 @@ const IconWrapper = styled.div`
   border-radius: 50%;
   transition: background ${TRANSITION_DURATION}ms ease 0s;
 
-  @media ${(p) => p.theme.breakpoints?.mdAndSmaller} {
+  @media ${(p) => p.theme.breakpoints?.smAndSmaller} {
     display: none;
   }
 

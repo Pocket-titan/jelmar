@@ -19,7 +19,7 @@ const Face = () => {
           objectFit: "cover",
           objectPosition: "50% 0",
           borderRadius: "50%",
-          boxShadow: SHADOWS.high,
+          boxShadow: SHADOWS.medium,
           width: 200,
           height: 200,
         }}

@@ -55,6 +55,8 @@ const GlobalStyle = createGlobalStyle`
     color: var(--color-text);
     background: var(--color-background);
     overflow-x: hidden;
+
+    width: 100%;
   }
 
   body.has-transition {

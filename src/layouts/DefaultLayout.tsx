@@ -10,14 +10,6 @@ const Background = createGlobalStyle<{ background: string }>`
   }
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: calc(100vw - var(--scrollbar-width));
-  transition: background 350ms ease 0s;
-`;
-
 const HeaderWrapper = styled.div`
   position: sticky;
   top: -1px;
@@ -49,6 +41,13 @@ const MaxWidthWrapper = styled.div`
     padding-left: 16px;
     padding-right: 16px;
   }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background 350ms ease 0s;
 `;
 
 const DefaultLayout = ({

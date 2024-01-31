@@ -143,14 +143,17 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: calc(100vw - var(--scrollbar-width));
+  /* min-width: calc(100vw - var(--scrollbar-width)); */
   transition: background ${TRANSITION_DURATION}ms ease 0s;
+  /* padding-left: calc(100vw - 100%); */
 `;
 
 const HeaderWrapper = styled.div`
   position: sticky;
   z-index: 5;
   top: 0;
+
+  width: 100vw;
 `;
 
 const Main = styled.main`

@@ -44,6 +44,8 @@ const Wrapper = styled.header`
   display: flex;
   align-items: center;
   padding: 0px;
+
+  /* margin-right: calc(-1 * (var(--scrollbar-width) - (100vw - 100%))); */
 `;
 
 const Left = styled.div`

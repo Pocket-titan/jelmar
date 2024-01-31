@@ -20,6 +20,7 @@ const Hamburger = ({ isOpen, size }: { isOpen: boolean; size: number }) => {
       friction: 22,
     },
   });
+
   const line2Props = useSpring({
     x1: isOpen ? 0 : size * 0.85,
     y1: isOpen ? size / 2 : size * 0.7,
