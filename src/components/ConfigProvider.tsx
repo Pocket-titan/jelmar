@@ -17,8 +17,8 @@ import {
   THEME_KEY,
   THEME_CSS_PROP,
   TRANSITION_DURATION,
-} from "src/ts/theme";
-import { keysToVariables } from "src/ts/utils";
+} from "ts/theme";
+import { keysToVariables } from "ts/utils";
 
 type ColorMode = "light" | "dark";
 

@@ -1,19 +1,22 @@
 import { type ComponentType, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useTrail, animated } from "@react-spring/web";
-import DarkModeToggle from "src/components/DarkModeToggle";
-import Hamburger from "src/components/Hamburger";
-import Button from "src/components/Button";
-import Link from "./Link";
 import { useRouter } from "next/router";
+import { useTrail, animated } from "@react-spring/web";
+import { HEADER_HEIGHT } from "ts/theme";
+import DarkModeToggle from "components/DarkModeToggle";
+import Hamburger from "components/Hamburger";
+import Button from "components/Button";
+import Link from "components/Link";
 
 const Trigger = styled(Button)`
+  --size: 40px;
+
   position: fixed;
   z-index: 10001;
   right: 32px;
-  width: 40px;
-  height: 40px;
-  top: 12px;
+  width: var(--size);
+  height: var(--size);
+  top: calc((${HEADER_HEIGHT} - var(--size)) / 2);
 
   @media (min-width: 769px) {
     display: none;

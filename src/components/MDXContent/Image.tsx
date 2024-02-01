@@ -1,6 +1,5 @@
-import { CSSProperties, HTMLAttributes } from "react";
 import styled from "styled-components";
-import NextImage from "next/legacy/image";
+import NextImage from "next/image";
 
 const Img = styled(NextImage)`
   display: block;
@@ -54,17 +53,14 @@ const Image = ({
       ? {
           width,
           height,
-          layout: "fixed",
         }
       : {
-          layout: "fill",
+          fill: true,
         };
 
   return (
     <Wrapper style={wrapperStyle}>
-      {/* <Img src={src} alt={alt} {...props} /> */}
-      {/* Codemod test */}
-      <NextImage src={src} alt={alt} layout="fill" />
+      <Img src={src} alt={alt} {...props} />
       {caption && <Caption>{caption}</Caption>}
     </Wrapper>
   );

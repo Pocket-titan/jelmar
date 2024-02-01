@@ -1,24 +1,35 @@
+import type { InferGetStaticPropsType, GetStaticProps, GetStaticPaths } from "next";
 import styled from "styled-components";
-import Image from "next/image";
+import NextImage, { StaticImageData } from "next/image";
 import DefaultLayout from "src/layouts/DefaultLayout";
-import ContentGrid from "src/components/ContentGrid";
-import MaxWidthWrapper from "src/components/MaxWidthWrapper";
-import Link from "src/components/Link";
-import { capitalize } from "src/ts/utils";
+import ContentGrid from "components/ContentGrid";
+import MaxWidthWrapper from "components/MaxWidthWrapper";
+import Link from "components/Link";
+import { capitalize } from "ts/utils";
+import GreenlandImage from "public/images/greenland_ice.png";
 
-const projects: {
+type Project = {
   title: string;
   description: string;
   tags: string[];
   url: string;
-  image?: string;
-}[] = [
+  image?: string | StaticImageData;
+};
+
+const projects: Project[] = [
   {
     title: "project 1",
     description: "my description",
     tags: ["react", "science"],
     url: "",
-    image: "/images/greenland_ice.png",
+    image: GreenlandImage,
+  },
+  {
+    title: "project 2",
+    description:
+      "my description much longer than previous and should wrap multiple lines I think that would be very cool don't you think so okay let's move on!",
+    tags: ["react", "science"],
+    url: "",
   },
 ];
 
@@ -50,9 +61,11 @@ const Description = styled.p`
 `;
 
 const Right = styled.div`
-  /* min-height: 300px; */
-  max-height: 200px;
-  width: 100%;
+  margin-left: 32px;
+
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
+    margin-left: 16px;
+  }
 `;
 
 const Tags = styled.div`
@@ -78,22 +91,32 @@ const Tag = styled.div`
     border-radius: 4px;
     padding: 2px;
     background: linear-gradient(330deg, var(--color-secondary) 20%, var(--color-primary) 100%);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
+    mask-composite: exclude;
   }
 `;
 
-const Project = ({ title, description, tags, url, image }: (typeof projects)[number]) => {
+const Img = styled(NextImage)`
+  position: relative !important;
+  display: block;
+  margin: auto;
+  width: 100%;
+
+  border-radius: 8px;
+  object-fit: contain;
+  object-position: center;
+`;
+
+const Project = ({ title, description, tags, url, image }: Project) => {
   return (
     <Article>
       <Link
         href={url}
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
+          display: "flex",
+          height: "100%",
+          width: "100%",
         }}
       >
         <Left>
@@ -108,17 +131,22 @@ const Project = ({ title, description, tags, url, image }: (typeof projects)[num
           <Description>{description}</Description>
         </Left>
         {image && (
-          <Right>
-            <Image
+          <Right
+            style={{
+              minWidth: 75,
+              minHeight: 75,
+              maxWidth: 200,
+              maxHeight: 200,
+            }}
+          >
+            <Img
               src={image}
               alt={title}
-              width={300}
-              height={300}
-              // layout="responsive"
               style={{
+                width: "100%",
                 height: "100%",
-                width: "auto",
-                borderRadius: 8,
+                objectFit: "contain",
+                objectPosition: "center",
               }}
             />
           </Right>

@@ -214,6 +214,8 @@ export const VARIABLES = {
   },
 };
 
+export const HEADER_HEIGHT = "3.1rem";
+
 export const TRANSITION_DURATION = 350;
 
 export const THEME_KEY = "theme";

@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from "react";
 import styled from "styled-components";
 import { FaChevronRight as ChevronRight } from "react-icons/fa";
-import Link from "src/components/Link";
-import { TRANSITION_DURATION } from "src/ts/theme";
+import Link from "components/Link";
+import { TRANSITION_DURATION } from "ts/theme";
 
 const Breadcrumbs = ({ children }: PropsWithChildren) => {
   if (!children || children instanceof Array === false) {

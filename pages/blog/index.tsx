@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import type { InferGetStaticPropsType, GetStaticProps } from "next";
-import { readFiles } from "src/ts/files";
-import MaxWidthWrapper from "src/components/MaxWidthWrapper";
+import { readFiles } from "ts/files";
+import MaxWidthWrapper from "components/MaxWidthWrapper";
 import DefaultLayout from "src/layouts/DefaultLayout";
-import Link from "src/components/Link";
-import { capitalize, formatDate } from "src/ts/utils";
+import Link from "components/Link";
+import { capitalize, formatDate } from "ts/utils";
 import { FaChevronRight } from "react-icons/fa";
-import ContentGrid from "src/components/ContentGrid";
+import ContentGrid from "components/ContentGrid";
 
 const Arrow = styled(FaChevronRight)`
   transition: opacity 250ms ease 0s;

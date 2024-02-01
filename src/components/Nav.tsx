@@ -1,6 +1,6 @@
 import type { ComponentType, PropsWithChildren } from "react";
 import styled from "styled-components";
-import Link from "src/components/Link";
+import Link from "components/Link";
 
 const NavLinkWrapper = styled(Link)`
   transition: color 250ms ease 0s;
@@ -10,7 +10,6 @@ const NavLinkWrapper = styled(Link)`
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
   font-size: 1rem;
-
 
   &:hover {
     color: var(--color-primary);

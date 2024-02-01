@@ -3,9 +3,9 @@ import { ThemeProvider } from "styled-components";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { Analytics } from "@vercel/analytics/react";
-import theme from "src/ts/theme";
-import ConfigProvider from "src/components/ConfigProvider";
-import GlobalStyle from "src/components/GlobalStyle";
+import theme from "ts/theme";
+import ConfigProvider from "components/ConfigProvider";
+import GlobalStyle from "components/GlobalStyle";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

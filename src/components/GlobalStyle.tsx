@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import { memo } from "react";
-import { TRANSITION_DURATION, VARIABLES } from "src/ts/theme";
-import { keysToVariables } from "src/ts/utils";
+import { TRANSITION_DURATION, VARIABLES } from "ts/theme";
+import { keysToVariables } from "ts/utils";
 
 const GlobalStyle = createGlobalStyle`
   /* Variables */

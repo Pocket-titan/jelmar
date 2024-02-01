@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import Socials from "src/components/Socials";
+import Socials from "components/Socials";
 import { CSSProperties } from "react";
 
 const Outer = styled.footer`
   transition: background 350ms ease 0s;
-
   width: 100vw;
   /* padding-left: calc(var(--scrollbar-width) - (100vw - 100%)); */
 `;

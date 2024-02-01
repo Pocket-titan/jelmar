@@ -1,7 +1,7 @@
 import type { InferGetStaticPropsType, GetStaticProps, GetStaticPaths } from "next";
 import ArticleLayout from "layouts/ArticleLayout";
-import { readFile, readFiles } from "src/ts/files";
-import MDXContent from "src/components/MDXContent";
+import { readFile, readFiles } from "ts/files";
+import MDXContent from "components/MDXContent";
 
 type Params = {
   slug: string;

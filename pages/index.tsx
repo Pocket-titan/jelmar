@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import DefaultLayout from "src/layouts/DefaultLayout";
-import MaxWidthWrapper from "src/components/MaxWidthWrapper";
-import Face from "src/components/Face";
-import { BREAKPOINTS, BREAKPOINT_SIZES } from "src/ts/theme";
-import Socials from "src/components/Socials";
-import Link from "src/components/Link";
+import MaxWidthWrapper from "components/MaxWidthWrapper";
+import Face from "components/Face";
+import { BREAKPOINTS, BREAKPOINT_SIZES } from "ts/theme";
+import Socials from "components/Socials";
+import Link from "components/Link";
 import { SVGAttributes } from "react";
 
 const WAVE_HEIGHT = 74;
@@ -162,15 +162,19 @@ const ContactMe = styled.div`
 `;
 
 const ContactText = styled.span`
-  @keyframes typewriter{
-    from{width: 0;}
-    to{width: 100%;}
+  @keyframes typewriter {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
   }
 
   position: absolute;
   right: 0;
   top: 0;
-  transform: scale(calc(1/1.2)) translate(158%, -65%) rotate(10deg);
+  transform: scale(calc(1 / 1.2)) translate(158%, -65%) rotate(10deg);
   font-size: 13px;
   color: var(--color-gray-400);
 `;

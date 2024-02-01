@@ -1,7 +1,7 @@
-import { TRANSITION_DURATION } from "src/ts/theme";
+import { TRANSITION_DURATION } from "ts/theme";
 import styled from "styled-components";
-import { throttle } from "src/ts/utils";
-import Heading from "src/components/Heading";
+import { throttle } from "ts/utils";
+import Heading from "components/Heading";
 import { useEffect, useState } from "react";
 
 const TableOfContents = ({

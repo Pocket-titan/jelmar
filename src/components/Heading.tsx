@@ -1,4 +1,4 @@
-import React, { ComponentType, PropsWithChildren } from "react";
+import React, { CSSProperties, ComponentType, PropsWithChildren } from "react";
 import styled from "styled-components";
 
 type HeadingType =
@@ -8,13 +8,14 @@ type HeadingType =
   | "large-title"
   | "major-heading"
   | "normal-heading"
-  | "minor-heading";
+  | "minor-heading"
+  | "mini-heading";
 
 const Heading = ({
   type = "medium-title",
   as,
   ...props
-}: PropsWithChildren<{ type?: HeadingType; as?: string }>) => {
+}: PropsWithChildren<{ type?: HeadingType; as?: string; style?: CSSProperties }>) => {
   let Component: ComponentType<any>;
 
   switch (type) {
@@ -38,6 +39,9 @@ const Heading = ({
       break;
     case "minor-heading":
       Component = MinorHeading;
+      break;
+    case "mini-heading":
+      Component = MiniHeading;
       break;
     default:
       throw new Error(`No valid title found for type: ${type}`);
@@ -71,24 +75,31 @@ const LargeTitle = styled.h1`
 `;
 
 const MajorHeading = styled.h2`
-  font-size: calc(32 / 16 * 1rem);
-  color: var(--color-tertiary);
-  margin-top: 96px;
-  margin-bottom: 32px;
+  font-size: calc(28 / 16 * 1rem);
+  color: var(--color-gray-1000);
+  margin-top: 24px;
+  margin-bottom: 10px;
 `;
 
 const NormalHeading = styled.h3`
-  font-size: calc(25 / 16 * 1rem);
+  font-size: calc(22 / 16 * 1rem);
   color: var(--color-gray-900);
-  margin-top: 64px;
-  margin-bottom: 12px;
+  margin-top: 22px;
+  margin-bottom: 6px;
 `;
 
 const MinorHeading = styled.h4`
-  font-size: calc(20 / 16 * 1rem);
+  font-size: calc(18 / 16 * 1rem);
   color: var(--color-gray-900);
-  margin-top: 24px;
-  margin-bottom: 12px;
+  margin-top: 18px;
+  margin-bottom: 2px;
+`;
+
+const MiniHeading = styled.h5`
+  font-size: calc(16 / 16 * 1rem);
+  color: var(--color-gray-900);
+  margin-top: 9px;
+  margin-bottom: 0px;
 `;
 
 export default Heading;

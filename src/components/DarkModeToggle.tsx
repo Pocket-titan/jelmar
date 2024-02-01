@@ -3,10 +3,10 @@
 import type { HTMLAttributes } from "react";
 import styled from "styled-components";
 import { animated, useSpring, useTrail } from "@react-spring/web";
-import { useConfig } from "src/components/ConfigProvider";
-import { BREAKPOINTS } from "src/ts/theme";
-import { roundTo } from "src/ts/utils";
-import Button from "src/components/Button";
+import { useConfig } from "components/ConfigProvider";
+import { BREAKPOINTS } from "ts/theme";
+import { roundTo } from "ts/utils";
+import Button from "components/Button";
 
 const Wrapper = styled(Button)`
   opacity: 0.7;

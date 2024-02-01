@@ -5,7 +5,7 @@ import {
   FaGithub as GitHubLogo,
   FaEnvelope as EmailLogo,
 } from "react-icons/fa";
-import Link from "src/components/Link";
+import Link from "components/Link";
 import { CSSProperties, PropsWithChildren, SVGAttributes } from "react";
 
 const XLogo = (props: SVGAttributes<SVGElement>) => (

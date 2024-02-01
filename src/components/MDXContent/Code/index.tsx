@@ -1,9 +1,9 @@
 import type { HTMLAttributes, PropsWithChildren } from "react";
 import styled from "styled-components";
-import { stringifyChildren } from "src/ts/utils";
-import { useEditor } from "src/ts/hooks";
+import { stringifyChildren } from "ts/utils";
+import { useEditor } from "ts/hooks";
 import { syntaxColors } from "./highlighting";
-import { SHADOWS, TRANSITION_DURATION } from "src/ts/theme";
+import { SHADOWS, TRANSITION_DURATION } from "ts/theme";
 import { languages } from "./languages";
 
 const Code = ({
@@ -43,8 +43,8 @@ const Code = ({
 
 const CodeWrapper = styled.div`
   position: relative;
-  margin-top: 1.5em;
-  margin-bottom: 1.5em;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
 
   * {
     font-family: var(--font-monospace), monospace !important;

@@ -1,8 +1,11 @@
 import { MDXRemote, type MDXRemoteSerializeResult, type MDXRemoteProps } from "next-mdx-remote";
+import styled from "styled-components";
 import Code from "./Code";
 import Math from "./Math";
 import Note from "./Note";
 import Image from "./Image";
+import ContentHeading from "./ContentHeading";
+import ContentLink from "./ContentLink";
 
 export type Frontmatter = {
   title: string;
@@ -51,6 +54,11 @@ const components: MDXRemoteProps["components"] = {
 
     return <span {...props} />;
   },
+  h1: (props) => <ContentHeading type="major-heading" {...props} />,
+  h2: (props) => <ContentHeading type="normal-heading" {...props} />,
+  h3: (props) => <ContentHeading type="minor-heading" {...props} />,
+  h4: (props) => <ContentHeading type="mini-heading" {...props} />,
+  a: (props) => <ContentLink {...props} />,
 };
 
 const MDXContent = (props: MDXRemoteProps) => {

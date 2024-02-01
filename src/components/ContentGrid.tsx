@@ -1,7 +1,7 @@
 import { Children, type PropsWithChildren } from "react";
 import styled from "styled-components";
-import Heading from "src/components/Heading";
-import { SHADOWS } from "src/ts/theme";
+import Heading from "components/Heading";
+import { SHADOWS } from "ts/theme";
 
 const Wrapper = styled.div`
   &:not(:first-of-type) {
@@ -49,6 +49,10 @@ const GridItem = styled.div`
   a {
     color: var(--color-text);
     text-decoration: none;
+  }
+
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
+    padding: 16px 24px 16px 24px;
   }
 `;
 

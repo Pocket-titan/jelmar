@@ -1,13 +1,12 @@
-"use client";
-
 import { PropsWithChildren, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import NextLink from "next/link";
-import DarkModeToggle from "src/components/DarkModeToggle";
-import MobileNav from "src/components/MobileNav";
-import Nav from "src/components/Nav";
+import DarkModeToggle from "components/DarkModeToggle";
+import MobileNav from "components/MobileNav";
+import Nav from "components/Nav";
+import { HEADER_HEIGHT } from "@ts/theme";
 
 const ExternalLinkIcon = styled(FaArrowUpRightFromSquare)`
   color: var(--color-subtle-primary);
@@ -40,7 +39,7 @@ const links = [
 ];
 
 const Wrapper = styled.header`
-  height: 3.75rem;
+  height: ${HEADER_HEIGHT};
   display: flex;
   align-items: center;
   padding: 0px;

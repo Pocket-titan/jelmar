@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { IBM_Plex_Mono } from "next/font/google";
-import MDXContent, { Frontmatter, type MDX } from "src/components/MDXContent";
-import MaxWidthWrapper from "src/components/MaxWidthWrapper";
-import TableOfContents from "src/components/TableOfContents";
-import Breadcrumbs from "src/components/Breadcrumbs";
-import Header from "src/components/Header";
-import Footer from "src/components/Footer";
-import { capitalize, formatDate } from "src/ts/utils";
-import { TRANSITION_DURATION } from "src/ts/theme";
+import MDXContent, { Frontmatter, type MDX } from "components/MDXContent";
+import MaxWidthWrapper from "components/MaxWidthWrapper";
+import TableOfContents from "components/TableOfContents";
+import Breadcrumbs from "components/Breadcrumbs";
+import Header from "components/Header";
+import Footer from "components/Footer";
+import { capitalize, formatDate } from "ts/utils";
+import { HEADER_HEIGHT, TRANSITION_DURATION } from "ts/theme";
 import { PropsWithChildren } from "react";
+import SmoothScrolling from "@components/SmoothScrolling";
 
 const ibmPlexMono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
@@ -72,8 +73,6 @@ const Tags = styled.div``;
 
 const Tag = styled.a``;
 
-const HEADER_HEIGHT = 60;
-
 const ArticleLayout = ({
   children,
   frontmatter: { title, date, tags },
@@ -134,7 +133,13 @@ const ArticleLayout = ({
         {/* End content */}
       </Main>
 
-      <Footer />
+      <Footer
+        style={{
+          marginTop: HEADER_HEIGHT,
+        }}
+      />
+
+      <SmoothScrolling />
     </Wrapper>
   );
 };
@@ -184,7 +189,7 @@ const LightHeaderBackground = styled.div`
   z-index: 4;
   top: 0;
   width: 100%;
-  height: ${HEADER_HEIGHT}px;
+  height: ${HEADER_HEIGHT};
   background: var(--color-muted);
   transition: background ${TRANSITION_DURATION}ms ease 0s;
 `;
@@ -192,9 +197,9 @@ const LightHeaderBackground = styled.div`
 const SneakyLightHeaderBackground = styled.div`
   position: absolute;
   z-index: 3;
-  top: -${HEADER_HEIGHT}px;
+  top: calc(-1 * ${HEADER_HEIGHT});
   width: 100%;
-  height: ${HEADER_HEIGHT}px;
+  height: ${HEADER_HEIGHT};
   background: var(--color-muted);
   transition: background ${TRANSITION_DURATION}ms ease 0s;
 `;
@@ -204,7 +209,7 @@ const DarkHeaderBackground = styled.div`
   z-index: 3;
   top: 0;
   width: 100%;
-  height: calc(${HEADER_HEIGHT}px + 2px);
+  height: calc(${HEADER_HEIGHT} + 2px);
   background: var(--color-background);
   transition: background ${TRANSITION_DURATION}ms ease 0s;
   transform: translateY(-2px);

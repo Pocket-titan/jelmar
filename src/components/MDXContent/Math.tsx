@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 import type { MathMLElements } from "@michijs/htmltype";
-import { stringifyChildren } from "src/ts/utils";
+import { stringifyChildren } from "ts/utils";
 import temml from "temml";
 import "temml/dist/Temml-Local.css";
 

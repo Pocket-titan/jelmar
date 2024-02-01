@@ -8,7 +8,7 @@ import {
 } from "react-icons/lu";
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
 import type { IconType } from "react-icons/lib";
-import { TRANSITION_DURATION } from "src/ts/theme";
+import { TRANSITION_DURATION } from "ts/theme";
 
 export type NoteType = "info" | "warning" | "danger" | "success";
 

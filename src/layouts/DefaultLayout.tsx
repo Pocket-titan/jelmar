@@ -1,7 +1,7 @@
 import type { CSSProperties, PropsWithChildren } from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import Header from "src/components/Header";
-import Footer from "src/components/Footer";
+import Header from "components/Header";
+import Footer from "components/Footer";
 import { omit } from "lodash";
 
 const Background = createGlobalStyle<{ background: string }>`
