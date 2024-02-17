@@ -1,17 +1,12 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import NextLink from "next/link";
+import { HEADER_HEIGHT } from "@ts/theme";
+import ExternalLinkIcon from "components/ExternalLinkIcon";
 import DarkModeToggle from "components/DarkModeToggle";
 import MobileNav from "components/MobileNav";
 import Nav from "components/Nav";
-import { HEADER_HEIGHT } from "@ts/theme";
-
-const ExternalLinkIcon = styled(FaArrowUpRightFromSquare)`
-  color: var(--color-subtle-primary);
-  transition: color 250ms ease 0s;
-`;
 
 const links = [
   {

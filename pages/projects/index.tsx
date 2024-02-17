@@ -6,30 +6,56 @@ import ContentGrid from "components/ContentGrid";
 import MaxWidthWrapper from "components/MaxWidthWrapper";
 import Link from "components/Link";
 import { capitalize } from "ts/utils";
-import GreenlandImage from "public/images/greenland_ice.png";
+import GreenlandImage from "public/images/projects/greenland_ice.png";
+import WikigraphImage from "public/images/projects/wikigraph_logo_new_w_1024.png";
+import WhcImage from "public/images/projects/whc.svg";
+import ExternalLinkIcon from "@components/ExternalLinkIcon";
+import { CSSProperties } from "react";
+import { sortBy } from "lodash";
 
 type Project = {
   title: string;
   description: string;
   tags: string[];
   url: string;
-  image?: string | StaticImageData;
+  image?: {
+    src: string | StaticImageData;
+    style?: CSSProperties;
+  };
+  date: {
+    year: number;
+    month: number;
+  };
 };
 
 const projects: Project[] = [
   {
-    title: "project 1",
-    description: "my description",
-    tags: ["react", "science"],
-    url: "",
-    image: GreenlandImage,
+    title: "WikiGraph",
+    description:
+      "A tool to visualise connections between Wikipedia articles and the images found on them. Useful for creating Wikipedia puzzles.",
+    tags: ["React", "Math"],
+    url: "https://pocket-titan.github.io/wikigraph/",
+    image: {
+      src: WikigraphImage,
+    },
+    date: {
+      year: 2022,
+      month: 1,
+    },
   },
   {
-    title: "project 2",
+    title: "World Heritage map",
     description:
-      "my description much longer than previous and should wrap multiple lines I think that would be very cool don't you think so okay let's move on!",
-    tags: ["react", "science"],
-    url: "",
+      "A better map of UNESCO World Heritage sites, with a focus on usability and clarity.",
+    url: "https://pocket-titan.github.io/world-heritage/",
+    tags: ["React", "GIS"],
+    image: {
+      src: WhcImage,
+    },
+    date: {
+      year: 2017,
+      month: 1,
+    },
   },
 ];
 
@@ -52,6 +78,9 @@ const Left = styled.div`
 const Title = styled.h3`
   transition: color 250ms ease 0s;
   margin-bottom: 6px;
+
+  display: flex;
+  align-items: center;
 `;
 
 const Description = styled.p`
@@ -108,19 +137,32 @@ const Img = styled(NextImage)`
   object-position: center;
 `;
 
+const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
+  display: inline-block;
+  margin-left: 0.3rem;
+`;
+
+const StyledLink = styled(Link)`
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  &:hover ${StyledExternalLinkIcon} {
+    color: var(--color-primary);
+  }
+`;
+
 const Project = ({ title, description, tags, url, image }: Project) => {
+  const isExternal = url.match(/(^http|^www)/i);
+
   return (
     <Article>
-      <Link
-        href={url}
-        style={{
-          display: "flex",
-          height: "100%",
-          width: "100%",
-        }}
-      >
+      <StyledLink href={url}>
         <Left>
-          <Title> {capitalize(title)} </Title>
+          <Title>
+            {capitalize(title)}
+            {isExternal && <StyledExternalLinkIcon />}
+          </Title>
           {tags.length > 0 && (
             <Tags>
               {tags.map((tag) => (
@@ -135,12 +177,13 @@ const Project = ({ title, description, tags, url, image }: Project) => {
             style={{
               minWidth: 75,
               minHeight: 75,
-              maxWidth: 200,
+              maxWidth: 150,
               maxHeight: 200,
+              ...(image.style || {}),
             }}
           >
             <Img
-              src={image}
+              src={image.src}
               alt={title}
               style={{
                 width: "100%",
@@ -151,12 +194,12 @@ const Project = ({ title, description, tags, url, image }: Project) => {
             />
           </Right>
         )}
-      </Link>
+      </StyledLink>
     </Article>
   );
 };
 
-const Projects = () => {
+const Projects = ({ projects }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <DefaultLayout background={"var(--color-subtle-background)"}>
       <MaxWidthWrapper>
@@ -171,5 +214,13 @@ const Projects = () => {
     </DefaultLayout>
   );
 };
+
+export const getStaticProps = (async () => {
+  return {
+    props: {
+      projects: sortBy(projects, ["date.year", "date.month"]).reverse(),
+    },
+  };
+}) satisfies GetStaticProps;
 
 export default Projects;

@@ -1,8 +1,8 @@
 import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import styled from "styled-components";
 import NextLink from "next/link";
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { omit } from "lodash";
+import ExternalLinkIcon from "@components/ExternalLinkIcon";
 
 type LinkType = "internal" | "external" | "hash";
 
@@ -44,14 +44,15 @@ const ContentLink = ({
       {...omit(props, ["style"])}
     >
       {children}
-      {linkType === "external" && <ExternalLinkIcon size={15} />}
+      {linkType === "external" && <StyledExternalLinkIcon size={15} />}
     </StyledLink>
   );
 };
 
-const ExternalLinkIcon = styled(FaArrowUpRightFromSquare)`
+const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   color: var(--color-subtle-primary);
   transition: color 250ms ease 0s;
+
   display: inline-block;
   margin-left: 0.2rem;
 
