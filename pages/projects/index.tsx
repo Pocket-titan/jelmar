@@ -1,4 +1,4 @@
-import type { InferGetStaticPropsType, GetStaticProps, GetStaticPaths } from "next";
+import type { InferGetStaticPropsType, GetStaticProps } from "next";
 import styled from "styled-components";
 import NextImage, { StaticImageData } from "next/image";
 import DefaultLayout from "src/layouts/DefaultLayout";
@@ -71,6 +71,13 @@ const Article = styled.article`
   }
 `;
 
+const Top = styled.div``;
+
+const Bottom = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 const Left = styled.div`
   flex: 1;
 `;
@@ -78,9 +85,6 @@ const Left = styled.div`
 const Title = styled.h3`
   transition: color 250ms ease 0s;
   margin-bottom: 6px;
-
-  display: flex;
-  align-items: center;
 `;
 
 const Description = styled.p`
@@ -119,8 +123,13 @@ const Tag = styled.div`
     inset: 0;
     border-radius: 4px;
     padding: 2px;
-    background: linear-gradient(330deg, var(--color-secondary) 20%, var(--color-primary) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    background: linear-gradient(
+      330deg,
+      var(--color-secondary) 20%,
+      var(--color-primary) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
@@ -138,12 +147,14 @@ const Img = styled(NextImage)`
 `;
 
 const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
-  display: inline-block;
+  display: inline;
+  vertical-align: baseline;
   margin-left: 0.3rem;
 `;
 
 const StyledLink = styled(Link)`
-  display: flex;
+  display: inline-flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
 
@@ -158,7 +169,7 @@ const Project = ({ title, description, tags, url, image }: Project) => {
   return (
     <Article>
       <StyledLink href={url}>
-        <Left>
+        <Top>
           <Title>
             {capitalize(title)}
             {isExternal && <StyledExternalLinkIcon />}
@@ -170,36 +181,42 @@ const Project = ({ title, description, tags, url, image }: Project) => {
               ))}
             </Tags>
           )}
-          <Description>{description}</Description>
-        </Left>
-        {image && (
-          <Right
-            style={{
-              minWidth: 75,
-              minHeight: 75,
-              maxWidth: 150,
-              maxHeight: 200,
-              ...(image.style || {}),
-            }}
-          >
-            <Img
-              src={image.src}
-              alt={title}
+        </Top>
+        <Bottom>
+          <Left>
+            <Description>{description}</Description>
+          </Left>
+          {image && (
+            <Right
               style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                objectPosition: "center",
+                minWidth: 75,
+                minHeight: 75,
+                maxWidth: 125,
+                maxHeight: 200,
+                ...(image.style || {}),
               }}
-            />
-          </Right>
-        )}
+            >
+              <Img
+                src={image.src}
+                alt={title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  objectPosition: "center",
+                }}
+              />
+            </Right>
+          )}
+        </Bottom>
       </StyledLink>
     </Article>
   );
 };
 
-const Projects = ({ projects }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Projects = ({
+  projects,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <DefaultLayout background={"var(--color-subtle-background)"}>
       <MaxWidthWrapper>
