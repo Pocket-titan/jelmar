@@ -7,8 +7,9 @@ import MaxWidthWrapper from "components/MaxWidthWrapper";
 import Link from "components/Link";
 import { capitalize } from "ts/utils";
 import GreenlandImage from "public/images/projects/greenland_ice.png";
+import ApygeeLogo from "public/images/projects/apygee_logo.jpg";
 import WikigraphImage from "public/images/projects/wikigraph_logo_new_w_1024.png";
-import WhcImage from "public/images/projects/whc.svg";
+import WhcImage from "public/images/projects/whc.png";
 import ExternalLinkIcon from "@components/ExternalLinkIcon";
 import { CSSProperties } from "react";
 import { sortBy } from "lodash";
@@ -29,6 +30,20 @@ type Project = {
 };
 
 const projects: Project[] = [
+  {
+    title: "Apygee",
+    description:
+      "A Python package for creating, manipulating and visualizing Kepler orbits.",
+    tags: ["Python", "Astrodynamics"],
+    url: "https://pypi.org/project/apygee/",
+    image: {
+      src: ApygeeLogo,
+    },
+    date: {
+      year: 2024,
+      month: 5,
+    },
+  },
   {
     title: "WikiGraph",
     description:
@@ -148,8 +163,9 @@ const Img = styled(NextImage)`
 
 const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   display: inline;
-  vertical-align: baseline;
+  vertical-align: sub;
   margin-left: 0.3rem;
+  margin-bottom: 1px;
 `;
 
 const StyledLink = styled(Link)`
