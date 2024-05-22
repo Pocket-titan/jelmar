@@ -6,8 +6,7 @@ import { BREAKPOINTS, BREAKPOINT_SIZES } from "ts/theme";
 import Socials from "components/Socials";
 import Link from "components/Link";
 import { SVGAttributes } from "react";
-
-const WAVE_HEIGHT = 74;
+import SpaceSvgs, { WAVE_HEIGHT } from "@components/SpaceSvgs";
 
 const Main = styled.main`
   padding-top: 64px;
@@ -252,6 +251,7 @@ const Home = () => {
               viewBox="0 0 1703 100"
               width={1703}
               height={WAVE_HEIGHT}
+              id="wave"
               style={{
                 position: "absolute",
                 left: "-3%",
@@ -272,6 +272,8 @@ const Home = () => {
               ></path>
             </svg>
           </div>
+
+          <SpaceSvgs />
         </First>
 
         <Second>
