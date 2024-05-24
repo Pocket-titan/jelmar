@@ -48,6 +48,7 @@ var LIGHT_COLORS = {
     subtleBackground: "hsl(225deg, 25%, 95%)",
     blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
     muted: "hsl(218, 56%, 92%)",
+    mutedContrast: "hsl(218, 56%, 96%)",
     primary: "#2b62d8",
     subtlePrimary: "hsl(221, 90%, 35%)",
     secondary: "#35E6A7", //#50E6E3
@@ -125,6 +126,7 @@ var DARK_COLORS = {
     blurredBackground: "hsla(223deg, 30%, 8%, 0.85)",
     darkerBackground: "hsl(223, 25%, 9%)",
     muted: "hsl(223, 30%, 20%)",
+    mutedContrast: "hsl(223, 30%, 15%)",
     primary: "#FF69B4",
     subtlePrimary: "hsl(330, 80%, 80%)",
     // #3A405A
@@ -177,6 +179,7 @@ var VARIABLES = {
         height: "12px",
     },
 };
+var HEADER_HEIGHT = "2.5rem";
 var TRANSITION_DURATION = 350;
 var THEME_KEY = "theme";
 var THEME_CSS_PROP = "--".concat(THEME_KEY);

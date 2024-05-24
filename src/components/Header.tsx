@@ -29,7 +29,8 @@ const links = [
         <ExternalLinkIcon />
       </div>
     ),
-    path: "/about",
+    path: `/cv.pdf`,
+    target: "_blank",
   },
 ];
 

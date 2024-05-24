@@ -1,10 +1,14 @@
+import type { InferGetStaticPropsType, GetStaticProps } from "next";
 import styled from "styled-components";
 import DefaultLayout from "src/layouts/DefaultLayout";
-import MaxWidthWrapper from "components/MaxWidthWrapper";
+import MaxWidthWrapper from "@components/MaxWidthWrapper";
+import GitHubActivity, { GitHubEvent } from "@components/GitHubActivity";
 import Face from "components/Face";
 import { BREAKPOINTS, BREAKPOINT_SIZES } from "ts/theme";
 import Socials from "components/Socials";
 import Link from "components/Link";
+import { load } from "cheerio";
+import _ from "lodash";
 import { SVGAttributes } from "react";
 import SpaceSvgs, { WAVE_HEIGHT } from "@components/SpaceSvgs";
 
@@ -155,7 +159,7 @@ const ContactMe = styled.div`
     display: block;
   }
 
-  @media (min-width: 700px) {
+  @media (min-width: 950px) {
     display: block;
   }
 `;
@@ -178,7 +182,18 @@ const ContactText = styled.span`
   color: var(--color-gray-400);
 `;
 
-const Home = () => {
+const Feeds = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5em;
+
+  @media (${BREAKPOINTS.mdAndSmaller}) {
+    grid-template-columns: 1fr;
+    grid-gap: 0.75em;
+  }
+`;
+
+const Home = ({ events }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <DefaultLayout
       childStyles={{ display: "flex" }}
@@ -278,13 +293,121 @@ const Home = () => {
 
         <Second>
           <MaxWidthWrapper>
-            This is where I would put other content, if I had any. Latest content? Or some kind of
-            special showcase? LinkedIn posts/GitHub activity?
+            <Feeds>
+              <GitHubActivity events={events} />
+              <div>hello</div>
+            </Feeds>
           </MaxWidthWrapper>
         </Second>
       </Main>
     </DefaultLayout>
   );
 };
+
+export const getStaticProps = (async (context) => {
+  const data = await fetch(`https://api.github.com/users/pocket-titan/events`, {
+    headers: {
+      Accept: "application/vnd.github+json",
+    },
+  });
+  const json = await data.json();
+  const events = json as GitHubEvent[];
+
+  return {
+    props: { events },
+  };
+}) satisfies GetStaticProps<any, any>;
+
+// const COLOR_MAP: { [key: number]: string } = {
+//   0: "#ebedf0",
+//   1: "#9be9a8",
+//   2: "#40c463",
+//   3: "#30a14e",
+//   4: "#216e39",
+// };
+
+// async function fetchDataForYear(url: string, year: string, format: string) {
+//   const data = await fetch(`https://github.com${url}`, {
+//     headers: {
+//       "x-requested-with": "XMLHttpRequest",
+//     },
+//   });
+//   const $ = load(await data.text());
+//   const $days = $("table.ContributionCalendar-grid td.ContributionCalendar-day");
+
+//   const contribText = $(".js-yearly-contributions h2")
+//     .text()
+//     .trim()
+//     .match(/^([0-9,]+)\s/);
+//   let contribCount: any;
+
+//   if (contribText) {
+//     [contribCount] = contribText;
+//     contribCount = parseInt(contribCount.replace(/,/g, ""), 10);
+//   }
+
+//   return {
+//     year,
+//     total: contribCount || 0,
+//     range: {
+//       start: $($days.get(0)).attr("data-date"),
+//       end: $($days.get($days.length - 1)).attr("data-date"),
+//     },
+//     contributions: (() => {
+//       const parseDay = (day: any, index: number) => {
+//         const $day = $(day);
+//         const date = $day
+//           .attr("data-date")!
+//           .split("-")
+//           .map((d) => parseInt(d, 10));
+//         const color = COLOR_MAP[parseInt($day.attr("data-level")!)];
+//         const value = {
+//           date: $day.attr("data-date"),
+//           count: index === 0 ? contribCount : 0,
+//           color,
+//           intensity: $day.attr("data-level") || 0,
+//         };
+//         return { date, value };
+//       };
+
+//       if (format !== "nested") {
+//         return $days.get().map((day, index) => parseDay(day, index).value);
+//       }
+
+//       return $days.get().reduce((o: any, day: any, index: number) => {
+//         const { date, value } = parseDay(day, index);
+//         const [y, m, d] = date;
+//         if (!o[y]) o[y] = {};
+//         if (!o[y][m]) o[y][m] = {};
+//         o[y][m][d] = value;
+//         return o;
+//       }, {});
+//     })(),
+//   };
+// }
+
+// async function fetchYears(username: string) {
+//   const data = await fetch(`https://github.com/${username}?tab=contributions`, {
+//     headers: {
+//       "x-requested-with": "XMLHttpRequest",
+//     },
+//   });
+//   const body = await data.text();
+//   const $ = load(body);
+//   return $(".js-year-link")
+//     .get()
+//     .map((a) => {
+//       const $a = $(a);
+//       const href = $a.attr("href");
+//       const githubUrl = new URL(`https://github.com${href}`);
+//       githubUrl.searchParams.set("tab", "contributions");
+//       const formattedHref = `${githubUrl.pathname}${githubUrl.search}`;
+
+//       return {
+//         href: formattedHref,
+//         text: $a.text().trim(),
+//       };
+//     });
+// }
 
 export default Home;

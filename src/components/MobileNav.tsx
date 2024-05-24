@@ -93,7 +93,11 @@ function useScrollDisabler(disabled: boolean) {
   }, [disabled]);
 }
 
-const MobileNav = ({ links }: { links: { path: string; Component: ComponentType }[] }) => {
+const MobileNav = ({
+  links,
+}: {
+  links: { Component: ComponentType; path: string; target?: string }[];
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -139,12 +143,13 @@ const MobileNav = ({ links }: { links: { path: string; Component: ComponentType 
         <Nav>
           <Top>
             {trail.map((style, index) => {
-              const { Component, path } = links[index];
+              const { Component, path, target } = links[index];
 
               return (
                 <animated.div style={style} key={index}>
                   <NavLink
                     href={path}
+                    target={target}
                     tabIndex={isOpen ? 0 : -1}
                     className="active"
                     onClick={() => {

@@ -96,6 +96,8 @@ const SatelliteSvg = styled(Svg)`
     }
   }
 
+  animation: calc(var(--duration) * 4) linear 10s infinite fly_satellite;
+
   @media (${BREAKPOINTS.mdAndSmaller}) {
     left: max(calc(0vw - 100px / 2), calc(50vw - 100px / 2 - 1100px / 2));
 
@@ -110,9 +112,9 @@ const SatelliteSvg = styled(Svg)`
         transform: translateX(100vw) translateY(-65vh);
       }
     }
-  }
 
-  animation: calc(var(--duration) * 4) linear 10s infinite fly_satellite;
+    animation: calc(var(--duration) * 3) linear 10s infinite fly_satellite;
+  }
 `;
 
 const Satellite = () => (

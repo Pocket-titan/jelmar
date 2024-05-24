@@ -20,7 +20,11 @@ const NavLinkWrapper = styled(Link)`
   }
 `;
 
-const NavLink = ({ path, children }: PropsWithChildren<{ path: string }>) => (
+const NavLink = ({
+  path,
+  target,
+  children,
+}: PropsWithChildren<{ path: string; target?: string }>) => (
   <div
     style={{
       position: "relative",
@@ -28,16 +32,22 @@ const NavLink = ({ path, children }: PropsWithChildren<{ path: string }>) => (
       alignItems: "center",
     }}
   >
-    <NavLinkWrapper href={path}>{children}</NavLinkWrapper>
+    <NavLinkWrapper href={path} target={target}>
+      {children}
+    </NavLinkWrapper>
   </div>
 );
 
-const Nav = ({ links }: { links: { Component: ComponentType; path: string }[] }) => {
+const Nav = ({
+  links,
+}: {
+  links: { Component: ComponentType; path: string; target?: string }[];
+}) => {
   return (
     <nav style={{ display: "flex" }}>
       <ul style={{ display: "flex", listStyle: "none", padding: 0 }}>
-        {links.map(({ Component, path }) => (
-          <NavLink key={path} path={path}>
+        {links.map(({ Component, path, target }) => (
+          <NavLink key={path} path={path} target={target}>
             <Component />
           </NavLink>
         ))}

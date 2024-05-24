@@ -27,7 +27,7 @@ const Grid = styled.div<{ type: "grid" | "list" }>`
   display: grid;
   grid-template-columns: ${(p) =>
     p.type === "grid" ? "repeat(auto-fill, minmax(400px, 1fr))" : "1fr"};
-  grid-gap: 32px;
+  grid-gap: 24px;
 
   @media ${(p) => p.theme.breakpoints.smAndSmaller} {
     grid-template-columns: 1fr;
@@ -41,7 +41,7 @@ const Grid = styled.div<{ type: "grid" | "list" }>`
 const GridItem = styled.div`
   background: var(--color-subtle-floating);
   /* background: hsl(220, 23%, 95%); */
-  padding: 24px 32px 24px 32px;
+  padding: 24px 24px 24px 24px;
   border-radius: 8px;
   transition: background 350ms ease 0s;
   box-shadow: ${SHADOWS.low};
@@ -52,7 +52,7 @@ const GridItem = styled.div`
   }
 
   @media ${(p) => p.theme.breakpoints.smAndSmaller} {
-    padding: 16px 24px 16px 24px;
+    padding: 16px 16px 16px 16px;
   }
 `;
 

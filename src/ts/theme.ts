@@ -65,6 +65,7 @@ export const LIGHT_COLORS = {
   subtleBackground: "hsl(225deg, 25%, 95%)",
   blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
   muted: "hsl(218, 56%, 92%)",
+  mutedContrast: "hsl(218, 56%, 96%)",
   primary: "#2b62d8",
   subtlePrimary: "hsl(221, 90%, 35%)",
   secondary: "#35E6A7", //#50E6E3
@@ -146,6 +147,7 @@ export const DARK_COLORS = {
   blurredBackground: "hsla(223deg, 30%, 8%, 0.85)",
   darkerBackground: "hsl(223, 25%, 9%)",
   muted: "hsl(223, 30%, 20%)",
+  mutedContrast: "hsl(223, 30%, 15%)",
   primary: "#FF69B4",
   subtlePrimary: "hsl(330, 80%, 80%)",
   // #3A405A
@@ -214,7 +216,7 @@ export const VARIABLES = {
   },
 };
 
-export const HEADER_HEIGHT = "3.1rem";
+export const HEADER_HEIGHT = "2.5rem";
 
 export const TRANSITION_DURATION = 350;
 

@@ -17,6 +17,7 @@
     "@codemirror/state": "^6.4.0",
     "@react-spring/web": "^9.7.3",
     "@vercel/analytics": "^1.1.2",
+    "cheerio": "^1.0.0-rc.12",
     "codemirror": "^6.0.1",
     "dedent": "^1.5.1",
     "front-matter": "^4.0.2",

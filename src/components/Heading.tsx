@@ -59,30 +59,30 @@ const SectionTitle = styled.h1`
 `;
 
 const SmallTitle = styled.h1`
-  font-size: calc(22 / 16 * 1rem);
+  font-size: calc(20 / 16 * 1rem);
   color: var(--color-gray-1000);
 `;
 
 const MediumTitle = styled.h1`
-  font-size: calc(28 / 16 * 1rem);
+  font-size: calc(24 / 16 * 1rem);
   color: var(--color-gray-1000);
   line-height: 1.2;
 `;
 
 const LargeTitle = styled.h1`
-  font-size: calc(38 / 16 * 1rem);
+  font-size: calc(32 / 16 * 1rem);
   color: var(--color-gray-1000);
 `;
 
 const MajorHeading = styled.h2`
-  font-size: calc(28 / 16 * 1rem);
+  font-size: calc(26 / 16 * 1rem);
   color: var(--color-gray-1000);
   margin-top: 24px;
   margin-bottom: 10px;
 `;
 
 const NormalHeading = styled.h3`
-  font-size: calc(22 / 16 * 1rem);
+  font-size: calc(20 / 16 * 1rem);
   color: var(--color-gray-900);
   margin-top: 22px;
   margin-bottom: 6px;
