@@ -232,17 +232,31 @@ const LanderSvg = styled(Svg)`
       transform: translateY(0%);
     }
     66% {
-      transform: translateY(max(calc(100vh - 30vw), 50vh));
+      transform: translateY(60vh);
     }
     100% {
-      transform: translateY(max(calc(100vh - 30vw), 50vh));
+      transform: translateY(60vh);
     }
   }
 
   offset-rotate: 0deg;
-  animation: calc(min(20s, calc(var(--duration) * 2)) * 3 / 2) cubic-bezier(0.61, 1, 0.88, 1)
+  animation: calc(min(20s, calc(var(--duration) * 2.5)) * 3 / 2) cubic-bezier(0.61, 1, 0.88, 1)
     calc(max(var(--duration), 10s) + min(calc(var(--duration) * 5), 25s) / 2 - 7s) infinite
     move_lander;
+
+  @media (${BREAKPOINTS.smAndSmaller}) {
+    @keyframes move_lander {
+      0% {
+        transform: translateY(0%);
+      }
+      66% {
+        transform: translateY(100vh);
+      }
+      100% {
+        transform: translateY(100vh);
+      }
+    }
+  }
 `;
 
 const Lander = () => (

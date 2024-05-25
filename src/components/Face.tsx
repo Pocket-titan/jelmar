@@ -13,6 +13,7 @@ const Img = styled(NextImage)`
   box-shadow: ${SHADOWS.medium};
   object-position: 50% 0;
   object-fit: cover;
+  user-select: none;
 `;
 
 const Face = () => {
