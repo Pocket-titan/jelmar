@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     line-height: 1.5;
-    line-height: calc(1em + 0.725rem);
+    /* line-height: calc(1em + 0.725rem); */
     -webkit-font-smoothing: antialiased;
   }
 

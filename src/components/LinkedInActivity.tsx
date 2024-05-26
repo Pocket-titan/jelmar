@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { List, Title, ListItem } from "@components/Activity";
+import { List, Title, ListItem, Avatar, formatDateString } from "@components/Activity";
 
 const LinkedInList = styled(List)`
   flex: 2;
@@ -17,7 +17,9 @@ const LinkedInActivity = ({ posts, bio }: { posts: LinkedInPost[]; bio: LinkedIn
 };
 
 const MyListItem = styled(ListItem)`
+  align-items: unset;
   flex-direction: column;
+  color: unset;
 
   span.link {
     color: var(--color-subtle-primary);
@@ -26,6 +28,40 @@ const MyListItem = styled(ListItem)`
     transition: color 350ms ease 0s;
   }
 `;
+
+const Top = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  margin-bottom: 0.6rem;
+`;
+
+const Left = styled.div``;
+
+const Middle = styled.div`
+  flex: 1;
+`;
+
+const Who = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Name = styled.span`
+  font-weight: 600;
+`;
+
+const Job = styled.span`
+  color: var(--color-gray-700);
+  font-size: 0.75rem;
+`;
+
+const When = styled.div`
+  color: var(--color-gray-700);
+  font-size: 0.75rem;
+`;
+
+const Right = styled.div``;
 
 const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
   post.post_date_time;
@@ -38,6 +74,7 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
   bio.username;
   bio.full_name;
   bio.profile_picture;
+
   const profileUrl = `https://www.linkedin.com/in/${bio.username}`;
 
   const description = post.description
@@ -46,10 +83,30 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
     .replaceAll(/<a([^>]*)>/g, "<span class='link'>")
     .replaceAll(/<\/a>/g, "</span>");
 
+  console.log(post);
+
   return (
-    <MyListItem>
-      <div>face</div>
+    <MyListItem href={postUrl} target="_blank">
+      <Top>
+        <Left>
+          <Avatar height={40} width={40} src={bio.profile_picture} alt={bio.full_name} />
+        </Left>
+        <Middle>
+          <Who>
+            <Name>{bio.full_name}</Name>
+            <Job>{bio.profile_description}</Job>
+          </Who>
+          <When>{formatDateString(post.post_date_time)}</When>
+        </Middle>
+        <Right>right</Right>
+      </Top>
       <span dangerouslySetInnerHTML={{ __html: description }} />
+      <div>
+        <span>images?? too big, special case for: 1 img, 2, 3, 4, 5+ </span>
+        {post.images.slice(0, 1).map((image) => (
+          <img src={image} alt="image" />
+        ))}
+      </div>
     </MyListItem>
   );
 };

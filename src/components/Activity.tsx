@@ -62,4 +62,43 @@ const DateString = styled.div`
   color: var(--color-gray-500);
 `;
 
-export { List, ListItem, Avatar, Entry, Title, DateString };
+const formatDateString = (dateString: string) => {
+  const date = new Date(dateString);
+  const currentDate = new Date();
+
+  if (date.toDateString() === currentDate.toDateString()) {
+    return "Today";
+  }
+
+  const yesterdayDate = new Date(currentDate);
+  yesterdayDate.setDate(currentDate.getDate() - 1);
+  if (date.toDateString() === yesterdayDate.toDateString()) {
+    return "Yesterday";
+  }
+
+  const years = currentDate.getFullYear() - date.getFullYear();
+  if (years > 0) {
+    return `${years} year${years > 1 ? "s" : ""} ago`;
+  }
+
+  const months = currentDate.getMonth() - date.getMonth();
+  if (months > 0) {
+    return `${months} month${months > 1 ? "s" : ""} ago`;
+  }
+
+  const weeks = Math.floor((currentDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 7));
+  if (weeks > 0) {
+    return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+  }
+
+  const days = currentDate.getDate() - date.getDate();
+  if (days > 0) {
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  }
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  return `${day}/${month}`;
+};
+
+export { List, ListItem, Avatar, Entry, Title, DateString, formatDateString };
