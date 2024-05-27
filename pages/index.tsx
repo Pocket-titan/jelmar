@@ -319,6 +319,8 @@ export const getStaticProps = (async (context) => {
   const posts = (json.posts || []) as LinkedInPost[];
   const bio = (json.bio || {}) as LinkedInBio;
 
+  console.log(`json`, json);
+
   return {
     props: { events, posts, bio },
   };

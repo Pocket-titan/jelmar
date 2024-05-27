@@ -16,7 +16,7 @@ const ListItem = styled.a`
   flex-direction: row;
   align-items: center;
   padding: 0.5rem;
-  background: var(--color-muted-contrast);
+  background: var(--color-background);
   border-radius: 5px;
   box-shadow: ${SHADOWS.low}, 0px 0px 5px 3px hsl(var(--shadow-color) / 0.03);
   transition: box-shadow 350ms ease 0s, background 350ms ease 0s, transform 350ms ease 0s;
@@ -34,7 +34,7 @@ const ListItem = styled.a`
 
     &:hover {
       box-shadow: ${SHADOWS.medium}, 0px 0px 5px 3px hsl(var(--shadow-color) / 0.05);
-      transform: scale(1.03);
+      transform: scale(1.02);
     }
   `}
 `;

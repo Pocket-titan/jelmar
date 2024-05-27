@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { FaLinkedin as LinkedInLogo, FaThumbsUp as ThumbsUp } from "react-icons/fa";
 import { List, Title, ListItem, Avatar, formatDateString } from "@components/Activity";
 
 const LinkedInList = styled(List)`
-  flex: 2;
+  flex: 1.5;
 `;
 
 const LinkedInActivity = ({ posts, bio }: { posts: LinkedInPost[]; bio: LinkedInBio }) => {
@@ -20,6 +21,7 @@ const MyListItem = styled(ListItem)`
   align-items: unset;
   flex-direction: column;
   color: unset;
+  padding: 1rem;
 
   span.link {
     color: var(--color-subtle-primary);
@@ -27,9 +29,13 @@ const MyListItem = styled(ListItem)`
     text-underline-offset: 2px;
     transition: color 350ms ease 0s;
   }
+
+  &:not(:last-child) {
+    margin-bottom: 0.9rem;
+  }
 `;
 
-const Top = styled.div`
+const First = styled.div`
   display: flex;
   flex-direction: row;
   align-items: start;
@@ -59,9 +65,16 @@ const Job = styled.span`
 const When = styled.div`
   color: var(--color-gray-700);
   font-size: 0.75rem;
+
+  display: flex;
+  align-items: center;
 `;
 
 const Right = styled.div``;
+
+const Second = styled.span`
+  margin-bottom: 0.75rem;
+`;
 
 const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
   post.post_date_time;
@@ -74,7 +87,6 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
   bio.username;
   bio.full_name;
   bio.profile_picture;
-
   const profileUrl = `https://www.linkedin.com/in/${bio.username}`;
 
   const description = post.description
@@ -83,11 +95,9 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
     .replaceAll(/<a([^>]*)>/g, "<span class='link'>")
     .replaceAll(/<\/a>/g, "</span>");
 
-  console.log(post);
-
   return (
     <MyListItem href={postUrl} target="_blank">
-      <Top>
+      <First>
         <Left>
           <Avatar height={40} width={40} src={bio.profile_picture} alt={bio.full_name} />
         </Left>
@@ -96,18 +106,113 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
             <Name>{bio.full_name}</Name>
             <Job>{bio.profile_description}</Job>
           </Who>
-          <When>{formatDateString(post.post_date_time)}</When>
+          <When>
+            {formatDateString(post.post_date_time) + " •"}
+            <LinkedInLogo
+              style={{
+                marginLeft: "0.2rem",
+              }}
+            />
+          </When>
         </Middle>
-        <Right>right</Right>
-      </Top>
-      <span dangerouslySetInnerHTML={{ __html: description }} />
-      <div>
-        <span>images?? too big, special case for: 1 img, 2, 3, 4, 5+ </span>
-        {post.images.slice(0, 1).map((image) => (
-          <img src={image} alt="image" />
-        ))}
-      </div>
+        <Right>
+          <Likes likes={post.likes_count} />
+        </Right>
+      </First>
+      <Second dangerouslySetInnerHTML={{ __html: description }} />
+      <Images images={post.images} />
     </MyListItem>
+  );
+};
+
+const ImagesWrapper = styled.div<{ nrows: number; ncols: number }>`
+  display: grid;
+  grid-template-rows: repeat(${(p) => p.nrows}, auto);
+  grid-template-columns: repeat(${(p) => p.ncols}, auto);
+  height: auto;
+  min-height: auto;
+  max-height: 400px;
+  overflow: clip;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 200px;
+  height: 100%;
+  width: 100%;
+  overflow: clip;
+`;
+
+const Image = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+`;
+
+const layouts: { [key: number]: (number | string)[][] } = {
+  0: [],
+  1: [[1, 1]],
+  2: [
+    [1, 1],
+    [1, 2],
+  ],
+  3: [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+  ],
+  4: [
+    [1, "1 / span 4"],
+    [2, 1],
+    [2, 2],
+    [2, 3],
+  ],
+};
+
+const Images = ({ images }: { images: string[] }) => {
+  const nrows = Math.ceil(images.length / 3);
+  const ncols = Math.min(images.length, 3);
+
+  const layout = layouts[Math.min(images.length, 4)];
+
+  return (
+    <ImagesWrapper nrows={nrows} ncols={ncols}>
+      {images.slice(0, 4).map((image, i) => (
+        <ImageWrapper
+          key={image}
+          style={{
+            gridRow: layout[i][0],
+            gridColumn: layout[i][1],
+          }}
+        >
+          <Image src={image} alt="image" />
+        </ImageWrapper>
+      ))}
+    </ImagesWrapper>
+  );
+};
+
+const LikesWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  color: var(--color-gray-500);
+  font-size: 0.8rem;
+`;
+
+const Likes = ({ likes }: { likes: string }) => {
+  return (
+    <LikesWrapper>
+      <ThumbsUp
+        style={{
+          display: "inline",
+          marginRight: "0.2rem",
+          color: "var(--color-primary)",
+        }}
+      />
+      <span>{likes}</span>
+    </LikesWrapper>
   );
 };
 
