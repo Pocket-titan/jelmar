@@ -131,7 +131,7 @@ const ImagesWrapper = styled.div<{ nrows: number; ncols: number }>`
   grid-template-columns: repeat(${(p) => p.ncols}, auto);
   height: auto;
   min-height: auto;
-  max-height: 400px;
+  max-height: 300px;
   overflow: clip;
 `;
 
@@ -139,7 +139,7 @@ const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 200px;
+  max-height: 150px;
   height: 100%;
   width: 100%;
   overflow: clip;
@@ -164,7 +164,7 @@ const layouts: { [key: number]: (number | string)[][] } = {
     [1, 3],
   ],
   4: [
-    [1, "1 / span 4"],
+    [1, "1 / span 3"],
     [2, 1],
     [2, 2],
     [2, 3],
