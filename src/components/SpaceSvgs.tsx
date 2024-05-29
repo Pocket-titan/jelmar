@@ -12,45 +12,12 @@ const Svg = styled.svg`
   transition: fill 350ms ease 0s;
 `;
 
-const StationSvg = styled(Svg)`
-  bottom: -${WAVE_HEIGHT}px;
-  left: max(calc(0vw - 100px / 2), calc(50vw - 100px / 2 - 1100px / 2));
-
-  @media (${BREAKPOINTS.mdAndSmaller}) {
-    display: none;
-  }
-
-  @keyframes fly_station {
-    0% {
-      transform: translateX(0) translateY(0) rotate(315deg);
-    }
-    80% {
-      transform: translateX(50vw) translateY(-50vh) rotate(315deg);
-    }
-    100% {
-      transform: translateX(50vw) translateY(-50vh) rotate(315deg);
-    }
-  }
-
-  animation: calc(var(--duration) * 4) linear 25s infinite fly_station;
-`;
-
-const Station = () => (
-  <StationSvg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlSpace="preserve"
-    width="100px"
-    height="100px"
-    viewBox="0 0 512 512"
-  >
-    <path d="M238.933 247.467h34.133v42.667h-34.133zM238.933 187.733h34.133V230.4h-34.133zM409.6 8.533h34.133v34.133H409.6zM503.467 8.533H460.8v34.133H512v-25.6a8.53 8.53 0 0 0-8.533-8.533zM409.6 59.733h34.133v34.133H409.6zM460.8 93.867h42.667A8.53 8.53 0 0 0 512 85.334v-25.6h-51.2v34.133zM409.6 426.667h34.133V460.8H409.6zM503.467 426.667H460.8V460.8H512v-25.6a8.53 8.53 0 0 0-8.533-8.533zM409.6 477.867h34.133V512H409.6z" />
-    <path d="M341.333 435.2v25.6H307.2v-34.133c0-.119-.06-.213-.068-.324-.034-.964-.171-1.929-.538-2.85l-16.461-41.139v-41.31c19.046-1.476 34.133-17.271 34.133-36.685v-130.85c0-19.413-15.087-35.209-34.133-36.685V102.4h8.533a8.53 8.53 0 0 0 8.533-8.533V59.733h34.133v25.6a8.53 8.53 0 0 0 8.533 8.533h42.667V59.733H358.4V42.667h34.133V8.533h-42.667a8.53 8.53 0 0 0-8.533 8.533v25.6H307.2V8.533A8.53 8.53 0 0 0 298.667 0h-34.133v51.2c0 4.71-3.814 8.533-8.533 8.533s-8.533-3.823-8.533-8.533V0h-34.133a8.53 8.53 0 0 0-8.533 8.533v34.133h-34.133v-25.6a8.53 8.53 0 0 0-8.533-8.533h-42.667v34.133H153.6v17.067h-34.133v34.133h42.667a8.53 8.53 0 0 0 8.533-8.533v-25.6H204.8v34.133a8.53 8.53 0 0 0 8.533 8.533h8.533v34.423c-19.046 1.476-34.133 17.271-34.133 36.685v130.85c0 19.413 15.087 35.209 34.133 36.685v41.31l-16.461 41.139c-.367.922-.503 1.886-.538 2.842-.009.12-.068.213-.068.333V460.8h-34.133v-25.6a8.53 8.53 0 0 0-8.533-8.533h-42.667V460.8H153.6v17.067h-34.133V512h42.667a8.53 8.53 0 0 0 8.533-8.533v-25.6H204.8v25.6a8.53 8.53 0 0 0 8.533 8.533h34.133v-51.2c0-4.71 3.814-8.533 8.533-8.533s8.533 3.823 8.533 8.533V512h34.133a8.53 8.53 0 0 0 8.533-8.533v-25.6h34.133v25.6a8.53 8.53 0 0 0 8.533 8.533h42.667v-34.133H358.4V460.8h34.133v-34.133h-42.667a8.531 8.531 0 0 0-8.533 8.533zm-115.396-17.067 10.24-25.6h39.646l10.24 25.6h-60.126zM281.6 307.2h-51.2a8.53 8.53 0 0 1-8.533-8.533V179.2a8.53 8.53 0 0 1 8.533-8.533h51.2a8.53 8.53 0 0 1 8.533 8.533v119.467a8.53 8.53 0 0 1-8.533 8.533zM460.8 512h42.667a8.53 8.53 0 0 0 8.533-8.533v-25.6h-51.2V512zM68.267 477.867H102.4V512H68.267zM0 503.467A8.53 8.53 0 0 0 8.533 512H51.2v-34.133H0v25.6zM68.267 426.667H102.4V460.8H68.267zM0 435.2v25.6h51.2v-34.133H8.533A8.53 8.53 0 0 0 0 435.2zM68.267 59.733H102.4v34.133H68.267zM8.533 93.867H51.2V59.733H0v25.6a8.53 8.53 0 0 0 8.533 8.534zM68.267 8.533H102.4v34.133H68.267zM51.2 8.533H8.533A8.53 8.53 0 0 0 0 17.067v25.6h51.2V8.533z" />
-  </StationSvg>
-);
-
 const RocketSvg = styled(Svg)`
-  bottom: -${WAVE_HEIGHT}px;
-  left: calc(66vw - 106px / 2);
+  --ydist: -${WAVE_HEIGHT}px;
+  --xdist: calc(66vw - 106px / 2);
+
+  bottom: var(--ydist);
+  left: var(--xdist);
 
   @keyframes move_rocket {
     0% {
@@ -80,36 +47,78 @@ const Rocket = () => (
   </RocketSvg>
 );
 
-const SatelliteSvg = styled(Svg)`
-  bottom: -${WAVE_HEIGHT}px;
-  left: -100px/2;
+const StationSvg = styled(Svg)`
+  --ydist: -${1.5 * WAVE_HEIGHT}px;
+  --xdist: max(calc(0vw - 100px / 2), calc(50vw - 100px / 2 - 1100px / 2));
 
-  @keyframes fly_satellite {
+  bottom: var(--ydist);
+  left: var(--xdist);
+
+  @media (${BREAKPOINTS.mdAndSmaller}) {
+    display: none;
+  }
+
+  @keyframes fly_station {
     0% {
-      transform: translateY(0) translateX(50vw);
+      transform: translateX(0) translateY(0) rotate(315deg);
     }
     80% {
-      transform: translateY(-50vh) translateX(90vw);
+      transform: translateX(50vw) translateY(calc(-50vh + var(--ydist))) rotate(315deg);
     }
     100% {
-      transform: translateY(-50vh) translateX(90vw);
+      transform: translateX(50vw) translateY(calc(-50vh + var(--ydist))) rotate(315deg);
     }
   }
 
-  animation: calc(var(--duration) * 4) linear 10s infinite fly_satellite;
+  animation: min(calc(var(--duration) * 4), 40s) linear 25s infinite fly_station;
+`;
+
+const Station = () => (
+  <StationSvg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    width="100px"
+    height="100px"
+    viewBox="0 0 512 512"
+  >
+    <path d="M238.933 247.467h34.133v42.667h-34.133zM238.933 187.733h34.133V230.4h-34.133zM409.6 8.533h34.133v34.133H409.6zM503.467 8.533H460.8v34.133H512v-25.6a8.53 8.53 0 0 0-8.533-8.533zM409.6 59.733h34.133v34.133H409.6zM460.8 93.867h42.667A8.53 8.53 0 0 0 512 85.334v-25.6h-51.2v34.133zM409.6 426.667h34.133V460.8H409.6zM503.467 426.667H460.8V460.8H512v-25.6a8.53 8.53 0 0 0-8.533-8.533zM409.6 477.867h34.133V512H409.6z" />
+    <path d="M341.333 435.2v25.6H307.2v-34.133c0-.119-.06-.213-.068-.324-.034-.964-.171-1.929-.538-2.85l-16.461-41.139v-41.31c19.046-1.476 34.133-17.271 34.133-36.685v-130.85c0-19.413-15.087-35.209-34.133-36.685V102.4h8.533a8.53 8.53 0 0 0 8.533-8.533V59.733h34.133v25.6a8.53 8.53 0 0 0 8.533 8.533h42.667V59.733H358.4V42.667h34.133V8.533h-42.667a8.53 8.53 0 0 0-8.533 8.533v25.6H307.2V8.533A8.53 8.53 0 0 0 298.667 0h-34.133v51.2c0 4.71-3.814 8.533-8.533 8.533s-8.533-3.823-8.533-8.533V0h-34.133a8.53 8.53 0 0 0-8.533 8.533v34.133h-34.133v-25.6a8.53 8.53 0 0 0-8.533-8.533h-42.667v34.133H153.6v17.067h-34.133v34.133h42.667a8.53 8.53 0 0 0 8.533-8.533v-25.6H204.8v34.133a8.53 8.53 0 0 0 8.533 8.533h8.533v34.423c-19.046 1.476-34.133 17.271-34.133 36.685v130.85c0 19.413 15.087 35.209 34.133 36.685v41.31l-16.461 41.139c-.367.922-.503 1.886-.538 2.842-.009.12-.068.213-.068.333V460.8h-34.133v-25.6a8.53 8.53 0 0 0-8.533-8.533h-42.667V460.8H153.6v17.067h-34.133V512h42.667a8.53 8.53 0 0 0 8.533-8.533v-25.6H204.8v25.6a8.53 8.53 0 0 0 8.533 8.533h34.133v-51.2c0-4.71 3.814-8.533 8.533-8.533s8.533 3.823 8.533 8.533V512h34.133a8.53 8.53 0 0 0 8.533-8.533v-25.6h34.133v25.6a8.53 8.53 0 0 0 8.533 8.533h42.667v-34.133H358.4V460.8h34.133v-34.133h-42.667a8.531 8.531 0 0 0-8.533 8.533zm-115.396-17.067 10.24-25.6h39.646l10.24 25.6h-60.126zM281.6 307.2h-51.2a8.53 8.53 0 0 1-8.533-8.533V179.2a8.53 8.53 0 0 1 8.533-8.533h51.2a8.53 8.53 0 0 1 8.533 8.533v119.467a8.53 8.53 0 0 1-8.533 8.533zM460.8 512h42.667a8.53 8.53 0 0 0 8.533-8.533v-25.6h-51.2V512zM68.267 477.867H102.4V512H68.267zM0 503.467A8.53 8.53 0 0 0 8.533 512H51.2v-34.133H0v25.6zM68.267 426.667H102.4V460.8H68.267zM0 435.2v25.6h51.2v-34.133H8.533A8.53 8.53 0 0 0 0 435.2zM68.267 59.733H102.4v34.133H68.267zM8.533 93.867H51.2V59.733H0v25.6a8.53 8.53 0 0 0 8.533 8.534zM68.267 8.533H102.4v34.133H68.267zM51.2 8.533H8.533A8.53 8.53 0 0 0 0 17.067v25.6h51.2V8.533z" />
+  </StationSvg>
+);
+
+const SatelliteSvg = styled(Svg)`
+  --ydist: -${1.5 * WAVE_HEIGHT}px;
+  --xdist: -100px/2;
+
+  bottom: var(--ydist);
+  left: var(--xdist);
+
+  @keyframes fly_satellite {
+    0% {
+      transform: translateX(50vw) translateY(0);
+    }
+    80% {
+      transform: translateX(90vw) translateY(calc(-50vh + var(--ydist)));
+    }
+    100% {
+      transform: translateX(90vw) translateY(calc(-50vh + var(--ydist)));
+    }
+  }
+
+  animation: min(calc(var(--duration) * 4), 40s) linear 10s infinite fly_satellite;
 
   @media (${BREAKPOINTS.mdAndSmaller}) {
-    left: max(calc(0vw - 100px / 2), calc(50vw - 100px / 2 - 1100px / 2));
+    --xdist: max(calc(0vw - 100px / 2), calc(50vw - 100px / 2 - 1100px / 2));
 
     @keyframes fly_satellite {
       0% {
         transform: translateX(-20vw) translateY(0);
       }
       80% {
-        transform: translateX(100vw) translateY(-65vh);
+        transform: translateX(100vw) translateY(calc(-65vh + var(--ydist)));
       }
       100% {
-        transform: translateX(100vw) translateY(-65vh);
+        transform: translateX(100vw) translateY(calc(-65vh + var(--ydist)));
       }
     }
 
@@ -150,8 +159,8 @@ const RoverSvg = styled(Svg)`
 
   offset-path: path(var(--wave-path));
   offset-anchor: bottom;
-  animation: calc(min(calc(var(--duration) * 5), 25s) * 1.1) ease-in-out
-    calc(max(var(--duration), 10s) - 4s) infinite move_rover;
+  animation: calc(min(calc(var(--duration) * 5), 40s) * 1.1) ease-in-out
+    calc(max(var(--duration), 10s) - 10s) infinite move_rover;
   transform: scaleX(-1) translateX(50px);
 `;
 
@@ -241,7 +250,7 @@ const LanderSvg = styled(Svg)`
 
   offset-rotate: 0deg;
   animation: calc(min(20s, calc(var(--duration) * 2.5)) * 3 / 2) cubic-bezier(0.61, 1, 0.88, 1)
-    calc(max(var(--duration), 10s) + min(calc(var(--duration) * 5), 25s) / 2 - 7s) infinite
+    calc(max(var(--duration), 10s) + min(calc(var(--duration) * 5), 25s) / 2 - 10s) infinite
     move_lander;
 
   @media (${BREAKPOINTS.smAndSmaller}) {
@@ -273,29 +282,6 @@ const Lander = () => (
 );
 
 const SpaceSvgs = () => {
-  useEffect(() => {
-    const setDuration = () => {
-      const [vw, vh] = [
-        Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
-        Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
-      ];
-
-      const baseDuration = 10;
-      const factor = 1 / (vw / vh) / (1920 / 1080);
-      const duration = `${baseDuration * Math.pow(factor, 1 / 2)}s`;
-      console.log(`duration`, duration);
-
-      window.document.documentElement.style.setProperty("--duration", duration);
-    };
-
-    window.addEventListener("resize", setDuration);
-    setDuration();
-
-    return () => {
-      window.removeEventListener("resize", setDuration);
-    };
-  }, []);
-
   return (
     <>
       <Lander />

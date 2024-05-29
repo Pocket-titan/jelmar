@@ -19,6 +19,31 @@ const GitHubActivity = ({ events }: { events: GitHubEvent[] }) => {
       <Title type="small-title"> GitHub activity </Title>
       {events
         .filter(({ type }) => ["WatchEvent", "CreateEvent", "PushEvent"].includes(type))
+        .reduce((acc, curr) => {
+          if (
+            acc.length > 0 &&
+            acc[acc.length - 1].type === "PushEvent" &&
+            curr.type === "PushEvent" &&
+            acc[acc.length - 1].repo.id === curr.repo.id &&
+            new Date(curr.created_at).getTime() -
+              new Date(acc[acc.length - 1].created_at).getTime() <
+              24 * 60 * 60
+          ) {
+            acc[acc.length - 1] = {
+              ...acc[acc.length - 1],
+              payload: {
+                ...acc[acc.length - 1].payload,
+                commits: (acc[acc.length - 1] as PushEvent).payload.commits.concat(
+                  curr.payload.commits
+                ),
+              } as any,
+            };
+          } else {
+            acc.push(curr);
+          }
+
+          return acc;
+        }, [] as GitHubEvent[])
         .slice(0, 5)
         .map((event) => (
           <Event event={event} key={event.id} />
@@ -80,7 +105,7 @@ const getEventText = (event: GitHubEvent) => {
 
         return (
           <span>
-            created {amount} commit{amount > 1 ? "s" : ""} in <Mono>{name}</Mono>
+            pushed {amount} commit{amount > 1 ? "s" : ""} to <Mono>{name}</Mono>
           </span>
         );
       }

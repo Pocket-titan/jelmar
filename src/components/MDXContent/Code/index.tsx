@@ -8,9 +8,12 @@ import { languages } from "./languages";
 
 const Code = ({
   language = "markdown",
+  wrapLines = true,
   children,
   ...props
-}: PropsWithChildren<{ language?: string } & HTMLAttributes<HTMLPreElement>>) => {
+}: PropsWithChildren<
+  { language?: string; wrapLines?: boolean } & HTMLAttributes<HTMLPreElement>
+>) => {
   const initialValue = stringifyChildren(children).trim();
   const name = findName(language) || language;
   const prefix = findPrefix(name);
@@ -18,22 +21,24 @@ const Code = ({
     {
       initialValue,
     },
-    [languages[name], syntaxColors]
+    [languages[name], syntaxColors].filter((x) => !!x),
+    wrapLines
   );
 
   // Precompute height to prevent layout shift. This will be wrong when the lines  wrap, but it's
   // better than nothing.
-  const fontSize = 15;
+  const fontSize = 14.4;
+  const paddingY = 13;
   const lineHeight = 1.5;
-  const height = 2 * 15 + fontSize * initialValue.split("\n").length * lineHeight;
+  const minHeight = 2 * paddingY + fontSize * initialValue.split("\n").length * lineHeight;
 
   return (
     <pre {...props}>
       <CodeWrapper className="code-wrapper">
         <CodeLanguage className="code-language">{prefix}</CodeLanguage>
         <EditorWrapper
-          style={{ minHeight: height }}
           className="editor-wrapper"
+          style={{ minHeight }}
           ref={(x) => (ref.current = x!)}
         />
       </CodeWrapper>
@@ -77,9 +82,13 @@ const EditorWrapper = styled.div`
   transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
   /* box-shadow: ${SHADOWS.low}; */
 
-  padding: 1em 1.25em;
-  border-radius: 0.5em;
-  font-size: 15px;
+  /* padding: 0.9em 1.15em;
+  border-radius: 5px;
+  font-size: 0.8rem; */
+
+  padding: 13px 16px;
+  border-radius: 5px;
+  font-size: 14.5px;
 
   * {
     line-height: 1.5 !important;

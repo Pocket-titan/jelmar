@@ -93,7 +93,13 @@ const Header = () => {
             // marginRight: 32,
           }}
         >
-          <span>Jelmar</span>
+          <span
+            style={{
+              userSelect: "none",
+            }}
+          >
+            Jelmar
+          </span>
         </NextLink>
       </Left>
 

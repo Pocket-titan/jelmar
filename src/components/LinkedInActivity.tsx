@@ -10,7 +10,7 @@ const LinkedInActivity = ({ posts, bio }: { posts: LinkedInPost[]; bio: LinkedIn
   return (
     <LinkedInList>
       <Title type="small-title"> LinkedIn activity </Title>
-      {posts.slice(0, 5).map((post) => (
+      {posts.slice(0, 2).map((post) => (
         <Post post={post} bio={bio} key={post.id} />
       ))}
     </LinkedInList>
@@ -58,11 +58,13 @@ const Name = styled.span`
 `;
 
 const Job = styled.span`
+  transition: color 350ms ease 0s;
   color: var(--color-gray-700);
   font-size: 0.75rem;
 `;
 
 const When = styled.div`
+  transition: color 350ms ease 0s;
   color: var(--color-gray-700);
   font-size: 0.75rem;
 
@@ -125,10 +127,10 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
   );
 };
 
-const ImagesWrapper = styled.div<{ nrows: number; ncols: number }>`
+const ImagesWrapper = styled.div<{ $nrows: number; $ncols: number }>`
   display: grid;
-  grid-template-rows: repeat(${(p) => p.nrows}, auto);
-  grid-template-columns: repeat(${(p) => p.ncols}, auto);
+  grid-template-rows: repeat(${(p) => p.$nrows}, auto);
+  grid-template-columns: repeat(${(p) => p.$ncols}, auto);
   height: auto;
   min-height: auto;
   max-height: 300px;
@@ -178,7 +180,7 @@ const Images = ({ images }: { images: string[] }) => {
   const layout = layouts[Math.min(images.length, 4)];
 
   return (
-    <ImagesWrapper nrows={nrows} ncols={ncols}>
+    <ImagesWrapper $nrows={nrows} $ncols={ncols}>
       {images.slice(0, 4).map((image, i) => (
         <ImageWrapper
           key={image}
@@ -198,6 +200,7 @@ const LikesWrapper = styled.div`
   display: flex;
   align-items: center;
   color: var(--color-gray-500);
+  transition: color 350ms ease 0s;
   font-size: 0.8rem;
 `;
 
@@ -209,6 +212,7 @@ const Likes = ({ likes }: { likes: string }) => {
           display: "inline",
           marginRight: "0.2rem",
           color: "var(--color-primary)",
+          transition: "color 350ms ease 0s",
         }}
       />
       <span>{likes}</span>

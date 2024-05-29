@@ -89,7 +89,7 @@ const Wrapper = styled.span`
 const Caption = styled.span`
   display: block;
   padding-top: 8px;
-  font-size: 15px;
+  font-size: 0.84rem;
   text-align: center;
 `;
 

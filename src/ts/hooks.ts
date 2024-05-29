@@ -4,7 +4,8 @@ import { EditorState } from "@codemirror/state";
 
 export function useEditor(
   { initialValue = "" }: { initialValue?: string },
-  extensions: any[] = []
+  extensions: any[] = [],
+  wrapLines = true
 ) {
   const ref = useRef<HTMLElement>();
   const [view, setView] = useState<EditorView>();
@@ -16,7 +17,7 @@ export function useEditor(
         extensions: [
           EditorState.readOnly.of(true),
           EditorView.editable.of(false),
-          EditorView.lineWrapping,
+          ...(wrapLines ? [EditorView.lineWrapping] : []),
           ...extensions,
         ],
       }),

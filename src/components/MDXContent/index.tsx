@@ -6,6 +6,7 @@ import Note from "./Note";
 import Image from "./Image";
 import ContentHeading from "./ContentHeading";
 import ContentLink from "./ContentLink";
+import Cell from "./Notebook/Cell";
 
 export type Frontmatter = {
   title: string;
@@ -19,6 +20,7 @@ export type Frontmatter = {
 export type MDX = MDXRemoteSerializeResult<Record<string, unknown>, Frontmatter>;
 
 const components: MDXRemoteProps["components"] = {
+  Cell,
   Code,
   Math,
   Note,
@@ -31,7 +33,7 @@ const components: MDXRemoteProps["components"] = {
       children.type === "code"
     ) {
       const { className, ...childProps } = children.props;
-      const language = className.replace(/language-/, "");
+      const language = (className || "").replace(/language-/, "");
 
       return (
         <Code language={language.length > 0 ? language : undefined} {...props} {...childProps} />

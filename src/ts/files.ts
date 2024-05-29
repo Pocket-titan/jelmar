@@ -46,9 +46,19 @@ async function readMarkdownFiles() {
 }
 
 async function readNotebookFiles() {
-  // const notebookFiles = await fs.readdir(path.resolve(process.cwd(), NOTEBOOK_FOLDER));
-  const notebookFiles: string[] = [];
-  return await Promise.all(notebookFiles.map(async (file) => await readNotebookFile(file)));
+  const notebookFiles = await fs.readdir(path.resolve(process.cwd(), NOTEBOOK_FOLDER));
+  return (
+    await Promise.all(
+      notebookFiles.map(async (file) => {
+        try {
+          return await readNotebookFile(file);
+        } catch (e) {
+          console.error(`Error reading notebook file ${file}`, e);
+          return undefined;
+        }
+      })
+    )
+  ).filter((x) => !!x) as NonNullable<Awaited<ReturnType<typeof readNotebookFile>>>[];
 }
 
 async function readMarkdownFile(file: string) {
@@ -76,12 +86,196 @@ async function readMarkdownFile(file: string) {
   return mdx;
 }
 
-async function readNotebookFile(file: string) {
-  // const filepath = path.resolve(process.cwd(), `${NOTEBOOK_FOLDER}/${file}`);
-  // const source = await fs.readFile(filepath, "utf-8");
+function makeReadable(item: any): any {
+  if (typeof item === "string") {
+    return item.length > 10 ? item.slice(0, 10) + "..." : item;
+  }
 
-  throw new Error("Unimplemented");
-  return {} as MDX;
+  if (Array.isArray(item)) {
+    return item.slice(0, 5).map((x) => makeReadable(x));
+  }
+
+  if (typeof item === "object" && item !== null) {
+    const processed: { [key: string]: any } = {};
+
+    for (const key in item) {
+      if (item.hasOwnProperty(key)) {
+        processed[key] = makeReadable(item[key]);
+      }
+    }
+
+    return processed;
+  }
+
+  return item;
+}
+
+type NotebookOutputData = {
+  "text/plain"?: string[];
+  "image/png"?: string;
+};
+
+type NotebookOutput = {
+  data: NotebookOutputData;
+  execution_count: number | null;
+  metadata: Record<string, any>;
+  output_type: string;
+};
+
+type CodeCell = {
+  cell_type: "code";
+  execution_count: number | null;
+  metadata: Record<string, any>;
+  outputs: NotebookOutput[];
+  source: string[];
+};
+
+type MarkdownCell = {
+  cell_type: "markdown";
+  metadata: Record<string, any>;
+  source: string[];
+};
+
+type NotebookCell = CodeCell | MarkdownCell;
+
+type NotebookMetadata = {
+  kernelspec: {
+    display_name: string;
+    language: string;
+    name: string;
+  };
+  language_info: {
+    codemirror_mode: {
+      name: string;
+      version: number;
+    };
+    file_extension: string;
+    mimetype: string;
+    name: string;
+    nbconvert_exporter: string;
+    pygments_lexer: string;
+    version: string;
+  };
+};
+
+type Notebook = {
+  cells: NotebookCell[];
+  metadata: NotebookMetadata;
+  nbformat_minor: number;
+  nbformat: number;
+};
+
+function convertCellToMDX(cell: NotebookCell): string {
+  let { metadata, source } = cell;
+
+  if (source.length === 0 || source.map((x) => x.trim()).join("").length === 0) {
+    return "";
+  }
+
+  if (cell.cell_type === "markdown") {
+    return source.join("");
+  }
+
+  if (cell.cell_type === "code") {
+    let tag = null;
+
+    if (source[0].trim() === "# hide") {
+      tag = "hide";
+    }
+
+    if (source[0].trim() === "# fold") {
+      tag = "fold";
+    }
+
+    if (tag) {
+      metadata.tags = [...(metadata.tags || []), tag];
+      source = source.slice(1);
+    }
+
+    if ((metadata.tags || []).includes("hide")) {
+      return "";
+    }
+
+    return `<Cell cell={${JSON.stringify({ ...cell, metadata, source })}}/>\n\n`;
+  }
+
+  return "";
+}
+
+const parseFrontmatterCell = ({ cell_type, source }: NotebookCell) => {
+  if (cell_type !== "code") {
+    throw new Error("Error parsing frontmatter");
+  }
+
+  return source
+    .filter((line) => line.trim().length > 0)
+    .map((line, i) => {
+      const res = line.trim();
+
+      if (!res.startsWith("#")) {
+        throw new Error(`Error parsing frontmatter on line ${i}`);
+      }
+
+      return res.slice(1).trim();
+    })
+    .join("\n");
+};
+
+const parseTitleCell = ({ cell_type, source }: NotebookCell) => {
+  if (cell_type !== "markdown") {
+    throw new Error("Error parsing title");
+  }
+
+  return source
+    .filter((line) => line.trim().length > 0)
+    .map((line) => line.replace("#", "").trim())[0]
+    .trim();
+};
+
+async function readNotebookFile(file: string) {
+  const filepath = path.resolve(process.cwd(), `${NOTEBOOK_FOLDER}/${file}`);
+  const contents = await fs.readFile(filepath, "utf-8");
+  const notebook = JSON.parse(contents) as Notebook;
+  const language = notebook.metadata.kernelspec.language;
+
+  let startCell = 1;
+  let frontmatter = parseFrontmatterCell(notebook.cells[0]);
+  if (!frontmatter.includes("title:")) {
+    startCell = 2;
+    const title = parseTitleCell(notebook.cells[1]);
+    let lines = frontmatter.split("\n");
+    const idx = lines.indexOf("---");
+    lines.splice(idx + 1, 0, `title: ${title}`);
+    frontmatter = lines.join("\n");
+  }
+
+  const cells = notebook.cells
+    .slice(startCell)
+    .map((cell) =>
+      cell.cell_type === "code" ? { ...cell, metadata: { ...cell.metadata, language } } : cell
+    )
+    .reduce((acc, cell) => acc + convertCellToMDX(cell), "");
+  const source = [frontmatter, cells].join("\n\n");
+
+  const mdx = await serialize<Record<string, unknown>, Frontmatter>(source, {
+    parseFrontmatter: true,
+    mdxOptions: {
+      remarkPlugins: [remarkMath],
+    },
+  });
+
+  const extension = path.extname(file);
+  const slug = file.replace(extension, "");
+  const fm = frontMatter(source);
+  mdx.frontmatter = maybeFixFrontmatter(
+    source
+      .split("\n")
+      .slice(Math.max(0, fm.bodyBegin - 1))
+      .join("\n"),
+    { ...(fm.attributes as object), slug }
+  );
+
+  return mdx;
 }
 
 export async function readFiles() {
