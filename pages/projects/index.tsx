@@ -13,6 +13,8 @@ import WhcImage from "public/images/projects/whc.png";
 import ExternalLinkIcon from "@components/ExternalLinkIcon";
 import { CSSProperties } from "react";
 import { sortBy } from "lodash";
+import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
+import Head from "next/head";
 
 type Project = {
   title: string;
@@ -32,8 +34,7 @@ type Project = {
 const projects: Project[] = [
   {
     title: "Apygee",
-    description:
-      "A Python package for creating, manipulating and visualizing Kepler orbits.",
+    description: "A Python package for creating, manipulating and visualizing Kepler orbits.",
     tags: ["Python", "Astrodynamics"],
     url: "https://pypi.org/project/apygee/",
     image: {
@@ -138,13 +139,8 @@ const Tag = styled.div`
     inset: 0;
     border-radius: 4px;
     padding: 2px;
-    background: linear-gradient(
-      330deg,
-      var(--color-secondary) 20%,
-      var(--color-primary) 100%
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
+    background: linear-gradient(330deg, var(--color-secondary) 20%, var(--color-primary) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
@@ -230,21 +226,36 @@ const Project = ({ title, description, tags, url, image }: Project) => {
   );
 };
 
-const Projects = ({
-  projects,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Projects = ({ projects }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <DefaultLayout background={"var(--color-subtle-background)"}>
-      <MaxWidthWrapper>
-        <Main>
-          <ContentGrid title="Projects" type="grid">
-            {projects.map((project) => (
-              <Project key={project.title} {...project} />
-            ))}
-          </ContentGrid>
-        </Main>
-      </MaxWidthWrapper>
-    </DefaultLayout>
+    <>
+      <Head>
+        <meta
+          key="theme_color_dark"
+          name="theme-color"
+          content={DARK_COLORS.subtleBackground}
+          media="(prefers-color-scheme: dark)"
+        />
+        <meta
+          key="theme_color_light"
+          name="theme-color"
+          content={LIGHT_COLORS.subtleBackground}
+          media="(prefers-color-scheme: light)"
+        />
+      </Head>
+
+      <DefaultLayout background={"var(--color-subtle-background)"}>
+        <MaxWidthWrapper>
+          <Main>
+            <ContentGrid title="Projects" type="grid">
+              {projects.map((project) => (
+                <Project key={project.title} {...project} />
+              ))}
+            </ContentGrid>
+          </Main>
+        </MaxWidthWrapper>
+      </DefaultLayout>
+    </>
   );
 };
 

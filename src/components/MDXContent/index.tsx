@@ -19,6 +19,15 @@ export type Frontmatter = {
 
 export type MDX = MDXRemoteSerializeResult<Record<string, unknown>, Frontmatter>;
 
+const InlineCode = styled.code`
+  background: var(--color-code-base);
+  border-radius: 3px;
+  margin-right: 0.1em;
+  padding: 0.1em 0.2em;
+  font-size: 0.875em;
+  transition: background 350ms ease 0s;
+`;
+
 const components: MDXRemoteProps["components"] = {
   Cell,
   Code,
@@ -61,6 +70,30 @@ const components: MDXRemoteProps["components"] = {
   h3: (props) => <ContentHeading type="minor-heading" {...props} />,
   h4: (props) => <ContentHeading type="mini-heading" {...props} />,
   a: (props) => <ContentLink {...props} />,
+  code: ({ children, ...props }) => {
+    if (!children) {
+      return null;
+    }
+
+    const { className, ...rest } = props;
+    const isMultiline = children.toString().trim().split("\n").length > 1;
+
+    if (isMultiline || (className && className.includes("language-"))) {
+      const language = (className || "").replace(/language-/, "");
+
+      return (
+        <Code language={language.length > 0 ? language : undefined} {...rest}>
+          {children}
+        </Code>
+      );
+    }
+
+    return (
+      <InlineCode {...props} className="inline-code">
+        {children}
+      </InlineCode>
+    );
+  },
 };
 
 const MDXContent = (props: MDXRemoteProps) => {

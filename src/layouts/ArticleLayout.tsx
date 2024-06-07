@@ -110,7 +110,7 @@ const ArticleLayout = ({
             {tags.length > 0 && (
               <Tags>
                 {tags.map((tag) => (
-                  <Tag>{tag}</Tag>
+                  <Tag key={tag}>{tag}</Tag>
                 ))}
               </Tags>
             )}
@@ -217,7 +217,7 @@ const DarkHeaderBackground = styled.div`
 `;
 
 const Heading = styled.h1<{ alone?: boolean }>`
-  font-size: calc(38 / 16 * 1rem);
+  font-size: calc(32 / 16 * 1rem);
   color: var(--color-gray-1000);
 `;
 

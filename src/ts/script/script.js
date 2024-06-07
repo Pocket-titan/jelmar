@@ -40,6 +40,11 @@ var code_theme_light = {
         6: "#d45b3d",
         "6-2": "#5bb6cd",
     },
+    diff: {
+        deletedLine: "hsl(0deg 30% 85.98% / 40%)",
+        changedText: "hsl(120deg 69.23% 43.33% / 40%)",
+        changedLine: "hsl(148deg 34% 82.98% / 40%)",
+    },
 };
 var LIGHT_COLORS = {
     // text: "#000",
@@ -117,6 +122,11 @@ var code_theme_dark = {
         6: "#d19a66",
         "6-2": "#e6c07b",
     },
+    diff: {
+        deletedLine: "hsl(0deg 24% 50.98% / 12%)",
+        changedText: "hsl(120deg 69.23% 43.33% / 40%)",
+        changedLine: "hsl(148deg 40% 51% / 10%)",
+    },
 };
 var DARK_COLORS = {
     // text: "white",
@@ -175,8 +185,8 @@ var VARIABLES = {
         },
     },
     scrollbar: {
-        width: "12px",
-        height: "12px",
+        width: "10px",
+        height: "10px",
     },
 };
 var HEADER_HEIGHT = "2.5rem";

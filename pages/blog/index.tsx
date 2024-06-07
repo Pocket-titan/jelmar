@@ -7,6 +7,8 @@ import Link from "components/Link";
 import { capitalize, formatDate } from "ts/utils";
 import { FaChevronRight } from "react-icons/fa";
 import ContentGrid from "components/ContentGrid";
+import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
+import Head from "next/head";
 
 const Arrow = styled(FaChevronRight)`
   transition: opacity 250ms ease 0s;
@@ -49,36 +51,52 @@ const SmallDate = styled.p`
 
 function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <DefaultLayout background={"var(--color-subtle-background)"}>
-      <MaxWidthWrapper>
-        <Main>
-          <ContentGrid title="Posts" type="grid">
-            {files.map((file) => (
-              <Article key={file.slug}>
-                <Link
-                  style={{ display: "flex", flexDirection: "column", height: "100%" }}
-                  href={`/blog/${file.slug}`}
-                >
-                  <Title>{capitalize(file.title)}</Title>
-                  <SmallDate>{formatDate(file.date)}</SmallDate>
-                  <Description>{file.excerpt}</Description>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      fontWeight: "bold",
-                    }}
+    <>
+      <Head>
+        <meta
+          key="theme_color_dark"
+          name="theme-color"
+          content={DARK_COLORS.subtleBackground}
+          media="(prefers-color-scheme: dark)"
+        />
+        <meta
+          key="theme_color_light"
+          name="theme-color"
+          content={LIGHT_COLORS.subtleBackground}
+          media="(prefers-color-scheme: light)"
+        />
+      </Head>
+      <DefaultLayout background={"var(--color-subtle-background)"}>
+        <MaxWidthWrapper>
+          <Main>
+            <ContentGrid title="Posts" type="grid">
+              {files.map((file) => (
+                <Article key={file.slug}>
+                  <Link
+                    style={{ display: "flex", flexDirection: "column", height: "100%" }}
+                    href={`/blog/${file.slug}`}
                   >
-                    Read more <Arrow />
-                  </div>
-                </Link>
-              </Article>
-            ))}
-          </ContentGrid>
-        </Main>
-      </MaxWidthWrapper>
-    </DefaultLayout>
+                    <Title>{capitalize(file.title)}</Title>
+                    <SmallDate>{formatDate(file.date)}</SmallDate>
+                    <Description>{file.excerpt}</Description>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Read more <Arrow />
+                    </div>
+                  </Link>
+                </Article>
+              ))}
+            </ContentGrid>
+          </Main>
+        </MaxWidthWrapper>
+      </DefaultLayout>
+    </>
   );
 }
 

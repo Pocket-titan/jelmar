@@ -4,14 +4,14 @@ import DefaultLayout from "src/layouts/DefaultLayout";
 import MaxWidthWrapper from "@components/MaxWidthWrapper";
 import GitHubActivity, { GitHubEvent } from "@components/GitHubActivity";
 import Face from "components/Face";
-import { BREAKPOINTS, BREAKPOINT_SIZES } from "ts/theme";
+import { BREAKPOINTS, BREAKPOINT_SIZES, DARK_COLORS, LIGHT_COLORS } from "ts/theme";
 import Socials from "components/Socials";
 import Link from "components/Link";
-import { load } from "cheerio";
 import _ from "lodash";
 import { SVGAttributes } from "react";
 import SpaceSvgs, { WAVE_HEIGHT } from "@components/SpaceSvgs";
 import LinkedInActivity, { LinkedInBio, LinkedInPost } from "@components/LinkedInActivity";
+import Head from "next/head";
 
 const Main = styled.main`
   padding-top: 64px;
@@ -197,112 +197,128 @@ const Feeds = styled.div`
 
 const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <DefaultLayout
-      childStyles={{ display: "flex" }}
-      footerStyles={{ background: "var(--color-muted)", color: "var(--color-gray-600)" }}
-    >
-      <Main>
-        <First>
-          <TwoColumns>
-            <Left>
-              <Face />
-              <Socials
-                style={{
-                  marginTop: 24,
-                  transform: "scale(1.2)",
-                  position: "relative",
-                }}
-              >
-                <ContactMe>
-                  <Arrow
-                    width={150}
-                    height={150}
-                    style={{
-                      position: "absolute",
-                      pointerEvents: "none",
-                      right: 0,
-                      top: 0,
-                      transform: "scale(calc(1/1.2)) translate(53%, -45%) rotate(-15deg)",
-                    }}
-                  />
-                  <ContactText>contact me!</ContactText>
-                </ContactMe>
-              </Socials>
-            </Left>
-            <Right>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  marginBottom: 24,
-                }}
-              >
-                <Greeting>hi!</Greeting>
-              </div>
-              <div>
-                My name is Jelmar. I'm currently finishing up a MSc in Aerospace Engineering at TU
-                Delft in the Netherlands. I'm passionate about science and software engineering.
-                Have a look at some of the{" "}
-                <UnderlinedLink href="/projects">projects</UnderlinedLink> I've done, or see my{" "}
-                <UnderlinedLink href="/blog">blog</UnderlinedLink> if you're interested in my
-                writings.
-              </div>
-            </Right>
-          </TwoColumns>
+    <>
+      <Head>
+        <meta
+          key="theme_color_dark"
+          name="theme-color"
+          content={DARK_COLORS.background}
+          media="(prefers-color-scheme: dark)"
+        />
+        <meta
+          key="theme_color_light"
+          name="theme-color"
+          content={LIGHT_COLORS.background}
+          media="(prefers-color-scheme: light)"
+        />
+      </Head>
+      <DefaultLayout
+        childStyles={{ display: "flex" }}
+        footerStyles={{ background: "var(--color-muted)", color: "var(--color-gray-600)" }}
+      >
+        <Main>
+          <First>
+            <TwoColumns>
+              <Left>
+                <Face />
+                <Socials
+                  style={{
+                    marginTop: 24,
+                    transform: "scale(1.2)",
+                    position: "relative",
+                  }}
+                >
+                  <ContactMe>
+                    <Arrow
+                      width={150}
+                      height={150}
+                      style={{
+                        position: "absolute",
+                        pointerEvents: "none",
+                        right: 0,
+                        top: 0,
+                        transform: "scale(calc(1/1.2)) translate(53%, -45%) rotate(-15deg)",
+                      }}
+                    />
+                    <ContactText>contact me!</ContactText>
+                  </ContactMe>
+                </Socials>
+              </Left>
+              <Right>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginBottom: 24,
+                  }}
+                >
+                  <Greeting>hi!</Greeting>
+                </div>
+                <div>
+                  My name is Jelmar. I'm currently finishing up a MSc in Aerospace Engineering at TU
+                  Delft in the Netherlands. I'm passionate about science and software engineering.
+                  Have a look at some of the{" "}
+                  <UnderlinedLink href="/projects">projects</UnderlinedLink> I've done, or see my{" "}
+                  <UnderlinedLink href="/blog">blog</UnderlinedLink> if you're interested in my
+                  writings.
+                </div>
+              </Right>
+            </TwoColumns>
 
-          <div
-            style={{
-              // overflow: "hidden",
-              // overflowX: "hidden",
-              display: "block",
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              transform: "translateY(1px)",
-            }}
-          >
-            <svg
-              preserveAspectRatio="none"
-              viewBox="0 0 1703 100"
-              width={1703}
-              height={WAVE_HEIGHT}
-              id="wave"
+            <div
               style={{
+                // overflow: "hidden",
+                // overflowX: "hidden",
+                display: "block",
                 position: "absolute",
-                left: "-3%",
-                right: "-3%",
+                left: 0,
+                right: 0,
                 bottom: 0,
-                width: "106%",
-                minWidth: 800,
-                maxWidth: "unset",
-                transition: `fill 350ms ease 0s`,
-                fill: "var(--color-muted)",
+                transform: "translateY(1px)",
               }}
             >
-              <path
-                fillOpacity="1"
-                d={
-                  "M 0 26.7 L 90 37.4 C 180 47.7 360 69.7 540 58.7 C 720 47.7 900 5.7 1080 0 C 1260 -5.3 1440 26.7 1620 48 C 1800 69.7 1980 79.7 2070 85.4 L 2160 90.7 L 2160 100 L 2070 100 C 1980 100 1800 100 1620 100 C 1440 100 1260 100 1080 100 C 900 100 720 100 540 100 C 360 100 180 100 90 100 L 0 100 Z"
-                }
-              ></path>
-            </svg>
-          </div>
+              <svg
+                preserveAspectRatio="none"
+                viewBox="0 0 1703 100"
+                width={1703}
+                height={WAVE_HEIGHT}
+                id="wave"
+                style={{
+                  position: "absolute",
+                  left: "-3%",
+                  right: "-3%",
+                  bottom: 0,
+                  width: "106%",
+                  minWidth: 800,
+                  maxWidth: "unset",
+                  transition: `fill 350ms ease 0s`,
+                  fill: "var(--color-muted)",
+                }}
+              >
+                <path
+                  fillOpacity="1"
+                  d={
+                    "M 0 26.7 L 90 37.4 C 180 47.7 360 69.7 540 58.7 C 720 47.7 900 5.7 1080 0 C 1260 -5.3 1440 26.7 1620 48 C 1800 69.7 1980 79.7 2070 85.4 L 2160 90.7 L 2160 100 L 2070 100 C 1980 100 1800 100 1620 100 C 1440 100 1260 100 1080 100 C 900 100 720 100 540 100 C 360 100 180 100 90 100 L 0 100 Z"
+                  }
+                ></path>
+              </svg>
+            </div>
 
-          <SpaceSvgs />
-        </First>
+            <SpaceSvgs />
+          </First>
 
-        <Second>
-          <MaxWidthWrapper>
-            <Feeds>
-              <GitHubActivity events={events} />
-              <LinkedInActivity posts={posts} bio={bio} />
-            </Feeds>
-          </MaxWidthWrapper>
-        </Second>
-      </Main>
-    </DefaultLayout>
+          <Second>
+            <MaxWidthWrapper>
+              <Feeds>
+                <GitHubActivity events={events} />
+                <LinkedInActivity posts={posts} bio={bio} />
+              </Feeds>
+            </MaxWidthWrapper>
+          </Second>
+        </Main>
+      </DefaultLayout>
+    </>
   );
 };
 

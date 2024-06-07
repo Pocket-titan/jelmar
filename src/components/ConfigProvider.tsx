@@ -42,6 +42,29 @@ export const useConfig = () => {
   return context;
 };
 
+// I really don't need to do this...
+const setFavicon = (colorMode: ColorMode) => {
+  // let icons = document.querySelectorAll('link[rel*="icon"]');
+
+  // if (!icons || icons.length === 0) {
+  //   return;
+  // }
+
+  // const oldColorMode = colorMode === "dark" ? "light" : "dark";
+
+  // icons.forEach((icon) => {
+  //   const href = icon.getAttribute("href");
+
+  //   if (!href || !(icon.id || "").includes(oldColorMode)) {
+  //     return;
+  //   }
+
+  //   icon.setAttribute("href", href.replace(oldColorMode, colorMode));
+  //   icon.toggleAttribute("media", false);
+  // });
+  return;
+};
+
 export const ConfigProvider = ({ children }: PropsWithChildren) => {
   const initialColorMode = "light";
   const [colorMode, _setColorMode] = useState<ColorMode>(initialColorMode);
@@ -85,6 +108,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
         root.style.setProperty(name, color);
       });
 
+      setFavicon(colorMode);
       _setColorMode(colorMode);
 
       // This is really ghetto, but it works: we do this to prevent the transition

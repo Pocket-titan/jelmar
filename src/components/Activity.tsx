@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Heading from "./Heading";
 import { SHADOWS } from "@ts/theme";
 
-const List = styled.ul`
+const List = styled.div`
   display: flex;
   flex-direction: column;
   list-style: none;
@@ -60,6 +60,7 @@ const DateString = styled.div`
   font-size: 0.7rem;
   transition: color 350ms ease 0s;
   color: var(--color-gray-500);
+  text-align: center;
 `;
 
 const formatDateString = (dateString: string) => {
@@ -81,7 +82,9 @@ const formatDateString = (dateString: string) => {
     return `${years} year${years > 1 ? "s" : ""} ago`;
   }
 
-  const months = currentDate.getMonth() - date.getMonth();
+  const months = Math.floor(
+    (currentDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 7 * 4)
+  );
   if (months > 0) {
     return `${months} month${months > 1 ? "s" : ""} ago`;
   }
@@ -91,7 +94,7 @@ const formatDateString = (dateString: string) => {
     return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
   }
 
-  const days = currentDate.getDate() - date.getDate();
+  const days = Math.floor((currentDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
   if (days > 0) {
     return `${days} day${days > 1 ? "s" : ""} ago`;
   }

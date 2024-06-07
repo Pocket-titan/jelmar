@@ -18,8 +18,9 @@ const LinkedInActivity = ({ posts, bio }: { posts: LinkedInPost[]; bio: LinkedIn
 };
 
 const MyListItem = styled(ListItem)`
-  align-items: unset;
-  flex-direction: column;
+  align-items: unset !important;
+  flex-direction: column !important;
+
   color: unset;
   padding: 1rem;
 

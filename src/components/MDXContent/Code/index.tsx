@@ -1,25 +1,38 @@
-import type { HTMLAttributes, PropsWithChildren } from "react";
+import { useState, type HTMLAttributes, type PropsWithChildren } from "react";
 import styled from "styled-components";
 import { stringifyChildren } from "ts/utils";
+import { FaCopy } from "react-icons/fa";
+import { Tooltip } from "react-tooltip";
 import { useEditor } from "ts/hooks";
 import { syntaxColors } from "./highlighting";
-import { SHADOWS, TRANSITION_DURATION } from "ts/theme";
+import { TRANSITION_DURATION } from "ts/theme";
 import { languages } from "./languages";
 
 const Code = ({
   language = "markdown",
+  hasCopyButton = false,
   wrapLines = true,
+  filename,
+  oldValue,
   children,
   ...props
 }: PropsWithChildren<
-  { language?: string; wrapLines?: boolean } & HTMLAttributes<HTMLPreElement>
+  {
+    language?: string;
+    filename?: string;
+    hasCopyButton?: boolean;
+    wrapLines?: boolean;
+    oldValue?: string;
+  } & HTMLAttributes<HTMLPreElement>
 >) => {
-  const initialValue = stringifyChildren(children).trim();
+  const value = stringifyChildren(children).trim();
+  const isMergeEditor = oldValue !== undefined;
   const name = findName(language) || language;
   const prefix = findPrefix(name);
   const { ref } = useEditor(
     {
-      initialValue,
+      value,
+      oldValue,
     },
     [languages[name], syntaxColors].filter((x) => !!x),
     wrapLines
@@ -30,21 +43,55 @@ const Code = ({
   const fontSize = 14.4;
   const paddingY = 13;
   const lineHeight = 1.5;
-  const minHeight = 2 * paddingY + fontSize * initialValue.split("\n").length * lineHeight;
+  const minHeight = 2 * paddingY + fontSize * value.split("\n").length * lineHeight;
 
   return (
     <pre {...props}>
       <CodeWrapper className="code-wrapper">
-        <CodeLanguage className="code-language">{prefix}</CodeLanguage>
+        <Floating>
+          {hasCopyButton && (
+            <CopyButton
+              id={(value.slice(0, 10) + value.slice(-10)).replaceAll(/\s/g, "")}
+              onClick={() => {
+                navigator.permissions.query({ name: "clipboard-write" as any }).then((result) => {
+                  if (result.state === "granted" || result.state === "prompt") {
+                    navigator.clipboard.writeText(value);
+                  }
+                });
+              }}
+            />
+          )}
+          <CodeLanguage className="code-language">{prefix}</CodeLanguage>
+        </Floating>
+        {filename && (
+          <FilenameWrapper>
+            <Filename>{filename}</Filename>
+          </FilenameWrapper>
+        )}
         <EditorWrapper
           className="editor-wrapper"
-          style={{ minHeight }}
+          style={{ minHeight, paddingTop: filename ? "calc(13px + 1em)" : "13px" }}
           ref={(x) => (ref.current = x!)}
         />
       </CodeWrapper>
     </pre>
   );
 };
+
+const FilenameWrapper = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const Filename = styled.span`
+  font-family: monospace;
+  color: var(--color-gray-600);
+  font-size: 14px;
+`;
 
 const CodeWrapper = styled.div`
   position: relative;
@@ -57,14 +104,84 @@ const CodeWrapper = styled.div`
   }
 `;
 
+const Floating = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 0px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+
+  margin-right: 4px;
+`;
+
+const CopyButtonWrapper = styled.button`
+  transition: color ${TRANSITION_DURATION}ms ease 0s, opacity ${TRANSITION_DURATION}ms,
+    background ${TRANSITION_DURATION}ms ease 0s;
+  color: var(--color-gray-400);
+  /* background: color-mix(in srgb, var(--color-code-base) 80%, var(--color-gray-400) 20%); */
+  background: transparent;
+
+  margin-top: 12px;
+  padding: 6px 6px;
+  border-radius: 4px;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: var(--color-gray-600) !important;
+    /* background: color-mix(in srgb, var(--color-code-base) 80%, var(--color-gray-600) 20%); */
+  }
+
+  z-index: 999;
+  cursor: pointer;
+
+  @media ${(p) => p.theme.breakpoints.mobile} {
+    opacity: 0;
+  }
+`;
+
+const CopyIcon = styled(FaCopy)`
+  font-size: 18px;
+`;
+
+const CopyButton = ({ id, ...props }: { id: string } & HTMLAttributes<HTMLButtonElement>) => {
+  const [content, setContent] = useState("Copy code");
+
+  return (
+    <CopyButtonWrapper
+      {...props}
+      data-tooltip-id={id}
+      onClick={(event) => {
+        setContent("Copied!");
+        props.onClick?.(event);
+      }}
+    >
+      <CopyIcon />
+      <Tooltip
+        id={id}
+        content={content}
+        style={{
+          background: "color-mix(in srgb, var(--color-gray-500) 20%, var(--color-muted) 80%)",
+          color: "var(--color-gray-900)",
+          fontSize: 14,
+        }}
+        afterHide={() => setContent("Copy code")}
+      />
+    </CopyButtonWrapper>
+  );
+};
+
 const CodeLanguage = styled.div`
   transition: color ${TRANSITION_DURATION}ms ease 0s, opacity ${TRANSITION_DURATION}ms;
   color: var(--color-gray-300);
-  position: absolute;
-  top: 0px;
-  right: 5px;
+
   font-size: 18px;
-  padding: 8px 12px 0px;
+  padding: 12px 8px 0px;
   text-transform: uppercase;
   font-weight: 600 !important;
   opacity: 1;
@@ -80,11 +197,6 @@ const EditorWrapper = styled.div`
   color: var(--color-code-mono-1);
   background: var(--color-code-base);
   transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
-  /* box-shadow: ${SHADOWS.low}; */
-
-  /* padding: 0.9em 1.15em;
-  border-radius: 5px;
-  font-size: 0.8rem; */
 
   padding: 13px 16px;
   border-radius: 5px;
@@ -155,6 +267,40 @@ const EditorWrapper = styled.div`
   .tok-tagName {
     color: var(--color-code-hue-5);
   }
+
+  /* Gutter (only for line numbers) */
+  div.cm-gutters {
+    transition: background ${TRANSITION_DURATION}ms ease 0s, border ${TRANSITION_DURATION}ms ease 0s,
+      color ${TRANSITION_DURATION}ms ease 0s;
+    --bg: var(--color-code-base);
+    color: var(--color-code-mono-3);
+    background: var(--bg);
+    border-right: 1px solid var(--bg);
+    padding-right: 7px;
+  }
+
+  /* Lines */
+  span.line-number-hidden {
+    transition: color ${TRANSITION_DURATION}ms ease 0s;
+    color: var(--color-code-mono-3);
+  }
+
+  .cm-changedLine {
+    transition: background ${TRANSITION_DURATION}ms ease 0s;
+    background: var(--color-code-diff-changed-line) !important;
+  }
+
+  .cm-changedText {
+    --color: var(--color-code-diff-changed-text);
+    transition: background ${TRANSITION_DURATION}ms ease 0s;
+    background: linear-gradient(var(--color), var(--color)) bottom/100% 2px no-repeat !important;
+  }
+
+  .cm-deletedChunk {
+    transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
+    background: var(--color-code-diff-deleted-line) !important;
+    color: var(--color-code-mono-2) !important;
+  }
 `;
 
 const nameMap = {
@@ -170,6 +316,7 @@ const nameMap = {
   css: ["css"],
   cpp: ["c++", "cpp"],
   latex: ["latex", "tex"],
+  fortran: ["fortran", "f90"],
 };
 
 const findName = (name: string) => {
@@ -195,6 +342,7 @@ const prefixMap = {
   cpp: "cpp",
   latex: "tex",
   julia: "jl",
+  fortran: "f90",
 };
 
 const findPrefix = (name: string) => {

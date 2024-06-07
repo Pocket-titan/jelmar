@@ -15,3 +15,9 @@ def f(x):
 $$
 1 + 2 + 3 = 6
 $$
+
+<div style={{
+  background: "red",
+}}>
+  hello
+</div>

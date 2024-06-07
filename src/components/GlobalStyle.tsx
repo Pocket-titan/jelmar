@@ -124,8 +124,8 @@ const GlobalStyle = createGlobalStyle`
   /* Scrollbar */
   /* @media (orientation: landscape) { */
   ::-webkit-scrollbar {
-    width: var(--scrollbar-width, 12px);
-    height: var(--scrollbar-height, 12px);
+    width: var(--scrollbar-width, 10px);
+    height: var(--scrollbar-height, 10px);
     background-color: var(--color-scrollbar-background, var(--color-gray-100));
     transition: background-color ${TRANSITION_DURATION}ms;
   }
@@ -137,7 +137,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: var(--color-scrollbar, var(--color-gray-700));
     border: 2px solid var(--color-scrollbar-background, var(--color-gray-100));
     transition: background-color ${TRANSITION_DURATION}ms;

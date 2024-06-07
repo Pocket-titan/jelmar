@@ -13,7 +13,7 @@ const CellWrapper = styled.div<{ $margin: string }>`
   }
 
   &:not(last-child) {
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
   }
 `;
 
@@ -85,6 +85,7 @@ const Image = styled.img`
 const Text = styled(Code)`
   flex: 1;
   min-width: 0;
+  font-size: 0.75rem;
 
   .editor-wrapper {
     font-size: 0.75rem;
