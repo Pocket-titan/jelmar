@@ -45,7 +45,7 @@ const OutputWrapper = styled.div`
   flex-direction: row;
 
   .editor-wrapper {
-    /* --padding-y: 0.5em; */
+    --padding-y: 0.5em;
     padding: 0.5em 0.75em;
     background: var(--color-muted);
     min-height: unset !important;
