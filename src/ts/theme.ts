@@ -226,8 +226,8 @@ export const VARIABLES = {
     },
   },
   scrollbar: {
-    width: "10px",
-    height: "10px",
+    width: "8px",
+    height: "7px",
   },
 };
 

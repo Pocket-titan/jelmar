@@ -124,10 +124,8 @@ const GlobalStyle = createGlobalStyle`
   /* Scrollbar */
   /* @media (orientation: landscape) { */
   ::-webkit-scrollbar {
-    /* width: var(--scrollbar-width, 10px);
-    height: var(--scrollbar-height, 10px); */
-    width: 7px;
-    height: 6px;
+    width: var(--scrollbar-width, 8px);
+    height: var(--scrollbar-height, 7px);
     background-color: var(--color-scrollbar-background, var(--color-gray-100));
     transition: background-color ${TRANSITION_DURATION}ms;
   }

@@ -45,7 +45,7 @@ const OutputWrapper = styled.div`
   flex-direction: row;
 
   .editor-wrapper {
-    --padding-y: 0.5em;
+    /* --padding-y: 0.5em; */
     padding: 0.5em 0.75em;
     background: var(--color-muted);
     min-height: unset !important;
@@ -86,10 +86,12 @@ const Image = styled.img`
 const Text = styled(Code)`
   flex: 1;
   min-width: 0;
+  font-size: 0.75rem;
 
   .editor-wrapper {
     font-size: 0.75rem;
     -webkit-text-size-adjust: none;
+    text-size-adjust: none;
   }
 `;
 

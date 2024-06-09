@@ -11,7 +11,7 @@ import { languages } from "./languages";
 const Code = ({
   language = "markdown",
   hasCopyButton = false,
-  wrapLines = false,
+  wrapLines = true,
   filename,
   oldValue,
   children,
@@ -40,7 +40,7 @@ const Code = ({
 
   // Precompute height to prevent layout shift. This will be wrong when the lines  wrap, but it's
   // better than nothing.
-  const fontSize = 14;
+  const fontSize = 12.8;
   const paddingY = 13;
   const lineHeight = 1.5;
   const minHeight = 2 * paddingY + fontSize * value.split("\n").length * lineHeight;
@@ -205,7 +205,9 @@ const EditorWrapper = styled.div`
 
   padding: var(--padding-y) 16px;
   border-radius: 5px;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 
   * {
     line-height: 1.5 !important;
