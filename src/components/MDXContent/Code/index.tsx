@@ -11,7 +11,7 @@ import { languages } from "./languages";
 const Code = ({
   language = "markdown",
   hasCopyButton = false,
-  wrapLines = true,
+  wrapLines = false,
   filename,
   oldValue,
   children,
@@ -40,7 +40,7 @@ const Code = ({
 
   // Precompute height to prevent layout shift. This will be wrong when the lines  wrap, but it's
   // better than nothing.
-  const fontSize = 14.4;
+  const fontSize = 14;
   const paddingY = 13;
   const lineHeight = 1.5;
   const minHeight = 2 * paddingY + fontSize * value.split("\n").length * lineHeight;
@@ -70,7 +70,10 @@ const Code = ({
         )}
         <EditorWrapper
           className="editor-wrapper"
-          style={{ minHeight, paddingTop: filename ? "calc(13px + 1em)" : "13px" }}
+          style={{
+            minHeight,
+            paddingTop: filename ? "calc(var(--padding-y) + 1em)" : "var(--padding-y)",
+          }}
           ref={(x) => (ref.current = x!)}
         />
       </CodeWrapper>
@@ -90,7 +93,7 @@ const FilenameWrapper = styled.div`
 const Filename = styled.span`
   font-family: monospace;
   color: var(--color-gray-600);
-  font-size: 14px;
+  font-size: 0.875rem;
 `;
 
 const CodeWrapper = styled.div`
@@ -146,7 +149,7 @@ const CopyButtonWrapper = styled.button`
 `;
 
 const CopyIcon = styled(FaCopy)`
-  font-size: 18px;
+  font-size: 1.125rem;
 `;
 
 const CopyButton = ({ id, ...props }: { id: string } & HTMLAttributes<HTMLButtonElement>) => {
@@ -180,7 +183,7 @@ const CodeLanguage = styled.div`
   transition: color ${TRANSITION_DURATION}ms ease 0s, opacity ${TRANSITION_DURATION}ms;
   color: var(--color-gray-300);
 
-  font-size: 18px;
+  font-size: 1.125rem;
   padding: 12px 8px 0px;
   text-transform: uppercase;
   font-weight: 600 !important;
@@ -194,13 +197,15 @@ const CodeLanguage = styled.div`
 `;
 
 const EditorWrapper = styled.div`
+  --padding-y: 13px;
+
   color: var(--color-code-mono-1);
   background: var(--color-code-base);
   transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
 
-  padding: 13px 16px;
+  padding: var(--padding-y) 16px;
   border-radius: 5px;
-  font-size: 14.5px;
+  font-size: 0.875rem;
 
   * {
     line-height: 1.5 !important;
