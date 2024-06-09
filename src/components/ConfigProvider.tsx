@@ -145,7 +145,10 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
 
     if (localColorValue !== initialColorMode) {
       _setColorMode(localColorValue);
-      setMetaTags(localColorValue);
+      // If this timeout isn't here, it messes with codemirrors scrollers... (think cuz it manipulates DOM)
+      setTimeout(() => {
+        setMetaTags(localColorValue);
+      }, 0);
     }
   }, []);
 

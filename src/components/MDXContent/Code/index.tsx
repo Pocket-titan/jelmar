@@ -11,7 +11,7 @@ import { languages } from "./languages";
 const Code = ({
   language = "markdown",
   hasCopyButton = false,
-  wrapLines = true,
+  wrapLines = false,
   filename,
   oldValue,
   children,
