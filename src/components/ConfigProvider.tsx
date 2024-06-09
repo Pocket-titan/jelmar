@@ -145,6 +145,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
 
     if (localColorValue !== initialColorMode) {
       _setColorMode(localColorValue);
+      setMetaTags(localColorValue);
     }
   }, []);
 

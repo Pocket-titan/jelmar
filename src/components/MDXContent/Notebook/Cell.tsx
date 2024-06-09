@@ -85,10 +85,10 @@ const Image = styled.img`
 const Text = styled(Code)`
   flex: 1;
   min-width: 0;
-  font-size: 0.75rem;
 
   .editor-wrapper {
     font-size: 0.75rem;
+    -webkit-text-size-adjust: none;
   }
 `;
 
