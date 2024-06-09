@@ -56,13 +56,13 @@ function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
         <meta
           key="theme_color_dark"
           name="theme-color"
-          content={DARK_COLORS.subtleBackground}
+          content={DARK_COLORS.background}
           media="(prefers-color-scheme: dark)"
         />
         <meta
           key="theme_color_light"
           name="theme-color"
-          content={LIGHT_COLORS.subtleBackground}
+          content={LIGHT_COLORS.background}
           media="(prefers-color-scheme: light)"
         />
       </Head>
