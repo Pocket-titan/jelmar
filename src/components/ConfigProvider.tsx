@@ -1,5 +1,6 @@
 "use client";
 
+import { last } from "lodash";
 import {
   type PropsWithChildren,
   createContext,
@@ -65,6 +66,71 @@ const setFavicon = (colorMode: ColorMode) => {
   return;
 };
 
+const setMetaTags = (colorMode: ColorMode) => {
+  const root = window.document.documentElement;
+  const metaJail = root.querySelector("noscript[id='meta-tag-jail']");
+  const head = root.querySelector("head");
+
+  if (!head) {
+    return;
+  }
+
+  const metas = Array.from(head.querySelectorAll('meta[name="theme-color"]') || []);
+
+  if (!metaJail || !metas) {
+    return;
+  }
+
+  const lastMeta = last(metas);
+
+  if (!lastMeta) {
+    return;
+  }
+
+  // If we have tags with media attrs
+  if (lastMeta.hasAttribute("media")) {
+    // Remove the meta tags without media attr
+    head.querySelectorAll('meta[name="theme-color"]:not([media])').forEach((meta) => meta.remove());
+
+    // Clear the jail
+    metaJail.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.remove());
+
+    const otherMode = colorMode === "dark" ? "light" : "dark";
+    const ourTag = head.querySelector(
+      `meta[name="theme-color"][media="(prefers-color-scheme: ${colorMode})"]`
+    );
+    const otherTag = head.querySelector(
+      `meta[name="theme-color"][media="(prefers-color-scheme: ${otherMode})"]`
+    );
+
+    if (!ourTag || !otherTag) {
+      return;
+    }
+
+    // Toggle the media tags
+    ourTag.toggleAttribute("media", false);
+    otherTag.toggleAttribute("media", false);
+
+    // Move our other tag to jail
+    metaJail.appendChild(otherTag);
+    return;
+  }
+  // If we don't
+  // Swap the jailed tag
+  const ourTag = metaJail.querySelector('meta[name="theme-color"]');
+  const otherTag = head.querySelector('meta[name="theme-color"]');
+
+  if (!ourTag || !otherTag) {
+    return;
+  }
+
+  // Move our other tag to jail
+  head.prepend(ourTag);
+  metaJail.appendChild(otherTag);
+
+  return;
+};
+
 export const ConfigProvider = ({ children }: PropsWithChildren) => {
   const initialColorMode = "light";
   const [colorMode, _setColorMode] = useState<ColorMode>(initialColorMode);
@@ -110,6 +176,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
 
       setFavicon(colorMode);
       _setColorMode(colorMode);
+      setMetaTags(colorMode);
 
       // This is really ghetto, but it works: we do this to prevent the transition
       // from occurring between navigating pages.

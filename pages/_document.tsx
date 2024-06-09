@@ -88,7 +88,7 @@ class MyDocument extends Document {
             media="(prefers-color-scheme: dark)"
           />
 
-          <meta
+          {/* <meta
             key="theme_color_light"
             name="theme-color"
             content="#eff1f5"
@@ -99,8 +99,9 @@ class MyDocument extends Document {
             name="theme-color"
             content="#181d2a"
             media="(prefers-color-scheme: dark)"
-          />
+          /> */}
         </Head>
+        <noscript id="meta-tag-jail" />
         <body>
           <DarkModeScript />
           <div id="mobile-nav" />
