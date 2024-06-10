@@ -17,28 +17,28 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    const maybeSwapMetaTags = () => {
-      const root = window.document.documentElement;
-      const isDark = root.getAttribute("data-color-mode") === "dark";
+  // useEffect(() => {
+  //   const maybeSwapMetaTags = () => {
+  //     const root = window.document.documentElement;
+  //     const isDark = root.getAttribute("data-color-mode") === "dark";
 
-      if (!isDark) {
-        return;
-      }
+  //     if (!isDark) {
+  //       return;
+  //     }
 
-      swapMetaTags();
-    };
+  //     swapMetaTags();
+  //   };
 
-    maybeSwapMetaTags();
+  //   maybeSwapMetaTags();
 
-    router.events.on("routeChangeComplete", maybeSwapMetaTags);
+  //   router.events.on("routeChangeComplete", maybeSwapMetaTags);
 
-    return () => {
-      router.events.off("routeChangeComplete", maybeSwapMetaTags);
-    };
-  }, []);
+  //   return () => {
+  //     router.events.off("routeChangeComplete", maybeSwapMetaTags);
+  //   };
+  // }, []);
 
   return (
     <>

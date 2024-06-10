@@ -67,27 +67,23 @@ const setFavicon = (colorMode: ColorMode) => {
 };
 
 export const swapMetaTags = () => {
-  const root = window.document.documentElement;
-  const head = root.querySelector("head");
-  if (!head) {
-    return;
-  }
-
-  const metas = Array.from(head.querySelectorAll('meta[name="theme-color"]') || []);
-  if (!metas) {
-    return;
-  }
-
-  if (metas.length === 2) {
-    const [firstContent, secondContent] = metas.map((x) => x.getAttribute("content"));
-
-    if (!firstContent || !secondContent) {
-      return;
-    }
-
-    metas[0].setAttribute("content", secondContent);
-    metas[1].setAttribute("content", firstContent);
-  }
+  // const root = window.document.documentElement;
+  // const head = root.querySelector("head");
+  // if (!head) {
+  //   return;
+  // }
+  // const metas = Array.from(head.querySelectorAll('meta[name="theme-color"]') || []);
+  // if (!metas) {
+  //   return;
+  // }
+  // if (metas.length === 2) {
+  //   const [firstContent, secondContent] = metas.map((x) => x.getAttribute("content"));
+  //   if (!firstContent || !secondContent) {
+  //     return;
+  //   }
+  //   metas[0].setAttribute("content", secondContent);
+  //   metas[1].setAttribute("content", firstContent);
+  // }
 };
 
 export const ConfigProvider = ({ children }: PropsWithChildren) => {

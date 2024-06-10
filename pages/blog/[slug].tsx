@@ -17,13 +17,13 @@ const Post = ({ mdx }: InferGetStaticPropsType<typeof getStaticProps>) => {
           key="theme_color_light"
           name="theme-color"
           content={LIGHT_COLORS.muted}
-          // media="(prefers-color-scheme: light)"
+          media="(prefers-color-scheme: light)"
         />
         <meta
           key="theme_color_dark"
           name="theme-color"
           content={DARK_COLORS.muted}
-          // media="(prefers-color-scheme: dark)"
+          media="(prefers-color-scheme: dark)"
         />
       </Head>
       <ArticleLayout frontmatter={mdx.frontmatter}>
