@@ -40,6 +40,15 @@ function maybeFixFrontmatter(source: string, frontmatter: { [key: string]: any }
   return frontmatter as Frontmatter;
 }
 
+async function doSerialize(source: string) {
+  return await serialize<Record<string, unknown>, Frontmatter>(source, {
+    parseFrontmatter: true,
+    mdxOptions: {
+      remarkPlugins: [remarkMath],
+    },
+  });
+}
+
 async function readMarkdownFiles() {
   const markdownFiles = await fs.readdir(path.resolve(process.cwd(), MARKDOWN_FOLDER));
   return await Promise.all(markdownFiles.map(async (file) => await readMarkdownFile(file)));
@@ -65,12 +74,7 @@ async function readMarkdownFile(file: string) {
   const filepath = path.resolve(process.cwd(), `${MARKDOWN_FOLDER}/${file}`);
   const source = await fs.readFile(filepath, "utf-8");
 
-  const mdx = await serialize<Record<string, unknown>, Frontmatter>(source, {
-    parseFrontmatter: true,
-    mdxOptions: {
-      remarkPlugins: [remarkMath],
-    },
-  });
+  const mdx = await doSerialize(source);
 
   const extension = path.extname(file);
   const slug = file.replace(extension, "");
@@ -257,12 +261,7 @@ async function readNotebookFile(file: string) {
     .reduce((acc, cell) => acc + convertCellToMDX(cell), "");
   const source = [frontmatter, cells].join("\n\n");
 
-  const mdx = await serialize<Record<string, unknown>, Frontmatter>(source, {
-    parseFrontmatter: true,
-    mdxOptions: {
-      remarkPlugins: [remarkMath],
-    },
-  });
+  const mdx = await doSerialize(source);
 
   const extension = path.extname(file);
   const slug = file.replace(extension, "");
