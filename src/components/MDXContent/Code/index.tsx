@@ -13,11 +13,13 @@ const Code = ({
   hasCopyButton = false,
   wrapLines = false,
   filename,
+  value,
   oldValue,
   children,
   ...props
 }: PropsWithChildren<
   {
+    value?: string;
     language?: string;
     filename?: string;
     hasCopyButton?: boolean;
@@ -25,13 +27,13 @@ const Code = ({
     oldValue?: string;
   } & HTMLAttributes<HTMLPreElement>
 >) => {
-  const value = stringifyChildren(children).trim();
+  const currentValue = value || stringifyChildren(children).trim();
   const isMergeEditor = oldValue !== undefined;
   const name = findName(language) || language;
   const prefix = findPrefix(name);
   const { ref } = useEditor(
     {
-      value,
+      value: currentValue,
       oldValue,
     },
     [languages[name], syntaxColors].filter((x) => !!x),
@@ -43,7 +45,7 @@ const Code = ({
   const fontSize = 12.8;
   const paddingY = 13;
   const lineHeight = 1.5;
-  const minHeight = 2 * paddingY + fontSize * value.split("\n").length * lineHeight;
+  const minHeight = 2 * paddingY + fontSize * currentValue.split("\n").length * lineHeight;
 
   return (
     <pre {...props}>
@@ -51,11 +53,11 @@ const Code = ({
         <Floating>
           {hasCopyButton && (
             <CopyButton
-              id={(value.slice(0, 10) + value.slice(-10)).replaceAll(/\s/g, "")}
+              id={(currentValue.slice(0, 10) + currentValue.slice(-10)).replaceAll(/\s/g, "")}
               onClick={() => {
                 navigator.permissions.query({ name: "clipboard-write" as any }).then((result) => {
                   if (result.state === "granted" || result.state === "prompt") {
-                    navigator.clipboard.writeText(value);
+                    navigator.clipboard.writeText(currentValue);
                   }
                 });
               }}
@@ -71,10 +73,10 @@ const Code = ({
         <EditorWrapper
           className="editor-wrapper"
           style={{
-            minHeight,
+            minHeight: isMergeEditor ? "unset" : minHeight,
             paddingTop: filename ? "calc(var(--padding-y) + 1em)" : "var(--padding-y)",
           }}
-          ref={(x) => (ref.current = x!)}
+          ref={(x) => (ref.current = x as any)}
         />
       </CodeWrapper>
     </pre>
@@ -126,7 +128,7 @@ const CopyButtonWrapper = styled.button`
   /* background: color-mix(in srgb, var(--color-code-base) 80%, var(--color-gray-400) 20%); */
   background: transparent;
 
-  margin-top: 12px;
+  margin-top: 10px;
   padding: 6px 6px;
   border-radius: 4px;
   border: none;
@@ -149,7 +151,7 @@ const CopyButtonWrapper = styled.button`
 `;
 
 const CopyIcon = styled(FaCopy)`
-  font-size: 1.125rem;
+  font-size: 1rem;
 `;
 
 const CopyButton = ({ id, ...props }: { id: string } & HTMLAttributes<HTMLButtonElement>) => {
@@ -183,8 +185,8 @@ const CodeLanguage = styled.div`
   transition: color ${TRANSITION_DURATION}ms ease 0s, opacity ${TRANSITION_DURATION}ms;
   color: var(--color-gray-300);
 
-  font-size: 1.125rem;
-  padding: 12px 8px 0px;
+  font-size: 1rem;
+  padding: 10px 8px 0px;
   text-transform: uppercase;
   font-weight: 600 !important;
   opacity: 1;

@@ -40,11 +40,65 @@ function maybeFixFrontmatter(source: string, frontmatter: { [key: string]: any }
   return frontmatter as Frontmatter;
 }
 
+function remarkGetCodeFile() {
+  const mapChild = async (child: any) => {
+    if (child.type && child.type === "code" && child.type === "code" && child.value) {
+      // TODO
+    }
+
+    if (
+      child.type &&
+      child.type === "mdxJsxFlowElement" &&
+      child.name &&
+      child.name === "Code" &&
+      child.attributes
+    ) {
+      child.attributes = await Promise.all(
+        child.attributes.map(async (attr: any) => {
+          if (
+            attr.type !== undefined &&
+            attr.type === "mdxJsxAttribute" &&
+            attr.name !== undefined &&
+            ["value", "oldValue"].includes(attr.name) &&
+            attr.value !== undefined &&
+            attr.value.startsWith("file:")
+          ) {
+            const filePath = attr.value.slice(5).trim();
+
+            try {
+              const content = await fs.readFile(path.resolve(process.cwd(), filePath), "utf-8");
+              attr.value = content.trim();
+            } catch (err) {
+              console.error(`Failed to load file at ${filePath} for Code element:`, err);
+            }
+          }
+
+          return attr;
+        })
+      );
+    }
+
+    if (child.type === "mdxJsxFlowElement" && child.name === "Cell") {
+      // TODO
+    }
+
+    if (child.children) {
+      child.children = await Promise.all(child.children.map(mapChild));
+    }
+
+    return child;
+  };
+
+  return async (tree: any, file: any) => {
+    tree.children = await Promise.all(tree.children.map(mapChild));
+  };
+}
+
 async function doSerialize(source: string) {
   return await serialize<Record<string, unknown>, Frontmatter>(source, {
     parseFrontmatter: true,
     mdxOptions: {
-      remarkPlugins: [remarkMath],
+      remarkPlugins: [remarkMath, remarkGetCodeFile],
     },
   });
 }

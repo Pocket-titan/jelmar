@@ -40,6 +40,7 @@ const Title = styled.h3`
 `;
 
 const Description = styled.p`
+  overflow-wrap: anywhere;
   margin-bottom: 8px;
   flex: 1;
 `;
