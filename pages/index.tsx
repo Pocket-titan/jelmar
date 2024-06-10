@@ -8,7 +8,7 @@ import { BREAKPOINTS, BREAKPOINT_SIZES, DARK_COLORS, LIGHT_COLORS } from "ts/the
 import Socials from "components/Socials";
 import Link from "components/Link";
 import _ from "lodash";
-import { SVGAttributes } from "react";
+import { SVGAttributes, useEffect } from "react";
 import SpaceSvgs, { WAVE_HEIGHT } from "@components/SpaceSvgs";
 import LinkedInActivity, { LinkedInBio, LinkedInPost } from "@components/LinkedInActivity";
 import Head from "next/head";
@@ -200,16 +200,16 @@ const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticPr
     <>
       <Head>
         <meta
-          key="theme_color_dark"
-          name="theme-color"
-          content={DARK_COLORS.background}
-          media="(prefers-color-scheme: dark)"
-        />
-        <meta
           key="theme_color_light"
           name="theme-color"
           content={LIGHT_COLORS.background}
-          media="(prefers-color-scheme: light)"
+          // media="(prefers-color-scheme: light)"
+        />
+        <meta
+          key="theme_color_dark"
+          name="theme-color"
+          content={DARK_COLORS.background}
+          // media="(prefers-color-scheme: dark)"
         />
       </Head>
       <DefaultLayout

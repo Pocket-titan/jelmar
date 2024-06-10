@@ -1,9 +1,16 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Ref } from "react";
 import { EditorView } from "codemirror";
 import { lineNumbers, Decoration, DecorationSet, WidgetType } from "@codemirror/view";
 import { EditorState, Extension, StateField } from "@codemirror/state";
 import { getChunks, getOriginalDoc, unifiedMergeView } from "@codemirror/merge";
 import { range } from "lodash";
+
+export function useCssVariable(variable: string, ref?: HTMLElement) {
+  const root = ref || window.document.documentElement;
+  return window.getComputedStyle(root).getPropertyValue(variable);
+}
+
+export function useRem() {}
 
 export function useEditor(
   { value = "", oldValue }: { value?: string; oldValue?: string },

@@ -231,16 +231,16 @@ const Projects = ({ projects }: InferGetStaticPropsType<typeof getStaticProps>) 
     <>
       <Head>
         <meta
-          key="theme_color_dark"
-          name="theme-color"
-          content={DARK_COLORS.subtleBackground}
-          media="(prefers-color-scheme: dark)"
-        />
-        <meta
           key="theme_color_light"
           name="theme-color"
           content={LIGHT_COLORS.subtleBackground}
-          media="(prefers-color-scheme: light)"
+          // media="(prefers-color-scheme: light)"
+        />
+        <meta
+          key="theme_color_dark"
+          name="theme-color"
+          content={DARK_COLORS.subtleBackground}
+          // media="(prefers-color-scheme: dark)"
         />
       </Head>
 

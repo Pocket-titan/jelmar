@@ -66,69 +66,28 @@ const setFavicon = (colorMode: ColorMode) => {
   return;
 };
 
-const setMetaTags = (colorMode: ColorMode) => {
+export const swapMetaTags = () => {
   const root = window.document.documentElement;
-  const metaJail = root.querySelector("noscript[id='meta-tag-jail']");
   const head = root.querySelector("head");
-
   if (!head) {
     return;
   }
 
   const metas = Array.from(head.querySelectorAll('meta[name="theme-color"]') || []);
-
-  if (!metaJail || !metas) {
+  if (!metas) {
     return;
   }
 
-  const lastMeta = last(metas);
+  if (metas.length === 2) {
+    const [firstContent, secondContent] = metas.map((x) => x.getAttribute("content"));
 
-  if (!lastMeta) {
-    return;
-  }
-
-  // If we have tags with media attrs
-  if (lastMeta.hasAttribute("media")) {
-    // Remove the meta tags without media attr
-    head.querySelectorAll('meta[name="theme-color"]:not([media])').forEach((meta) => meta.remove());
-
-    // Clear the jail
-    metaJail.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.remove());
-
-    const otherMode = colorMode === "dark" ? "light" : "dark";
-    const ourTag = head.querySelector(
-      `meta[name="theme-color"][media="(prefers-color-scheme: ${colorMode})"]`
-    );
-    const otherTag = head.querySelector(
-      `meta[name="theme-color"][media="(prefers-color-scheme: ${otherMode})"]`
-    );
-
-    if (!ourTag || !otherTag) {
+    if (!firstContent || !secondContent) {
       return;
     }
 
-    // Toggle the media tags
-    ourTag.toggleAttribute("media", false);
-    otherTag.toggleAttribute("media", false);
-
-    // Move our other tag to jail
-    metaJail.appendChild(otherTag);
-    return;
+    metas[0].setAttribute("content", secondContent);
+    metas[1].setAttribute("content", firstContent);
   }
-  // If we don't
-  // Swap the jailed tag
-  const ourTag = metaJail.querySelector('meta[name="theme-color"]');
-  const otherTag = head.querySelector('meta[name="theme-color"]');
-
-  if (!ourTag || !otherTag) {
-    return;
-  }
-
-  // Move our other tag to jail
-  head.prepend(ourTag);
-  metaJail.appendChild(otherTag);
-
-  return;
 };
 
 export const ConfigProvider = ({ children }: PropsWithChildren) => {
@@ -145,10 +104,6 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
 
     if (localColorValue !== initialColorMode) {
       _setColorMode(localColorValue);
-      // If this timeout isn't here, it messes with codemirrors scrollers... (think cuz it manipulates DOM)
-      setTimeout(() => {
-        setMetaTags(localColorValue);
-      }, 0);
     }
   }, []);
 
@@ -180,7 +135,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
 
       setFavicon(colorMode);
       _setColorMode(colorMode);
-      setMetaTags(colorMode);
+      swapMetaTags();
 
       // This is really ghetto, but it works: we do this to prevent the transition
       // from occurring between navigating pages.
