@@ -82,9 +82,15 @@
     "@codemirror/view" "^6.0.0"
     crelt "^1.0.5"
 
-"@codemirror/merge@link:./merge":
-  version "0.0.0"
-  uid ""
+"@codemirror/merge@./merge":
+  version "6.6.3"
+  dependencies:
+    "@codemirror/language" "^6.10.2"
+    "@codemirror/state" "^6.4.1"
+    "@codemirror/view" "^6.28.0"
+    "@lezer/highlight" "^1.0.0"
+    style-mod "^4.1.0"
+    vscode-diff "^2.1.1"
 
 "@codemirror/search@^6.0.0":
   version "6.5.6"
