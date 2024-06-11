@@ -10,6 +10,16 @@ const nextConfig = {
   //   // }
   //   // return config;
   // },
+
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^merge$/,
+      })
+    );
+
+    return config;
+  },
 };
 
 if (process.env.ANALYZE) {
