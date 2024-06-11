@@ -1,10 +1,10 @@
 import { lineNumbers, Decoration, DecorationSet, WidgetType } from "@codemirror/view";
-import { getChunks, getOriginalDoc, unifiedMergeView, presentableDiff } from "@codemirror/merge";
+import { getChunks, getOriginalDoc, unifiedMergeView } from "@codemirror/merge";
 import { EditorState, Extension, StateField } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { range } from "lodash";
 
-export function mergeExtension(oldValue: string): Extension[] {
+export function mergeExtension(oldValue: string, num_context_lines = 1): Extension[] {
   const mark = Decoration.replace({
     widget: new Widget(),
   });
@@ -13,7 +13,7 @@ export function mergeExtension(oldValue: string): Extension[] {
 
   const field = StateField.define<DecorationSet>({
     create(state) {
-      const ranges = getRanges(state);
+      const ranges = getRanges(state, num_context_lines);
 
       ranges.forEach(([from, to]) => {
         const [startLine, endLine] = [from, to].map((x) => state.doc.line(x).number);
@@ -53,10 +53,9 @@ type Line = {
   index: number;
 };
 
-function getRanges(state: EditorState) {
+function getRanges(state: EditorState, num_context_lines: number) {
   const chunks = getChunks(state);
   const linesToInclude: { [key: number]: Line } = {};
-  const N_CONTEXT = 1;
 
   if (!chunks || chunks["side"] !== "b") {
     return [];
@@ -80,8 +79,8 @@ function getRanges(state: EditorState) {
       });
 
       const contextLines: Line[] = [
-        ...range(startLine - N_CONTEXT, startLine),
-        ...range(endLine + 1, endLine + N_CONTEXT + 1),
+        ...range(startLine - num_context_lines, startLine),
+        ...range(endLine + 1, endLine + num_context_lines + 1),
       ]
         .filter((x) => x > 0 && x <= state.doc.lines)
         .map((x) => ({ kind: "normal", index: x }));
@@ -95,7 +94,10 @@ function getRanges(state: EditorState) {
       const aText = originalDoc.slice(x.fromA, x.endA);
 
       const [startLine, endLine] = [x.fromB, x.endB].map((x) => state.doc.lineAt(x).number);
-      const lines: Line[] = range(startLine - N_CONTEXT, endLine + 1 + N_CONTEXT - 1).map((x) => ({
+      const lines: Line[] = range(
+        startLine - num_context_lines,
+        endLine + 1 + num_context_lines - 1
+      ).map((x) => ({
         kind: "normal",
         index: x,
       }));

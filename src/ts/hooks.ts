@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { EditorState, Extension } from "@codemirror/state";
+import { EditorState, Extension, Prec } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { mergeExtension } from "./cm_merge_view";
 
@@ -28,10 +28,10 @@ export function useEditor(
       state: EditorState.create({
         doc: value,
         extensions: [
-          EditorState.readOnly.of(true),
-          EditorView.editable.of(false),
+          Prec.highest(EditorState.readOnly.of(true)),
+          Prec.highest(EditorView.editable.of(false)),
           ...(wrapLines ? [EditorView.lineWrapping] : []),
-          ...(isMergeEditor ? mergeExtension(oldValue.trim()) : []),
+          ...(isMergeEditor ? mergeExtension(oldValue.trim(), 0) : []),
           ...extensions,
         ],
       }),
