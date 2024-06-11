@@ -9,10 +9,6 @@
     "lint": "next lint",
     "build-script": "cd src/ts/script && webpack"
   },
-  "workspaces": [
-    "./",
-    "./merge"
-  ],
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/lang-python": "^6.1.3",
