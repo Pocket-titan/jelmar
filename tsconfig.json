@@ -19,7 +19,6 @@
       }
     ],
     "paths": {
-      "@codemirror/merge": ["./merge"],
       "@components/*": ["src/components/*"],
       "components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
