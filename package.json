@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn run build-script && cd merge && yarn && cd ../ && next build",
+    "build": "yarn run build-script && next build",
     "start": "next start",
     "lint": "next lint",
     "build-script": "cd src/ts/script && webpack"
