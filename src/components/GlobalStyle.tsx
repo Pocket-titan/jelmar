@@ -154,6 +154,11 @@ const GlobalStyle = createGlobalStyle`
   mtable {
     display: block;
   }
+
+  /* I think I want this? */
+  p + p {
+    margin-top: 0.35em;
+  }
 `;
 
 export default memo(GlobalStyle);

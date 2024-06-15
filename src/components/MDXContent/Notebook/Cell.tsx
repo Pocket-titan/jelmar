@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { GrReturn } from "react-icons/gr";
 import Code from "../Code";
 import { BREAKPOINTS } from "@ts/theme";
+import { isBase64 } from "@ts/utils";
 
 const CellWrapper = styled.div<{ $margin: string }>`
   .code-wrapper {
@@ -121,12 +122,19 @@ const Outputs = ({ outputs }: { outputs: Output[] }) => (
 
           if (!data || !data["image/png"]) {
             Component = null;
+            console.warn("Unsupported display data", data);
             break;
           }
 
           Component = (
             <ImageWrapper>
-              <Image src={`data:image/png;base64,${data["image/png"]}`} />
+              <Image
+                src={
+                  isBase64(data["image/png"])
+                    ? `data:image/png;base64,${data["image/png"]}`
+                    : data["image/png"]
+                }
+              />
             </ImageWrapper>
           );
           break;

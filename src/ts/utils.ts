@@ -120,3 +120,11 @@ export function keysToVariables(object: Obj, prefix: string = ""): FlatObj {
 
 export const roundTo = (number: number, places = 0) =>
   Math.round(number * 10 ** places) / 10 ** places;
+
+export function isBase64(str: string) {
+  try {
+    return Buffer.from(str, "base64").toString("base64") === str;
+  } catch {
+    return false;
+  }
+}

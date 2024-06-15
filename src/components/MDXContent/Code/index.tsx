@@ -5,13 +5,15 @@ import { FaCopy } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 import { useEditor } from "ts/hooks";
 import { syntaxColors } from "./highlighting";
-import { TRANSITION_DURATION } from "ts/theme";
+import { BREAKPOINTS, TRANSITION_DURATION } from "ts/theme";
 import { languages } from "./languages";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const Code = ({
   language = "markdown",
   hasCopyButton = false,
   wrapLines = false,
+  oldFilename,
   filename,
   value,
   oldValue,
@@ -21,6 +23,7 @@ const Code = ({
   {
     value?: string;
     language?: string;
+    oldFilename?: string;
     filename?: string;
     hasCopyButton?: boolean;
     wrapLines?: boolean;
@@ -65,16 +68,28 @@ const Code = ({
           )}
           <CodeLanguage className="code-language">{prefix}</CodeLanguage>
         </Floating>
-        {filename && (
-          <FilenameWrapper>
-            <Filename>{filename}</Filename>
+        <FilenameContainer>
+          {oldFilename && (
+            <>
+              <FilenameWrapper className="to-hide" style={{ justifyContent: "flex-end" }}>
+                <Filename title={oldFilename}>{oldFilename}</Filename>
+              </FilenameWrapper>
+              <div className="to-hide" style={{ flexShrink: 0 }}>
+                <ArrowRight />
+              </div>
+            </>
+          )}
+          <FilenameWrapper style={{ justifyContent: oldFilename ? "flex-start" : "center" }}>
+            <Filename title={filename}>{filename}</Filename>
           </FilenameWrapper>
-        )}
+        </FilenameContainer>
+
         <EditorWrapper
           className="editor-wrapper"
           style={{
             minHeight: isMergeEditor ? "unset" : minHeight,
-            paddingTop: filename ? "calc(var(--padding-y) + 1em)" : "var(--padding-y)",
+            paddingLeft: isMergeEditor ? "4px" : "var(--padding-left)",
+            paddingTop: filename ? "calc(var(--padding-y) + 1em + 10px)" : "var(--padding-y)",
           }}
           ref={(x) => (ref.current = x as any)}
         />
@@ -83,19 +98,53 @@ const Code = ({
   );
 };
 
-const FilenameWrapper = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 0px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+const ArrowRight = styled(FaArrowRightLong)`
+  font-family: sans-serif !important;
+  font-weight: 400;
+  color: var(--color-gray-600);
+  font-size: 0.875rem;
+
+  margin-left: auto;
+  margin-right: auto;
+  flex: 1;
 `;
 
 const Filename = styled.span`
-  font-family: monospace;
+  font-family: sans-serif !important;
+  font-weight: 400;
   color: var(--color-gray-600);
   font-size: 0.875rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const FilenameWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+`;
+
+const FilenameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 10px 16px;
+
+  @media ${BREAKPOINTS.smAndSmaller} {
+    .to-hide {
+      display: none;
+    }
+
+    ${FilenameWrapper} {
+      justify-content: center !important;
+    }
+  }
 `;
 
 const CodeWrapper = styled.div`
@@ -103,7 +152,7 @@ const CodeWrapper = styled.div`
   margin-top: 1.25em;
   margin-bottom: 1.25em;
 
-  * {
+  *:not(${Filename}) {
     font-family: var(--font-monospace), monospace !important;
     font-weight: 450 !important;
   }
@@ -200,12 +249,13 @@ const CodeLanguage = styled.div`
 
 const EditorWrapper = styled.div`
   --padding-y: 13px;
+  --padding-left: 16px;
 
   color: var(--color-code-mono-1);
   background: var(--color-code-base);
   transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
 
-  padding: var(--padding-y) 16px;
+  padding: var(--padding-y) 16px var(--padding-y) var(--padding-left);
   border-radius: 5px;
   font-size: 0.8rem;
   -webkit-text-size-adjust: none;

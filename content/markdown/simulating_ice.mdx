@@ -1,0 +1,438 @@
+---
+title: Simulating an ice sheet
+date: 2024-05-29
+excerpt: how to simulate an ice sheet
+---
+
+new cell. Sicopolis: [SICOPOLIS](https://www.sicopolis.net/)
+
+Mass conservation:
+
+$$
+\begin{equation}
+  \frac{\partial H}{\partial t} + \nabla \cdot (H \mathbf{u}) = b_s - b_m
+\end{equation}
+$$
+
+this is some $1 + 2 = \frac{45}{39}$ inline math.
+
+## Starting out
+
+[CMIP5 monthly data on single levels](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip5-monthly-single-levels?tab=overview) dataset.
+
+Follow the instructions [here](https://cds.climate.copernicus.eu/api-how-to) to setup `cdsapi` and accept the Terms of Use for the dataset.
+
+It will generate the following request:
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 4,
+    metadata: { language: "python" },
+    outputs: [],
+    source: [
+      "from pathlib import Path\n",
+      "import cdsapi\n",
+      "\n",
+      'DATA_DIR = Path("data")\n',
+      "DATA_DIR.mkdir(exist_ok=True)\n",
+      "\n",
+      'if not (DATA_DIR / "download.zip").exists():\n',
+      "    c = cdsapi.Client()\n",
+      "\n",
+      "    c.retrieve(\n",
+      '        "projections-cmip5-monthly-single-levels",\n',
+      "        {\n",
+      '            "variable": "2m_temperature",\n',
+      '            "period": "200601-230012",\n',
+      '            "experiment": "rcp_8_5",\n',
+      '            "model": "ipsl_cm5a_lr",\n',
+      '            "ensemble_member": "r1i1p1",\n',
+      '            "format": "zip",\n',
+      "        },\n",
+      '        f"{DATA_DIR}/download.zip",\n',
+      "    )",
+    ],
+  }}
+/>
+
+Which, after unzipping:
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 5,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        name: "stdout",
+        output_type: "stream",
+        text: [
+          "Archive:  data/download.zip\n",
+          "  inflating: data/tas_Amon_IPSL-CM5A-LR_rcp85_r1i1p1_200601-230012.nc  \n",
+        ],
+      },
+    ],
+    source: ["!unzip -o $DATA_DIR/download.zip -d $DATA_DIR"],
+  }}
+/>
+
+...gives us a netCDF file that looks a little like this.
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 6,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        name: "stdout",
+        output_type: "stream",
+        text: [
+          "('time', (3540,))\n",
+          "('time_bnds', (3540, 2))\n",
+          "('lat', (96,))\n",
+          "('lat_bnds', (96, 2))\n",
+          "('lon', (96,))\n",
+          "('lon_bnds', (96, 2))\n",
+          "('height', ())\n",
+          "('tas', (3540, 96, 96))\n",
+        ],
+      },
+      {
+        data: {
+          "text/plain": [
+            "<class 'netCDF4._netCDF4.Variable'>\n",
+            "float32 tas(time, lat, lon)\n",
+            "    standard_name: air_temperature\n",
+            "    long_name: Near-Surface Air Temperature\n",
+            "    units: K\n",
+            "    original_name: t2m\n",
+            "    cell_methods: time: mean (interval: 30 minutes)\n",
+            "    cell_measures: area: areacella\n",
+            "    history: 2011-08-16T21:57:47Z altered by CMOR: Treated scalar dimension: 'height'. 2011-08-16T21:57:47Z altered by CMOR: replaced missing value flag (9.96921e+36) with standard missing value (1e+20). 2011-08-16T21:57:48Z altered by CMOR: Inverted axis: lat.\n",
+            "    coordinates: height\n",
+            "    missing_value: 1e+20\n",
+            "    _FillValue: 1e+20\n",
+            "    associated_files: baseURL: http://cmip-pcmdi.llnl.gov/CMIP5/dataLocation gridspecFile: gridspec_atmos_fx_IPSL-CM5A-LR_rcp85_r0i0p0.nc areacella: areacella_fx_IPSL-CM5A-LR_rcp85_r0i0p0.nc\n",
+            "unlimited dimensions: time\n",
+            "current shape = (3540, 96, 96)\n",
+            "filling on",
+          ],
+        },
+        execution_count: 6,
+        metadata: {},
+        output_type: "execute_result",
+      },
+    ],
+    source: [
+      "from netCDF4 import Dataset\n",
+      "\n",
+      'grp = Dataset(next(DATA_DIR.rglob("*.nc")).absolute())\n',
+      "\n",
+      'print(*[(key, grp.variables[key].shape) for key in grp.variables.keys()], sep="\\n")\n',
+      'grp.variables["tas"]',
+    ],
+  }}
+/>
+
+## Creating input data
+
+It is between latitudes 59° and 83°N, and longitudes 11° and 74°W.
+
+This translates to lat: [59, 83], lon: [286, 349]
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 7,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        data: {
+          "image/png": "/images/notebooks/simulating_ice/cell_output_12_0.png",
+          "text/plain": ["<Figure size 640x480 with 2 Axes>"],
+        },
+        metadata: {},
+        output_type: "display_data",
+      },
+    ],
+    source: [
+      "import matplotlib.pyplot as plt\n",
+      "\n",
+      '[lat, lon] = [grp["lat"][:], grp["lon"][:]]\n',
+      'tas = grp["tas"][:, (lat >= 59) & (lat <= 83), (lon >= 286) & (lon <= 349)]\n',
+      "mask = tas[-1] < 273.15\n",
+      "x = tas[-1]\n",
+      "\n",
+      "x[mask] = x[mask]\n",
+      "x[~mask] = 273.15\n",
+      "\n",
+      "plt.imshow(x[::-1])\n",
+      "plt.grid(False)\n",
+      "plt.colorbar();",
+    ],
+  }}
+/>
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 8,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        name: "stdout",
+        output_type: "stream",
+        text: [
+          "temps = [240.47 242.   243.91 ... 268.34 265.52 263.22]\n",
+          "yrs = [  0   0   0 ... 294 294 294]\n",
+          "chunked =\n",
+          "\t[[240.47 242.   243.91 ... 254.38 248.07 241.32]\n",
+          "\t [238.61 239.11 243.87 ... 252.68 246.61 243.23]\n",
+          "\t [239.68 240.64 243.54 ... 251.35 243.64 242.59]\n",
+          "\t ...\n",
+          "\t [258.91 263.27 261.72 ... 269.57 265.38 262.05]\n",
+          "\t [258.28 257.18 258.25 ... 269.48 267.91 264.15]\n",
+          "\t [258.52 259.41 260.15 ... 268.34 265.52 263.22]]\n",
+        ],
+      },
+      {
+        data: {
+          "image/png": "/images/notebooks/simulating_ice/cell_output_13_1.png",
+          "text/plain": ["<Figure size 1000x400 with 2 Axes>"],
+        },
+        metadata: {},
+        output_type: "display_data",
+      },
+    ],
+    source: [
+      "temps = np.mean(np.asarray(tas[:, mask]), axis=-1)\n",
+      'print(f"temps = {temps}")\n',
+      "\n",
+      'yrs = np.array(grp.variables["time"][:] // 365).astype(int)\n',
+      'print(f"yrs = {yrs}")\n',
+      "\n",
+      "chunked = np.array([temps[yrs == yr] for yr in np.unique(yrs)])\n",
+      'print(f"chunked =\\n{"\\n\\t".join(["", *f"{chunked}".split("\\n")])[1:]}")\n',
+      "\n",
+      "fig, axes = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=(10, 4))\n",
+      "\n",
+      "\n",
+      "avgs = np.mean(chunked, axis=-1)\n",
+      "axes[0].plot(avgs - avgs[0])  # Kelvin difference == Celsius difference\n",
+      'axes[0].set_ylabel(r"$\\Delta$T [$\\degree$C]")\n',
+      'axes[0].set_title("Yearly average")\n',
+      "\n",
+      "\n",
+      "def smooth(x: np.ndarray, wlen: int) -> np.ndarray:\n",
+      '    w = np.ones(wlen, "d")\n',
+      '    padded = np.pad(x, (wlen // 2, wlen - 1 - wlen // 2), mode="edge")\n',
+      '    return np.convolve(padded, w / w.sum(), mode="valid")\n',
+      "\n",
+      "\n",
+      "smoothed_temps = smooth(avgs, 10)\n",
+      "axes[1].plot(smoothed_temps - smoothed_temps[0])\n",
+      'axes[1].set_title("Smoothed");',
+    ],
+  }}
+/>
+
+Nice! Now we have to write this out to a file that SICOPOLIS understands. `sico_in/general/grl_warming_scenario_rcp26.asc`. We'll take the temperature from there, too.
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 9,
+    metadata: { language: "python" },
+    outputs: [{ name: "stdout", output_type: "stream", text: ["295 295\n"] }],
+    source: [
+      "dt_2006 = 5.8161056e-01\n",
+      "\n",
+      "time = 2006 + np.unique(yrs) - 1990\n",
+      "dtemps = (smoothed_temps - smoothed_temps[0]) + dt_2006\n",
+      "print(len(time), len(dtemps))",
+    ],
+  }}
+/>
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 10,
+    metadata: { language: "python" },
+    outputs: [],
+    source: [
+      "start, end = time[[0, -1]]\n",
+      "step = time[1] - time[0]\n",
+      "\n",
+      'contents = f"""#  {start}  {step}  {end}\n',
+      '{"\\n".join([f"  {yr}  {t}" for yr, t in zip(time, dtemps)])}\n',
+      "\n",
+      "# --------------------------------------------------------------------------------\n",
+      "# Greenland surface temperature anomaly from RCP8.5 scenario for years 2006 - 2300\n",
+      "# Year (relative to 1990 CE) - Delta T [C]\n",
+      "# --------------------------------------------------------------------------------\n",
+      '"""\n',
+      "\n",
+      'with open(f"{DATA_DIR}/grl_rcp85.dat", "w") as f:\n',
+      "    f.write(contents)",
+    ],
+  }}
+/>
+
+## Running the model
+
+Now we can actually run the model.
+
+a = annus; years in Latin.
+
+`-a` doesn't take relative paths - so no `-a ./sico_in/...`, but `-a /home/user/sicopolis/sico_in/...`.
+
+`(./sico.sh -f -m repo_grl20_b2_paleo21) >tmp/out_001.dat` (took ~1h12m)
+`(./sico.sh -f -m grl20_rcp85 -a /home/jelmar/Github/portfolio/sicopolis/sico_out/repo_grl20_b2_paleo21) >tmp/out_001.dat`
+
+<Note type="info">info</Note>
+
+<Note type="warning">warning</Note>
+
+<Code
+  language="fortran"
+  oldFilename="sico_specs_repo_grl10_b2_future21_asmb.h"
+  filename="sico_specs_grl20_rcp85.h"
+  oldValue="file:./data/sico_specs_repo_grl10_b2_future21_asmb.h"
+  value="file:./data/sico_specs_grl20_rcp85.h"
+/>
+
+## Processing output data
+
+Output files will be in the folder `sico_out/grl20_rcp85` (or whatever name you gave to your specfile). An explanation of what these different files contain can be found [here](https://sicopolis.readthedocs.io/en/develop/getting_started.html#getting-started-output), but the gist of it is that the `.ser` or `_ser.nc` files contain scalar variables (`ser` meaning time series), the `.site` or `_site.nc` also contain (different) scalar variables sampled at particular _sites_ (which are predefined and specific to your modeling domain), and the files that end in `0001.nc`, `0002.nc` etc. contain full 2D/3D fields (e.g. ice velocity or thickness). These fields are written out at the times we set on line 1322 of our specfile, so in our case it's once every 50 years.
+
+Your directory should look something like this:
+
+<FileTree
+  items={[
+    {
+      name: "sico_out",
+      items: [
+        {
+          name: "grl20_rcp85",
+          items: [
+            "grl20_rcp85.core",
+            "out_grl20_rcp85.dat",
+            "sico_specs_grl20_rcp85.h",
+            "grl20_rcp85.log",
+            "host_info.log",
+            "grl20_rcp85_core.nc",
+            "grl20_rcp85_ser.nc",
+            "grl20_rcp850001.nc",
+            "grl20_rcp850002.nc",
+            "grl20_rcp850003.nc",
+            "grl20_rcp850004.nc",
+            "grl20_rcp850005.nc",
+            "grl20_rcp850006.nc",
+            "grl20_rcp850007.nc",
+            "grl20_rcp85.ser",
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+As a first sanity check, we'll get the surface temperature anomaly from the `grl20_rcp85_ser.nc` file to make sure that it corresponds to the input data we generated.
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 11,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        data: {
+          "image/png": "/images/notebooks/simulating_ice/cell_output_29_0.png",
+          "text/plain": ["<Figure size 1000x400 with 2 Axes>"],
+        },
+        metadata: {},
+        output_type: "display_data",
+      },
+    ],
+    source: [
+      'sim_name = "grl20_rcp85"\n',
+      'root = f"{SICOPOLIS_DIR}/sico_out/{sim_name}"\n',
+      "start_year = 1990\n",
+      "\n",
+      'ser = Dataset(f"{root}/{sim_name}_ser.nc")\n',
+      "\n",
+      '[time, delta_ts, V_sle] = [ser.variables[x][:] for x in ["t", "delta_ts", "V_sle"]]\n',
+      "sle = (V_sle - V_sle[0]) * -1\n",
+      "time += start_year\n",
+      "\n",
+      "fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))\n",
+      "axes[0].plot(time, delta_ts)\n",
+      "axes[1].plot(time, sle)\n",
+      "\n",
+      'axes[0].set_ylabel("Surface temperature anomaly [C]")\n',
+      'axes[1].set_ylabel("Sea level rise [m]")\n',
+      "\n",
+      "for ax in axes:\n",
+      '    ax.set_xlabel("Time [yr]")',
+    ],
+  }}
+/>
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 12,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        data: { "text/plain": ["<matplotlib.image.AxesImage at 0x7f8beb06f950>"] },
+        execution_count: 12,
+        metadata: {},
+        output_type: "execute_result",
+      },
+      {
+        data: {
+          "image/png": "/images/notebooks/simulating_ice/cell_output_30_1.png",
+          "text/plain": ["<Figure size 640x480 with 1 Axes>"],
+        },
+        metadata: {},
+        output_type: "display_data",
+      },
+    ],
+    source: [
+      'grp = Dataset(f"{root}/{sim_name}0007.nc")\n',
+      "plt.grid(False)\n",
+      'plt.imshow(grp.variables["H"][:][::-1])',
+    ],
+  }}
+/>
+
+<Cell
+  cell={{
+    cell_type: "code",
+    execution_count: 13,
+    metadata: { language: "python" },
+    outputs: [
+      {
+        data: {
+          "text/plain": [
+            "['grl20_rcp850001.nc',\n",
+            " 'grl20_rcp850002.nc',\n",
+            " 'grl20_rcp850003.nc',\n",
+            " 'grl20_rcp850004.nc',\n",
+            " 'grl20_rcp850005.nc',\n",
+            " 'grl20_rcp850006.nc',\n",
+            " 'grl20_rcp850007.nc']",
+          ],
+        },
+        execution_count: 13,
+        metadata: {},
+        output_type: "execute_result",
+      },
+    ],
+    source: ['[f"{sim_name}{x:04}.nc" for x in range(1, 7 + 1)]'],
+  }}
+/>

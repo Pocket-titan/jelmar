@@ -7,6 +7,7 @@ import Image from "./Image";
 import ContentHeading from "./ContentHeading";
 import ContentLink from "./ContentLink";
 import Cell from "./Notebook/Cell";
+import FileTree from "./FileTree";
 
 export type Frontmatter = {
   title: string;
@@ -29,9 +30,10 @@ const InlineCode = styled.code`
 `;
 
 const components: MDXRemoteProps["components"] = {
+  FileTree,
   Cell,
-  Code,
   Math,
+  Code,
   Note,
   Image,
   pre: ({ children, ...props }) => {
@@ -51,20 +53,6 @@ const components: MDXRemoteProps["components"] = {
 
     return <pre {...props}>{children}</pre>;
   },
-  div: ({ children, ...props }) => {
-    if (props.className && props.className.includes("math-display")) {
-      return <Math>{children}</Math>;
-    }
-
-    return <div {...props}> {children}</div>;
-  },
-  span: ({ ...props }) => {
-    if (props.className && props.className.includes("math-inline")) {
-      return <Math inline>{props.children}</Math>;
-    }
-
-    return <span {...props} />;
-  },
   h1: (props) => <ContentHeading type="major-heading" {...props} />,
   h2: (props) => <ContentHeading type="normal-heading" {...props} />,
   h3: (props) => <ContentHeading type="minor-heading" {...props} />,
@@ -76,6 +64,15 @@ const components: MDXRemoteProps["components"] = {
     }
 
     const { className, ...rest } = props;
+
+    if (className && className.includes("math-display")) {
+      return <Math>{children}</Math>;
+    }
+
+    if (className && className.includes("math-inline")) {
+      return <Math inline>{children}</Math>;
+    }
+
     const isMultiline = children.toString().trim().split("\n").length > 1;
 
     if (isMultiline || (className && className.includes("language-"))) {
