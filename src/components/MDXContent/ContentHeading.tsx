@@ -29,16 +29,16 @@ const Hidden = styled.div`
   border: 0;
 `;
 
-const ContentHeading = ({ children, ...props }: Parameters<typeof Heading>[0]) => {
-  const id = stringifyChildren(children).toLowerCase().replace(/\s/g, "-");
-
+const ContentHeading = ({ children, id, ...props }: Parameters<typeof Heading>[0]) => {
   return (
     <Wrapper>
       <Heading {...props} style={{ position: "relative" }}>
-        <Anchor id={id} href={`#${id}`}>
-          <IconElement size={24} />
-          <Hidden>Link to this heading</Hidden>
-        </Anchor>
+        {id && (
+          <Anchor id={id} href={`#${id}`}>
+            <IconElement size={24} />
+            <Hidden>Link to this heading</Hidden>
+          </Anchor>
+        )}
         {children}
       </Heading>
     </Wrapper>

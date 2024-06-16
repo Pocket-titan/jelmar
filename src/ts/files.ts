@@ -1,9 +1,13 @@
+import type { Frontmatter } from "src/components/MDXContent";
 import { serialize } from "next-mdx-remote/serialize";
+import GithubSlugger from "github-slugger";
 import frontMatter from "front-matter";
+import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 import fs from "fs/promises";
 import path from "path";
-import type { Frontmatter } from "src/components/MDXContent";
+
+const slugger = new GithubSlugger();
 
 const MARKDOWN_FOLDER = "content/markdown";
 
@@ -98,6 +102,7 @@ async function doSerialize(source: string) {
     parseFrontmatter: true,
     mdxOptions: {
       remarkPlugins: [remarkMath, remarkGetCodeFile],
+      rehypePlugins: [rehypeSlug],
     },
   });
 }
@@ -107,10 +112,40 @@ async function readMarkdownFiles() {
   return await Promise.all(markdownFiles.map(async (file) => await readMarkdownFile(file)));
 }
 
+// Credit to joshwcomeau: https://stackoverflow.com/questions/73447710/parse-mdx-file-in-next-js
+function getHeadings(source: string) {
+  // Get each line individually, and filter out anything that
+  // isn't a heading.
+  const headingLines = source.split("\n").filter((line) => {
+    return line.match(/^###*\s/);
+  });
+
+  // Transform the string '## Some text' into an object
+  // with the shape '{ text: 'Some text', level: 2 }'
+  return headingLines.map((raw) => {
+    const text = raw.replace(/^###*\s/, "");
+    const id = slugger.slug(text);
+    const max_heading_level = 4;
+
+    const levels = [...Array(max_heading_level - 1)].map((_, i) => i + 2).reverse();
+
+    for (let level of levels) {
+      if (raw.slice(0, level) === "#".repeat(level)) {
+        // Because we have an h1 at the top of the page, all of our headings should be h2 or lower.
+        // If we find an h1, we'll just make it an h2. Because we still want it to be level 1. YOU KNOW WHAT I MEAN
+        return { id, text, level: Math.max(level - 1, 1) };
+      }
+    }
+
+    return { id, text, level: 99 };
+  });
+}
+
 async function readMarkdownFile(file: string) {
   const filepath = path.resolve(process.cwd(), `${MARKDOWN_FOLDER}/${file}`);
   const source = await fs.readFile(filepath, "utf-8");
 
+  const headings = getHeadings(source);
   const mdx = await doSerialize(source);
 
   const extension = path.extname(file);
@@ -124,7 +159,7 @@ async function readMarkdownFile(file: string) {
     { ...(frontmatter.attributes as object), slug }
   );
 
-  return mdx;
+  return { mdx, headings };
 }
 
 export async function readFiles() {

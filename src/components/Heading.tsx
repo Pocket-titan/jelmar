@@ -1,4 +1,4 @@
-import React, { CSSProperties, ComponentType, PropsWithChildren } from "react";
+import React, { CSSProperties, ComponentType, HTMLAttributes, PropsWithChildren } from "react";
 import styled from "styled-components";
 
 type HeadingType =
@@ -15,7 +15,8 @@ const Heading = ({
   type = "medium-title",
   as,
   ...props
-}: PropsWithChildren<{ type?: HeadingType; as?: string; style?: CSSProperties }>) => {
+}: PropsWithChildren<{ type?: HeadingType; as?: string; style?: CSSProperties }> &
+  HTMLAttributes<HTMLHeadingElement>) => {
   let Component: ComponentType<any>;
 
   switch (type) {
@@ -47,7 +48,16 @@ const Heading = ({
       throw new Error(`No valid title found for type: ${type}`);
   }
 
-  return <Component as={as} {...props} />;
+  return (
+    <Component
+      as={as}
+      {...props}
+      style={{
+        ...(props.style || {}),
+        transition: "color 350ms ease 0s",
+      }}
+    />
+  );
 };
 
 const SectionTitle = styled.h1`

@@ -6,6 +6,12 @@ html[data-color-mode="light"] {
   background: white;
 }
 
+/* Not yet */
+/*
+html {
+  scrollbar-gutter: stable;
+} */
+
 /* Font */
 @font-face {
   font-family: "Wotfard";

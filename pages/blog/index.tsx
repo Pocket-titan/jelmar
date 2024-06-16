@@ -103,7 +103,7 @@ function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps = (async (context) => {
-  const files = (await readFiles()).map((file) => file.frontmatter);
+  const files = (await readFiles()).map(({ mdx }) => mdx.frontmatter);
 
   files.sort((a, b) => {
     const dateA = new Date(a.date);

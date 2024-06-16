@@ -4,12 +4,14 @@ import { throttle } from "ts/utils";
 import Heading from "components/Heading";
 import { useEffect, useState } from "react";
 
-const TableOfContents = ({
-  headings,
-}: {
-  headings: { id: string; text: string; level: number }[];
-}) => {
-  const largeEnoughHeadings = headings.filter((h) => h.level <= 2);
+type Heading = {
+  id: string;
+  text: string;
+  level: number;
+};
+
+const TableOfContents = ({ headings }: { headings: Heading[] }) => {
+  const largeEnoughHeadings = headings.filter((h) => h.level <= 3);
 
   const activeHeadingId = useActiveHeading(largeEnoughHeadings);
 
@@ -45,12 +47,14 @@ const TableOfContents = ({
 const useActiveHeading = (headings: { id: string }[]) => {
   const [activeHeadingId, setActiveHeading] = useState(null);
 
+  console.log(activeHeadingId);
+
   useEffect(() => {
     const handleScroll = throttle(() => {
       // If we're all the way at the top, there is no active heading.
       // This is done because "Introduction", the first link in the TOC, will
       // be active if `heading` is `null`.
-      if (window.pageYOffset === 0) {
+      if (window.scrollY === 0) {
         return setActiveHeading(null);
       }
 
@@ -124,14 +128,14 @@ const getStylesForDepth = (level: number, isActiveHeading: boolean) => {
     case 1:
       return {
         ...base,
-        marginTop: 12,
+        marginTop: 10,
         "--font-size-px": 15,
       };
 
     case 2:
       return {
         ...base,
-        marginTop: 4,
+        marginTop: 6,
         "--font-size-px": 14,
         paddingLeft: 12,
       };
@@ -154,6 +158,7 @@ const Wrapper = styled.nav`
 `;
 
 const TocHeading = styled(Heading)`
+  transition: color 350ms ease 0s;
   color: var(--color-gray-900);
   margin-bottom: 16px;
 `;

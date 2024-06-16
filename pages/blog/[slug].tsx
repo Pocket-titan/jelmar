@@ -9,7 +9,7 @@ type Params = {
   slug: string;
 };
 
-const Post = ({ mdx }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Post = ({ mdx, headings }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
       <Head>
@@ -26,7 +26,7 @@ const Post = ({ mdx }: InferGetStaticPropsType<typeof getStaticProps>) => {
           media="(prefers-color-scheme: dark)"
         />
       </Head>
-      <ArticleLayout frontmatter={mdx.frontmatter}>
+      <ArticleLayout headings={headings} frontmatter={mdx.frontmatter}>
         <MDXContent {...mdx} />
       </ArticleLayout>
     </>
@@ -35,16 +35,16 @@ const Post = ({ mdx }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
 export const getStaticProps = (async (context) => {
   const { slug } = context.params!;
-  const mdx = await readFile(slug);
+  const { mdx, headings } = await readFile(slug);
 
-  return { props: { mdx } };
+  return { props: { mdx, headings } };
 }) satisfies GetStaticProps<any, Params>;
 
 export const getStaticPaths = (async (context) => {
   const files = await readFiles();
 
-  const paths = files.map((file) => ({
-    params: { slug: file.frontmatter.slug },
+  const paths = files.map(({ mdx }) => ({
+    params: { slug: mdx.frontmatter.slug },
   }));
 
   return {

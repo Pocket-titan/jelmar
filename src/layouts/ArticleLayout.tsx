@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IBM_Plex_Mono } from "next/font/google";
-import MDXContent, { Frontmatter, type MDX } from "components/MDXContent";
+import { Frontmatter } from "components/MDXContent";
 import MaxWidthWrapper from "components/MaxWidthWrapper";
 import TableOfContents from "components/TableOfContents";
 import Breadcrumbs from "components/Breadcrumbs";
@@ -19,35 +19,65 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const ContentWrapper = styled(MaxWidthWrapper)`
-  padding-top: 0px;
+const ContentWrapper = styled.div`
+  grid-column: 2 / 3;
+  padding-top: 0;
   display: flex;
-  flex-direction: row-reverse;
+  /* flex-direction: row-reverse;
   justify-content: center;
-  align-items: flex-start; /* required for sticky sidebar */
-  max-width: 1100px;
+  align-items: flex-start; */
+  z-index: 2;
+  padding-left: 32px;
+  padding-right: 32px;
+
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+`;
+
+const Main = styled.main`
+  display: grid;
+  grid-template-columns: 1fr minmax(0px, 1100px) 1fr;
+  z-index: 1;
+  flex: 1;
 `;
 
 const Article = styled.article<{ $toc: boolean }>`
-  flex: 1 1 ${(p) => (p.$toc ? "800px" : "100%")};
-  max-width: min(${(p) => (p.$toc ? "800px" : "100%")}, 100%);
+  flex: 1 1 ${(p) => (p.$toc ? "1100px" : "100%")};
+  max-width: min(${(p) => (p.$toc ? "1100px" : "100%")}, 100%);
+  position: relative;
 `;
 
+const MIN_WIDTH_TO_SHOW_TOC = 1600;
+
 const Sidebar = styled.aside`
-  flex: 0 100000 250px;
   display: none;
+  top: 0px;
+  grid-column: 3 / 4;
+
+  /* margin-right: 32px; */
+  padding-left: 16px;
+
   position: sticky;
-  top: 148px;
-  max-height: calc(100vh - 148px);
-  overflow: auto;
+
+  top: 75px;
+  max-height: calc(100vh - 75px);
+  /* overflow: auto; */
   padding-bottom: 16px;
-  margin-left: auto;
   /* Optical alignment */
   margin-top: 4px;
 
-  @media (min-width: 1084px) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (min-width: ${MIN_WIDTH_TO_SHOW_TOC}px) {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
+  }
+
+  @media (min-width: 1750px) {
+    margin-right: 64px;
   }
 
   @media (orientation: landscape) {
@@ -76,15 +106,12 @@ const Tag = styled.a``;
 const ArticleLayout = ({
   children,
   frontmatter: { title, date, tags },
-  toc = false,
-}: PropsWithChildren<{ frontmatter: Frontmatter; toc?: boolean }>) => {
-  const headings = [
-    {
-      id: "wow",
-      text: "wow",
-      level: 1,
-    },
-  ];
+  headings,
+}: PropsWithChildren<{
+  frontmatter: Frontmatter;
+  headings: { id: string; text: string; level: number }[];
+}>) => {
+  const toc = headings && headings.length > 0;
 
   return (
     <Wrapper>
@@ -103,7 +130,6 @@ const ArticleLayout = ({
             <Breadcrumbs>
               <Breadcrumbs.Crumb href="/">home</Breadcrumbs.Crumb>
               <Breadcrumbs.Crumb href={`/blog`}>blog</Breadcrumbs.Crumb>
-              {/* <Breadcrumbs.Crumb href={`/blog/`}>{"formattedCategory"}</Breadcrumbs.Crumb> */}
             </Breadcrumbs>
             <Title>{title && capitalize(title)}</Title>
             <Subtitle>{date && formatDate(new Date(date))}</Subtitle>
@@ -121,16 +147,23 @@ const ArticleLayout = ({
       <DarkHeaderBackground />
 
       <Main>
-        {/* Content */}
         <ContentWrapper className={ibmPlexMono.variable}>
-          {toc && (
-            <Sidebar>
-              <TableOfContents headings={headings} />
-            </Sidebar>
+          {toc && headings[0].id !== "introduction" && (
+            <a
+              id="introduction"
+              style={{
+                scrollMarginTop: 48,
+              }}
+            />
           )}
           <Article $toc={toc}>{children}</Article>
         </ContentWrapper>
-        {/* End content */}
+        {toc && (
+          <Sidebar>
+            {toc}
+            <TableOfContents headings={headings} />
+          </Sidebar>
+        )}
       </Main>
 
       <Footer
@@ -159,17 +192,6 @@ const HeaderWrapper = styled.div`
   top: 0;
 
   width: 100vw;
-`;
-
-const Main = styled.main`
-  position: relative;
-  z-index: 1;
-  flex: 1;
-
-  @media ${(p) => p.theme.breakpoints.lgAndSmaller} {
-    max-width: 100vw;
-    overflow: hidden;
-  }
 `;
 
 const HeroWrapper = styled.div`

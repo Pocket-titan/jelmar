@@ -128,6 +128,12 @@ const Directory = ({ directory: { name, depth, items, expanded } }: { directory:
         depth={depth}
         icon={getIcon(isExpanded ? "__openedFolder" : "__folder")}
         onClick={() => setIsExpanded(!isExpanded)}
+        onMouseDown={(event) => {
+          // Prevent double click selection, it's annoying with the click to expand
+          if (event.detail === 2) {
+            event.preventDefault();
+          }
+        }}
         style={{
           cursor: "pointer",
         }}
