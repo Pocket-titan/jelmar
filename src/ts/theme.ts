@@ -231,7 +231,7 @@ export const VARIABLES = {
   },
 };
 
-export const HEADER_HEIGHT = "2.5rem";
+export const HEADER_HEIGHT = "2.75rem";
 
 export const TRANSITION_DURATION = 350;
 

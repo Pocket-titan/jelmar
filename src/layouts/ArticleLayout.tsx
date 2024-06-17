@@ -8,7 +8,15 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import { capitalize, formatDate } from "ts/utils";
 import { HEADER_HEIGHT, TRANSITION_DURATION } from "ts/theme";
-import { PropsWithChildren } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import SmoothScrolling from "@components/SmoothScrolling";
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -103,19 +111,66 @@ const Tags = styled.div``;
 
 const Tag = styled.a``;
 
+if (!HEADER_HEIGHT.endsWith("rem")) {
+  throw new Error("HEADER_HEIGHT is expected to be in rem here, change this!");
+}
+const rem = parseFloat(HEADER_HEIGHT.replace("rem", ""));
+
+const getUpdateBackgroundFn =
+  (headerBackground: string, setHeaderBackground: (x: string) => void) => (background: string) => {
+    if (background !== headerBackground) {
+      setHeaderBackground(background);
+    }
+  };
+
 const ArticleLayout = ({
   children,
   frontmatter: { title, date, tags },
-  headings,
+  headings = [],
 }: PropsWithChildren<{
   frontmatter: Frontmatter;
-  headings: { id: string; text: string; level: number }[];
+  headings?: { id: string; text: string; level: number }[];
 }>) => {
+  const [headerBackground, setHeaderBackground] = useState("var(--color-muted)");
+  const updateBackgroundFn = useRef(getUpdateBackgroundFn(headerBackground, setHeaderBackground));
   const toc = headings && headings.length > 0;
+  const HEIGHT = useMemo(() => {
+    try {
+      return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+    } catch {
+      return 40;
+    }
+  }, []);
+
+  useEffect(() => {
+    updateBackgroundFn.current = getUpdateBackgroundFn(headerBackground, setHeaderBackground);
+  }, [headerBackground]);
+
+  const updateScroll = () => {
+    if (window.scrollY > 2 * HEIGHT) {
+      return updateBackgroundFn.current("var(--color-background)");
+    }
+
+    if (window.scrollY <= 2 * HEIGHT) {
+      return updateBackgroundFn.current("var(--color-muted)");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", updateScroll);
+
+    return () => {
+      window.removeEventListener("scroll", updateScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    updateScroll();
+  }, []);
 
   return (
     <Wrapper>
-      <HeaderWrapper>
+      <HeaderWrapper style={{ background: headerBackground }}>
         <MaxWidthWrapper>
           <Header />
         </MaxWidthWrapper>
@@ -123,7 +178,7 @@ const ArticleLayout = ({
 
       <HeroWrapper>
         <LightHeaderBackground />
-        <SneakyLightHeaderBackground />
+        {/* <SneakyLightHeaderBackground /> */}
 
         <Hero>
           <MaxWidthWrapper>
@@ -144,7 +199,7 @@ const ArticleLayout = ({
         </Hero>
       </HeroWrapper>
 
-      <DarkHeaderBackground />
+      {/* <DarkHeaderBackground /> */}
 
       <Main>
         <ContentWrapper className={ibmPlexMono.variable}>
@@ -187,11 +242,11 @@ const Wrapper = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
+  transition: background 350ms ease 0s;
   position: sticky;
+  width: 100vw;
   z-index: 5;
   top: 0;
-
-  width: 100vw;
 `;
 
 const HeroWrapper = styled.div`
