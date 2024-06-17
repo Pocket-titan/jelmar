@@ -3,6 +3,7 @@ import styled from "styled-components";
 import NextLink from "next/link";
 import { omit } from "lodash";
 import ExternalLinkIcon from "@components/ExternalLinkIcon";
+import { HEADER_HEIGHT } from "@ts/theme";
 
 type LinkType = "internal" | "external" | "hash";
 
@@ -31,6 +32,7 @@ const ContentLink = ({
 
   const style = {
     ...(linkType === "external" ? { display: "inline-flex", alignItems: "center" } : {}),
+    ...(linkType === "hash" ? { scrollMarginTop: HEADER_HEIGHT } : {}),
     ...(props.style || {}),
   };
 

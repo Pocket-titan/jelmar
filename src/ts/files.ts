@@ -4,6 +4,7 @@ import GithubSlugger from "github-slugger";
 import frontMatter from "front-matter";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import fs from "fs/promises";
 import path from "path";
 
@@ -101,7 +102,7 @@ async function doSerialize(source: string) {
   return await serialize<Record<string, unknown>, Frontmatter>(source, {
     parseFrontmatter: true,
     mdxOptions: {
-      remarkPlugins: [remarkMath, remarkGetCodeFile],
+      remarkPlugins: [remarkMath, remarkGetCodeFile, remarkGfm],
       rehypePlugins: [rehypeSlug],
     },
   });
