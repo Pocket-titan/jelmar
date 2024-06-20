@@ -8,6 +8,7 @@ import ContentHeading from "./ContentHeading";
 import ContentLink from "./ContentLink";
 import Cell from "./Notebook/Cell";
 import FileTree from "./FileTree";
+import Collapsed from "@components/Collapsed";
 
 export type Frontmatter = {
   title: string;
@@ -30,6 +31,7 @@ const InlineCode = styled.code`
 `;
 
 const components: MDXRemoteProps["components"] = {
+  Collapsed,
   FileTree,
   Cell,
   Math,

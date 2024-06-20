@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Link from "components/Link";
 
 const NavLinkWrapper = styled(Link)`
-  transition: color 250ms ease 0s;
+  transition: color 350ms ease 0s;
   position: relative;
   padding: 10px 18px 10px 18px;
   text-decoration: none;

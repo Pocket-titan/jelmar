@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback, useSyncExternalStore } from "react";
 import { EditorState, Extension, Prec } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { mergeExtension } from "./cm_merge_view";
@@ -13,6 +13,31 @@ export function useCssVariable(variable: string, ref?: HTMLElement) {
 }
 
 export function useRem() {}
+
+export function useMediaQuery(query: string) {
+  const subscribe = useCallback(
+    (callback: (this: MediaQueryList, event: MediaQueryListEvent) => void) => {
+      const matchMedia = window.matchMedia(query);
+
+      matchMedia.addEventListener("change", callback);
+
+      return () => {
+        matchMedia.removeEventListener("change", callback);
+      };
+    },
+    [query]
+  );
+
+  const getSnapshot = () => {
+    return window.matchMedia(query).matches;
+  };
+
+  const getServerSnapshot = () => {
+    throw Error("useMediaQuery is a client-only hook");
+  };
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
 
 export function useEditor(
   { value = "", oldValue }: { value?: string; oldValue?: string },

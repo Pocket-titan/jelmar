@@ -156,6 +156,10 @@ const CodeWrapper = styled.div`
     font-family: var(--font-monospace), monospace !important;
     font-weight: 450 !important;
   }
+
+  pre:last-child & {
+    margin-bottom: 0px;
+  }
 `;
 
 const Floating = styled.div`

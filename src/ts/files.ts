@@ -1,14 +1,12 @@
 import type { Frontmatter } from "src/components/MDXContent";
 import { serialize } from "next-mdx-remote/serialize";
-import GithubSlugger from "github-slugger";
+import { slug } from "github-slugger";
 import frontMatter from "front-matter";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import fs from "fs/promises";
 import path from "path";
-
-const slugger = new GithubSlugger();
 
 const MARKDOWN_FOLDER = "content/markdown";
 
@@ -125,7 +123,7 @@ function getHeadings(source: string) {
   // with the shape '{ text: 'Some text', level: 2 }'
   return headingLines.map((raw) => {
     const text = raw.replace(/^###*\s/, "");
-    const id = slugger.slug(text);
+    const id = slug(text);
     const max_heading_level = 4;
 
     const levels = [...Array(max_heading_level - 1)].map((_, i) => i + 2).reverse();

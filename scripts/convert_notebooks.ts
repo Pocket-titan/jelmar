@@ -5,13 +5,16 @@ const MARKDOWN_FOLDER = "content/markdown";
 const NOTEBOOK_FOLDER = "content/notebooks";
 
 async function main() {
-  await convertNotebookFiles();
+  await convertNotebookFiles(process.argv[2]);
 }
 
 main();
 
-async function convertNotebookFiles() {
-  const notebookFiles = await fs.readdir(path.resolve(process.cwd(), NOTEBOOK_FOLDER));
+async function convertNotebookFiles(glob?: string) {
+  let notebookFiles = await fs.readdir(path.resolve(process.cwd(), NOTEBOOK_FOLDER));
+  if (glob) {
+    notebookFiles = notebookFiles.filter((file) => file.match(glob));
+  }
   console.log(`Converting ${notebookFiles.length} notebook files to MDX...`);
 
   for (let file of notebookFiles) {
@@ -29,7 +32,7 @@ async function readNotebookFile(file: string) {
   const filepath = path.resolve(process.cwd(), `${NOTEBOOK_FOLDER}/${file}`);
   const contents = await fs.readFile(filepath, "utf-8");
   const notebook = JSON.parse(contents) as Notebook;
-  const language = notebook.metadata.kernelspec.language;
+  const language = notebook.metadata.kernelspec?.language || notebook.metadata.language_info.name;
 
   let startCell = 1;
   let frontmatter = parseFrontmatterCell(notebook.cells[0]);
@@ -48,7 +51,12 @@ async function readNotebookFile(file: string) {
   const cells = await notebook.cells
     .slice(startCell)
     .map((cell) =>
-      cell.cell_type === "code" ? { ...cell, metadata: { ...cell.metadata, language } } : cell
+      cell.cell_type === "code"
+        ? {
+            ...cell,
+            metadata: { ...cell.metadata, language: cell.metadata?.vscode?.languageId || language },
+          }
+        : cell
     )
     .reduce(
       async (acc, cell, i) => (await acc) + (await convertCellToMDX(cell, slug, i)),

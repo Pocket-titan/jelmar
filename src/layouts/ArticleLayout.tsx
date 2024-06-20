@@ -106,10 +106,10 @@ const Tag = styled.a``;
 const ArticleLayout = ({
   children,
   frontmatter: { title, date, tags },
-  headings,
+  headings = [],
 }: PropsWithChildren<{
   frontmatter: Frontmatter;
-  headings: { id: string; text: string; level: number }[];
+  headings?: { id: string; text: string; level: number }[];
 }>) => {
   const toc = headings && headings.length > 0;
 
@@ -235,7 +235,7 @@ const DarkHeaderBackground = styled.div`
   background: var(--color-background);
   transition: background ${TRANSITION_DURATION}ms ease 0s;
   transform: translateY(-2px);
-  will-change: transform;
+  /* will-change: transform; */
 `;
 
 const Heading = styled.h1<{ alone?: boolean }>`
@@ -246,7 +246,7 @@ const Heading = styled.h1<{ alone?: boolean }>`
 const Title = styled(Heading)`
   /* margin-bottom: 16px; */
   font-weight: var(--font-weight-medium);
-  transition: color ${TRANSITION_DURATION}ms;
+  transition: color ${TRANSITION_DURATION}ms ease 0s;
 
   /* margin-top: ${(p) => (p.alone ? 8 : 24)}px; */
 `;
@@ -258,6 +258,7 @@ const Subtitle = styled.span`
   margin-bottom: 0px;
   font-weight: var(--font-weight-book);
   color: var(--color-gray-700);
+  transition: color 350ms ease 0s;
 `;
 
 export default ArticleLayout;

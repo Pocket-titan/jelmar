@@ -53,7 +53,7 @@ const ContentLink = ({
 
 const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   color: var(--color-subtle-primary);
-  transition: color 250ms ease 0s;
+  transition: color 350ms ease 0s;
 
   display: inline-block;
   margin-left: 0.2rem;
@@ -64,14 +64,14 @@ const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
 `;
 
 const StyledLink = styled.a`
-  text-align: baseline;
+  vertical-align: baseline;
   color: var(--color-subtle-primary);
   text-decoration: underline;
   text-decoration-color: var(--color-subtle-primary);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 
-  transition: color 250ms ease 0s, text-decoration-color 250ms ease 0s;
+  transition: color 350ms ease 0s, text-decoration-color 350ms ease 0s;
 
   &:focus {
     outline: 2px auto var(--color-primary);

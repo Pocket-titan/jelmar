@@ -36,10 +36,13 @@ const Article = styled.article`
 `;
 
 const Title = styled.h3`
-  transition: color 250ms ease 0s;
+  transition: color 350ms ease 0s;
+  color: var(--color-text);
 `;
 
 const Description = styled.p`
+  transition: color 350ms ease 0s;
+  color: var(--color-text);
   overflow-wrap: anywhere;
   margin-bottom: 8px;
   flex: 1;

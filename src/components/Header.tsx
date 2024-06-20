@@ -77,6 +77,21 @@ const Right = styled.div<{ $platform: "mobile" | "desktop" }>`
   `}
 `;
 
+const Logo = () => (
+  <span
+    style={{
+      userSelect: "none",
+      fontSize: "24px",
+      letterSpacing: "-1px",
+      padding: "0px",
+      color: "var(--color-primary)",
+      transition: "color 350ms ease 0s",
+    }}
+  >
+    Jelmar
+  </span>
+);
+
 const Header = () => {
   return (
     <Wrapper>
@@ -85,21 +100,10 @@ const Header = () => {
           href="/"
           style={{
             display: "flex",
-            fontSize: "24px",
-            letterSpacing: "-1px",
-            padding: "0px",
             textDecoration: "none",
-            color: "var(--color-primary)",
-            // marginRight: 32,
           }}
         >
-          <span
-            style={{
-              userSelect: "none",
-            }}
-          >
-            Jelmar
-          </span>
+          <Logo />
         </NextLink>
       </Left>
 

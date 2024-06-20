@@ -76,8 +76,8 @@ export const LIGHT_COLORS = {
   blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
   muted: "hsl(218, 56%, 92%)",
   mutedContrast: "hsl(218, 56%, 96%)",
-  primary: "#2b62d8",
-  subtlePrimary: "hsl(221, 90%, 35%)",
+  primary: "hsl(221deg 80% 51%)",
+  subtlePrimary: "hsl(221, 58%, 60%)",
   secondary: "#35E6A7", //#50E6E3
   tertiary: "#7750E6",
   subtleFloating: "hsl(0deg, 0%, 100%)",
@@ -231,7 +231,7 @@ export const VARIABLES = {
   },
 };
 
-export const HEADER_HEIGHT = "2.5rem";
+export const HEADER_HEIGHT = "2.75rem";
 
 export const TRANSITION_DURATION = 350;
 

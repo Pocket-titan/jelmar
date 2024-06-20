@@ -43,6 +43,10 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
+  p {
+    line-height: 1.7;
+  }
+
   img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;
@@ -127,20 +131,20 @@ const GlobalStyle = createGlobalStyle`
     width: var(--scrollbar-width, 8px);
     height: var(--scrollbar-height, 7px);
     background-color: var(--color-scrollbar-background, var(--color-gray-100));
-    transition: background-color ${TRANSITION_DURATION}ms;
+    transition: background-color ${TRANSITION_DURATION}ms ease 0s;
   }
 
   ::-webkit-scrollbar-track {
     border-radius: 3px;
     background-color: var(--color-scrollbar-background, transparent);
-    transition: background-color ${TRANSITION_DURATION}ms;
+    transition: background-color ${TRANSITION_DURATION}ms ease 0s;
   }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: var(--color-scrollbar, var(--color-gray-700));
     border: 2px solid var(--color-scrollbar-background, var(--color-gray-100));
-    transition: background-color ${TRANSITION_DURATION}ms;
+    transition: background-color ${TRANSITION_DURATION}ms ease 0s;
   }
   /* } */
 
@@ -157,7 +161,47 @@ const GlobalStyle = createGlobalStyle`
 
   /* I think I want this? */
   p + p {
-    margin-top: 0.35em;
+    margin-top: 1.5em;
+  }
+
+  p, a, h1, h2, h3, h4, h5, h6 {
+    transition: color 350ms ease 0s;
+    color: var(--color-text);
+  }
+
+  /* Footnotes */
+  .footnotes {
+    font-size: smaller;
+    color: var(--color-gray-700);
+    border-top: 1.5px solid var(--color-gray-500);
+    margin-top: 2.5em;
+    padding-top: 0.5em;
+  }
+
+  /* Hide the section label for visual users. */
+  .sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    word-wrap: normal;
+    border: 0;
+  }
+
+  /* Place [ and ] around footnote references */
+  [data-footnote-ref]::before {
+    content: '[';
+  }
+
+  [data-footnote-ref]::after {
+    content: ']';
+  }
+
+  /* Space */
+  [data-footnote-ref] {
+    text-underline-offset: 4px;
   }
 `;
 

@@ -128,6 +128,7 @@ const Tag = styled.div`
   font-size: 13px;
   position: relative;
   color: var(--color-gray-900);
+  transition: color 350ms ease 0s, background 350ms ease 0s;
 
   &:not(:last-child) {
     margin-right: 8px;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { HTMLAttributes, PropsWithChildren, useState } from "react";
+import { HTMLAttributes, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { SiHtml5, SiCss3, SiJavascript, SiTypescript, SiJupyter } from "react-icons/si";
 import { MdDataObject } from "react-icons/md";
 import { BiHeading } from "react-icons/bi";
@@ -7,6 +7,8 @@ import { LuBinary } from "react-icons/lu";
 import { FiFile, FiFileText } from "react-icons/fi";
 import { FaFolder, FaFolderOpen, FaImage } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
+import { animated, useSpring } from "@react-spring/web";
+import useMeasure from "react-use-measure";
 
 type File = {
   kind: "file";
@@ -39,7 +41,9 @@ const FileTree = ({ items }: { items: PartialItem[] }) => {
         margin: "0.5em 0.5em 1em 0.5em",
       }}
     >
-      <SubTree items={tree} />
+      <ul>
+        <SubTree items={tree} />
+      </ul>
     </div>
   );
 };
@@ -87,6 +91,7 @@ const Name = styled.span`
   font-size: 15px;
   font-weight: 400;
   color: var(--color-gray-900);
+  transition: color 350ms ease 0s;
 `;
 
 const NameWrapper = ({
@@ -119,14 +124,28 @@ const File = ({ file: { name, depth } }: { file: File }) => {
   );
 };
 
+const Content = styled(animated.div)`
+  will-change: opacity, height, color;
+  overflow: hidden;
+`;
+
 const Directory = ({ directory: { name, depth, items, expanded } }: { directory: Directory }) => {
   const [isExpanded, setIsExpanded] = useState(expanded ?? false);
+  const [ref, { height }] = useMeasure();
+  const styles = useSpring({
+    from: { height: 0, opacity: 0 },
+    to: {
+      height: isExpanded ? height : 0,
+      opacity: isExpanded ? 1 : 0,
+    },
+  });
 
   return (
     <>
       <NameWrapper
         depth={depth}
         icon={getIcon(isExpanded ? "__openedFolder" : "__folder")}
+        style={{ cursor: "pointer" }}
         onClick={() => setIsExpanded(!isExpanded)}
         onMouseDown={(event) => {
           // Prevent double click selection, it's annoying with the click to expand
@@ -134,29 +153,26 @@ const Directory = ({ directory: { name, depth, items, expanded } }: { directory:
             event.preventDefault();
           }
         }}
-        style={{
-          cursor: "pointer",
-        }}
       >
         {name}
       </NameWrapper>
-      {isExpanded && <SubTree items={items} />}
+      <Content style={{ ...styles }}>
+        <ul ref={ref}>
+          <SubTree items={items} />
+        </ul>
+      </Content>
     </>
   );
 };
 
 const SubTree = ({ items }: { items: Item[] }) => {
-  return (
-    <ul>
-      {items.map((item, i) => {
-        if (item.kind === "file") {
-          return <File key={`${item.name}-${i}`} file={item} />;
-        }
+  return items.map((item, i) => {
+    if (item.kind === "file") {
+      return <File key={`${item.name}-${i}`} file={item} />;
+    }
 
-        return <Directory key={`${item.name}-${i}`} directory={item} />;
-      })}
-    </ul>
-  );
+    return <Directory key={`${item.name}-${i}`} directory={item} />;
+  });
 };
 
 const getIcon = (() => {

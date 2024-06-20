@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const ExternalLinkIcon = styled(FaArrowUpRightFromSquare)`
   color: var(--color-subtle-primary);
-  transition: color 250ms ease 0s;
+  transition: color 350ms ease 0s;
 `;
 
 export default ExternalLinkIcon;
