@@ -15,14 +15,17 @@ const DarkModeScript = () => {
 };
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps> {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
 
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
@@ -101,7 +104,6 @@ class MyDocument extends Document {
             media="(prefers-color-scheme: dark)"
           /> */}
         </Head>
-        <noscript id="meta-tag-jail" />
         <body>
           <DarkModeScript />
           <div id="mobile-nav" />

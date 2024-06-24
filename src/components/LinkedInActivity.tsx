@@ -1,18 +1,43 @@
 import styled from "styled-components";
-import { FaLinkedin as LinkedInLogo, FaThumbsUp as ThumbsUp } from "react-icons/fa";
-import { List, Title, ListItem, Avatar, formatDateString } from "@components/Activity";
+import {
+  FaLinkedin as LinkedInLogo,
+  FaThumbsUp as ThumbsUp,
+} from "react-icons/fa";
+import {
+  List,
+  Title,
+  ListItem,
+  Avatar,
+  formatDateString,
+} from "@components/Activity";
 
 const LinkedInList = styled(List)`
   flex: 1.5;
 `;
 
-const LinkedInActivity = ({ posts, bio }: { posts: LinkedInPost[]; bio: LinkedInBio }) => {
+const LinkedInActivity = ({
+  posts,
+  bio,
+}: {
+  posts: LinkedInPost[];
+  bio: LinkedInBio;
+}) => {
   return (
     <LinkedInList>
       <Title type="small-title"> LinkedIn activity </Title>
-      {posts.slice(0, 2).map((post) => (
-        <Post post={post} bio={bio} key={post.id} />
-      ))}
+      {posts.length > 0 ? (
+        posts
+          .slice(0, 2)
+          .map((post) => <Post post={post} bio={bio} key={post.id} />)
+      ) : (
+        <em
+          style={{
+            color: "var(--color-gray-500)",
+          }}
+        >
+          No recent activity
+        </em>
+      )}
     </LinkedInList>
   );
 };
@@ -102,7 +127,12 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
     <MyListItem href={postUrl} target="_blank">
       <First>
         <Left>
-          <Avatar height={40} width={40} src={bio.profile_picture} alt={bio.full_name} />
+          <Avatar
+            height={40}
+            width={40}
+            src={bio.profile_picture}
+            alt={bio.full_name}
+          />
         </Left>
         <Middle>
           <Who>

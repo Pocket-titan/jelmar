@@ -1,4 +1,8 @@
-import { MDXRemote, type MDXRemoteSerializeResult, type MDXRemoteProps } from "next-mdx-remote";
+import {
+  MDXRemote,
+  type MDXRemoteSerializeResult,
+  type MDXRemoteProps,
+} from "next-mdx-remote";
 import styled from "styled-components";
 import Code from "./Code";
 import Math from "./Math";
@@ -19,14 +23,17 @@ export type Frontmatter = {
   extension: string;
 };
 
-export type MDX = MDXRemoteSerializeResult<Record<string, unknown>, Frontmatter>;
+export type MDX = MDXRemoteSerializeResult<
+  Record<string, unknown>,
+  Frontmatter
+>;
 
 const InlineCode = styled.code`
   background: var(--color-code-base);
   border-radius: 3px;
   margin-right: 0.1em;
   padding: 0.1em 0.2em;
-  font-size: 0.875em;
+  font-size: 1rem;
   transition: background 350ms ease 0s;
 `;
 
@@ -49,7 +56,11 @@ const components: MDXRemoteProps["components"] = {
       const language = (className || "").replace(/language-/, "");
 
       return (
-        <Code language={language.length > 0 ? language : undefined} {...props} {...childProps} />
+        <Code
+          language={language.length > 0 ? language : undefined}
+          {...props}
+          {...childProps}
+        />
       );
     }
 

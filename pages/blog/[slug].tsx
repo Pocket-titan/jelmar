@@ -1,18 +1,26 @@
-import type { InferGetStaticPropsType, GetStaticProps, GetStaticPaths } from "next";
+import type {
+  InferGetStaticPropsType,
+  GetStaticProps,
+  GetStaticPaths,
+} from "next";
 import ArticleLayout from "layouts/ArticleLayout";
 import { readFile, readFiles } from "ts/files";
 import MDXContent from "components/MDXContent";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
 import Head from "next/head";
+import SEO from "@components/SEO";
 
 type Params = {
   slug: string;
 };
 
-const Post = ({ mdx, headings }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Post = ({
+  mdx,
+  headings,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
-      <Head>
+      {/* <Head>
         <meta
           key="theme_color_light"
           name="theme-color"
@@ -25,7 +33,13 @@ const Post = ({ mdx, headings }: InferGetStaticPropsType<typeof getStaticProps>)
           content={DARK_COLORS.background}
           media="(prefers-color-scheme: dark)"
         />
-      </Head>
+      </Head> */}
+      <SEO
+        title={mdx.frontmatter?.title}
+        description={mdx.frontmatter?.excerpt}
+        darkColor={DARK_COLORS.background}
+        lightColor={LIGHT_COLORS.background}
+      />
       <ArticleLayout headings={headings} frontmatter={mdx.frontmatter}>
         <MDXContent {...mdx} />
       </ArticleLayout>

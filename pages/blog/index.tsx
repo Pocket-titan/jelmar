@@ -10,6 +10,7 @@ import ContentGrid from "components/ContentGrid";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
 import Head from "next/head";
 import { useCssVariable } from "@ts/hooks";
+import SEO from "@components/SEO";
 
 const Arrow = styled(FaChevronRight)`
   transition: opacity 250ms ease 0s;
@@ -57,7 +58,7 @@ const SmallDate = styled.p`
 function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <Head>
+      {/* <Head>
         <meta
           key="theme_color_light"
           name="theme-color"
@@ -70,7 +71,12 @@ function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
           content={DARK_COLORS.subtleBackground}
           media="(prefers-color-scheme: dark)"
         />
-      </Head>
+      </Head> */}
+      <SEO
+        title="Blog"
+        darkColor={DARK_COLORS.subtleBackground}
+        lightColor={LIGHT_COLORS.subtleBackground}
+      />
       <DefaultLayout background={"var(--color-subtle-background)"}>
         <MaxWidthWrapper>
           <Main>
@@ -78,7 +84,11 @@ function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
               {files.map((file) => (
                 <Article key={file.slug}>
                   <Link
-                    style={{ display: "flex", flexDirection: "column", height: "100%" }}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
                     href={`/blog/${file.slug}`}
                   >
                     <Title>{capitalize(file.title)}</Title>

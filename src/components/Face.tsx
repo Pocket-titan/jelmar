@@ -19,7 +19,13 @@ const Img = styled(NextImage)`
 const Face = () => {
   return (
     <Wrapper>
-      <Img src={FacePicture} alt="Picture of the author" width={200} height={200} priority />
+      <Img
+        src={FacePicture}
+        alt="Picture of the author"
+        width={200}
+        height={200}
+        loading="eager"
+      />
     </Wrapper>
   );
 };

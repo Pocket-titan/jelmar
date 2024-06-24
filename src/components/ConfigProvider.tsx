@@ -10,7 +10,6 @@ import {
   useCallback,
   useContext,
   useRef,
-  useLayoutEffect,
 } from "react";
 import {
   LIGHT_COLORS,
@@ -125,9 +124,11 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
       root.style.setProperty(THEME_CSS_PROP, colorMode);
       const newColors = prefersDark ? DARK_COLORS : LIGHT_COLORS;
 
-      Object.entries(keysToVariables(newColors, "color")).forEach(([name, color]) => {
-        root.style.setProperty(name, color);
-      });
+      Object.entries(keysToVariables(newColors, "color")).forEach(
+        ([name, color]) => {
+          root.style.setProperty(name, color);
+        }
+      );
 
       setFavicon(colorMode);
       _setColorMode(colorMode);
@@ -182,7 +183,9 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
     [colorMode, _setColorMode, setColorMode, allowColorTransitions]
   );
 
-  return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
+  return (
+    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
+  );
 };
 
 export default ConfigProvider;

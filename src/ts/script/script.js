@@ -54,8 +54,8 @@ var LIGHT_COLORS = {
     blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
     muted: "hsl(218, 56%, 92%)",
     mutedContrast: "hsl(218, 56%, 96%)",
-    primary: "#2b62d8",
-    subtlePrimary: "hsl(221, 90%, 35%)",
+    primary: "hsl(221deg 80% 51%)",
+    subtlePrimary: "hsl(221, 58%, 60%)",
     secondary: "#35E6A7", //#50E6E3
     tertiary: "#7750E6",
     subtleFloating: "hsl(0deg, 0%, 100%)",
@@ -189,7 +189,7 @@ var VARIABLES = {
         height: "7px",
     },
 };
-var HEADER_HEIGHT = "2.5rem";
+var HEADER_HEIGHT = "2.75rem";
 var TRANSITION_DURATION = 350;
 var THEME_KEY = "theme";
 var THEME_CSS_PROP = "--".concat(THEME_KEY);
@@ -326,6 +326,14 @@ var roundTo = function (number, places) {
     if (places === void 0) { places = 0; }
     return Math.round(number * Math.pow(10, places)) / Math.pow(10, places);
 };
+function isBase64(str) {
+    try {
+        return Buffer.from(str, "base64").toString("base64") === str;
+    }
+    catch (_a) {
+        return false;
+    }
+}
 
 ;// CONCATENATED MODULE: ./script.ts
 

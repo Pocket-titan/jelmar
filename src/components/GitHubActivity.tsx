@@ -14,40 +14,51 @@ const GitHubList = styled(List)`
 `;
 
 const GitHubActivity = ({ events }: { events: GitHubEvent[] }) => {
+  const filteredEvents = events
+    .filter(({ type }) =>
+      ["WatchEvent", "CreateEvent", "PushEvent"].includes(type)
+    )
+    .reduce((acc, curr) => {
+      if (
+        acc.length > 0 &&
+        acc[acc.length - 1].type === "PushEvent" &&
+        curr.type === "PushEvent" &&
+        acc[acc.length - 1].repo.id === curr.repo.id &&
+        new Date(curr.created_at).getTime() -
+          new Date(acc[acc.length - 1].created_at).getTime() <
+          24 * 60 * 60
+      ) {
+        acc[acc.length - 1] = {
+          ...acc[acc.length - 1],
+          payload: {
+            ...acc[acc.length - 1].payload,
+            commits: (acc[acc.length - 1] as PushEvent).payload.commits.concat(
+              curr.payload.commits
+            ),
+          } as any,
+        };
+      } else {
+        acc.push(curr);
+      }
+
+      return acc;
+    }, [] as GitHubEvent[])
+    .slice(0, 5);
+
   return (
     <GitHubList>
       <Title type="small-title"> GitHub activity </Title>
-      {events
-        .filter(({ type }) => ["WatchEvent", "CreateEvent", "PushEvent"].includes(type))
-        .reduce((acc, curr) => {
-          if (
-            acc.length > 0 &&
-            acc[acc.length - 1].type === "PushEvent" &&
-            curr.type === "PushEvent" &&
-            acc[acc.length - 1].repo.id === curr.repo.id &&
-            new Date(curr.created_at).getTime() -
-              new Date(acc[acc.length - 1].created_at).getTime() <
-              24 * 60 * 60
-          ) {
-            acc[acc.length - 1] = {
-              ...acc[acc.length - 1],
-              payload: {
-                ...acc[acc.length - 1].payload,
-                commits: (acc[acc.length - 1] as PushEvent).payload.commits.concat(
-                  curr.payload.commits
-                ),
-              } as any,
-            };
-          } else {
-            acc.push(curr);
-          }
-
-          return acc;
-        }, [] as GitHubEvent[])
-        .slice(0, 5)
-        .map((event) => (
-          <Event event={event} key={event.id} />
-        ))}
+      {filteredEvents.length > 0 ? (
+        filteredEvents.map((event) => <Event event={event} key={event.id} />)
+      ) : (
+        <em
+          style={{
+            color: "var(--color-gray-500)",
+          }}
+        >
+          No recent activity
+        </em>
+      )}
     </GitHubList>
   );
 };
@@ -74,9 +85,9 @@ const getUrl = ({ type, repo, payload }: GitHubEvent) => {
           .replace("commits", "commit");
       }
       case "CreateEvent": {
-        return `${repo.url.replace("api.", "").replace("/repos", "")}/releases/${
-          payload.ref_type
-        }/${payload.ref}`;
+        return `${repo.url
+          .replace("api.", "")
+          .replace("/repos", "")}/releases/${payload.ref_type}/${payload.ref}`;
       }
       default:
         return undefined;
@@ -112,7 +123,8 @@ const getEventText = (event: GitHubEvent) => {
       case "CreateEvent": {
         return (
           <span>
-            created {event.payload.ref_type} {event.payload.ref} in <Mono>{name}</Mono>
+            created {event.payload.ref_type} {event.payload.ref} in{" "}
+            <Mono>{name}</Mono>
           </span>
         );
       }
@@ -126,7 +138,8 @@ const getEventText = (event: GitHubEvent) => {
       case "DeleteEvent": {
         return (
           <span>
-            deleted {event.payload.ref_type} {event.payload.ref} in <Mono>{name}</Mono>
+            deleted {event.payload.ref_type} {event.payload.ref} in{" "}
+            <Mono>{name}</Mono>
           </span>
         );
       }

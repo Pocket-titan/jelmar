@@ -78,8 +78,9 @@ const GlobalStyle = createGlobalStyle`
     color: var(--color-text);
     background: var(--color-background);
     overflow-x: hidden;
+    width: 100vw;
 
-    width: 100%;
+    font-size: 1.1875rem;
   }
 
   body.has-transition {
@@ -100,7 +101,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   code {
-    font-size: 0.95em;
+    font-size: 1rem;
   }
 
   button {

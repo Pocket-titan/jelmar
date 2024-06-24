@@ -15,6 +15,7 @@ import { CSSProperties } from "react";
 import { sortBy } from "lodash";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
 import Head from "next/head";
+import SEO from "@components/SEO";
 
 type Project = {
   title: string;
@@ -34,7 +35,8 @@ type Project = {
 const projects: Project[] = [
   {
     title: "Apygee",
-    description: "A Python package for creating, manipulating and visualizing Kepler orbits.",
+    description:
+      "A Python package for creating, manipulating and visualizing Kepler orbits.",
     tags: ["Python", "Astrodynamics"],
     url: "https://pypi.org/project/apygee/",
     image: {
@@ -140,22 +142,25 @@ const Tag = styled.div`
     inset: 0;
     border-radius: 4px;
     padding: 2px;
-    background: linear-gradient(330deg, var(--color-secondary) 20%, var(--color-primary) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    background: linear-gradient(
+      330deg,
+      var(--color-secondary) 20%,
+      var(--color-primary) 100%
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
 `;
 
 const Img = styled(NextImage)`
-  position: relative !important;
-  display: block;
-  margin: auto;
   width: 100%;
-
-  border-radius: 8px;
+  height: 100%;
   object-fit: contain;
   object-position: center;
+  border-radius: 8px;
 `;
 
 const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
@@ -209,16 +214,7 @@ const Project = ({ title, description, tags, url, image }: Project) => {
                 ...(image.style || {}),
               }}
             >
-              <Img
-                src={image.src}
-                alt={title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  objectPosition: "center",
-                }}
-              />
+              <Img src={image.src} alt={title} loading="eager" />
             </Right>
           )}
         </Bottom>
@@ -227,10 +223,12 @@ const Project = ({ title, description, tags, url, image }: Project) => {
   );
 };
 
-const Projects = ({ projects }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Projects = ({
+  projects,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
-      <Head>
+      {/* <Head>
         <meta
           key="theme_color_light"
           name="theme-color"
@@ -243,7 +241,14 @@ const Projects = ({ projects }: InferGetStaticPropsType<typeof getStaticProps>) 
           content={DARK_COLORS.subtleBackground}
           media="(prefers-color-scheme: dark)"
         />
-      </Head>
+      </Head> */}
+
+      <SEO
+        title="Projects"
+        description="A collection of projects I've worked on."
+        darkColor={DARK_COLORS.subtleBackground}
+        lightColor={LIGHT_COLORS.subtleBackground}
+      />
 
       <DefaultLayout background={"var(--color-subtle-background)"}>
         <MaxWidthWrapper>

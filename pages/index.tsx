@@ -4,14 +4,23 @@ import DefaultLayout from "src/layouts/DefaultLayout";
 import MaxWidthWrapper from "@components/MaxWidthWrapper";
 import GitHubActivity, { GitHubEvent } from "@components/GitHubActivity";
 import Face from "components/Face";
-import { BREAKPOINTS, BREAKPOINT_SIZES, DARK_COLORS, LIGHT_COLORS } from "ts/theme";
+import {
+  BREAKPOINTS,
+  BREAKPOINT_SIZES,
+  DARK_COLORS,
+  LIGHT_COLORS,
+} from "ts/theme";
 import Socials from "components/Socials";
 import Link from "components/Link";
 import _ from "lodash";
 import { SVGAttributes, useEffect } from "react";
 import SpaceSvgs, { WAVE_HEIGHT } from "@components/SpaceSvgs";
-import LinkedInActivity, { LinkedInBio, LinkedInPost } from "@components/LinkedInActivity";
+import LinkedInActivity, {
+  LinkedInBio,
+  LinkedInPost,
+} from "@components/LinkedInActivity";
 import Head from "next/head";
+import SEO from "@components/SEO";
 
 const Main = styled.main`
   padding-top: 64px;
@@ -68,7 +77,7 @@ const Greeting = styled.h1`
 
   @keyframes slideInFromLeft {
     0% {
-      background-size: background-size: 100% 0.2em, 0 0.2em;
+      background-size: 100% 0.2em, 0 0.2em;
     }
     100% {
       background-size: 0 0.2em, 100% 0.2em;
@@ -83,13 +92,20 @@ const Greeting = styled.h1`
     left: -5%;
     height: 5px;
     border-radius: 2px;
-    background: none, linear-gradient(111.3deg, var(--color-primary) 9.6%, var(--color-secondary) 93.6%);
+    background: none,
+      linear-gradient(
+        111.3deg,
+        var(--color-primary) 9.6%,
+        var(--color-secondary) 93.6%
+      );
     background-size: 100% 0.2em, 0 0.2em;
     background-position: 100% 100%, 0 100%;
     background-repeat: no-repeat;
     /* transition: background-size 350ms ease 0s; */
-    animation: slideInFromLeft 600ms cubic-bezier(0.65, 0, 0.35, 1) 0s 1 normal forwards;
-    transition --color-primary 350ms ease 0s, --color-secondary 350ms ease 0s;
+    animation: slideInFromLeft 600ms cubic-bezier(0.65, 0, 0.35, 1) 0s 1 normal
+      forwards;
+    /* transition: background 350ms ease 0s; */
+    /* transition --color-primary 350ms ease 0s, --color-secondary 350ms ease 0s; */
   }
 `;
 
@@ -124,7 +140,10 @@ const Arrow = (props: SVGAttributes<SVGElement>) => (
       strokeLinejoin="round"
       // transform="matrix(-0.5150380749100543,0.8571673007021123,-0.8571673007021123,-0.5150380749100543,785.8821502448666,263.14830968317676)"
     >
-      <path d="M 1209 0 Q 693 702 450 400.6022" markerEnd="url(#SvgjsMarker1999)"></path>
+      <path
+        d="M 1209 0 Q 693 702 450 400.6022"
+        markerEnd="url(#SvgjsMarker1999)"
+      ></path>
     </g>
     <defs>
       <marker
@@ -195,10 +214,14 @@ const Feeds = styled.div`
   }
 `;
 
-const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Home = ({
+  events,
+  posts,
+  bio,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
-      <Head>
+      {/* <Head>
         <meta
           key="theme_color_light"
           name="theme-color"
@@ -211,10 +234,18 @@ const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticPr
           content={DARK_COLORS.background}
           media="(prefers-color-scheme: dark)"
         />
-      </Head>
+      </Head> */}
+
+      <SEO
+        darkColor={DARK_COLORS.background}
+        lightColor={LIGHT_COLORS.background}
+      />
       <DefaultLayout
         childStyles={{ display: "flex" }}
-        footerStyles={{ background: "var(--color-muted)", color: "var(--color-gray-600)" }}
+        footerStyles={{
+          background: "var(--color-muted)",
+          color: "var(--color-gray-600)",
+        }}
       >
         <Main>
           <First>
@@ -237,7 +268,8 @@ const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticPr
                         pointerEvents: "none",
                         right: 0,
                         top: 0,
-                        transform: "scale(calc(1/1.2)) translate(53%, -45%) rotate(-15deg)",
+                        transform:
+                          "scale(calc(1/1.2)) translate(53%, -45%) rotate(-15deg)",
                       }}
                     />
                     <ContactText>contact me!</ContactText>
@@ -256,12 +288,14 @@ const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticPr
                   <Greeting>hi!</Greeting>
                 </div>
                 <div>
-                  My name is Jelmar. I'm currently finishing up a MSc in Aerospace Engineering at TU
-                  Delft in the Netherlands. I'm passionate about science and software engineering.
-                  Have a look at some of the{" "}
-                  <UnderlinedLink href="/projects">projects</UnderlinedLink> I've done, or see my{" "}
-                  <UnderlinedLink href="/blog">blog</UnderlinedLink> if you're interested in my
-                  writings.
+                  My name is Jelmar. I'm currently finishing up a MSc in
+                  Aerospace Engineering at TU Delft in the Netherlands. I'm
+                  passionate about science and software engineering. Have a look
+                  at some of the{" "}
+                  <UnderlinedLink href="/projects">projects</UnderlinedLink>{" "}
+                  I've done, or see my{" "}
+                  <UnderlinedLink href="/blog">blog</UnderlinedLink> if you're
+                  interested in my writings.
                 </div>
               </Right>
             </TwoColumns>
@@ -322,18 +356,44 @@ const Home = ({ events, posts, bio }: InferGetStaticPropsType<typeof getStaticPr
   );
 };
 
-export const getStaticProps = (async (context) => {
-  const data = await fetch(`https://api.github.com/users/pocket-titan/events`, {
-    headers: {
-      Accept: "application/vnd.github+json",
-    },
-  });
-  const events = (await data.json()) as GitHubEvent[];
+async function fetchGithub() {
+  try {
+    const data = await fetch(
+      `https://api.github.com/users/pocket-titan/events`,
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+        },
+      }
+    );
+    const events = (await data.json()) as GitHubEvent[];
+    return events;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
 
-  const feed = await fetch("https://data.accentapi.com/feed/25417027.json");
-  const json = await feed.json();
-  const posts = (json.posts || []) as LinkedInPost[];
-  const bio = (json.bio || {}) as LinkedInBio;
+async function fetchLinkedIn() {
+  try {
+    const feed = await fetch("https://data.accentapi.com/feed/25417027.json");
+    const json = await feed.json();
+    const posts = (json.posts || []) as LinkedInPost[];
+    const bio = (json.bio || {}) as LinkedInBio;
+    return { posts, bio };
+  } catch (err) {
+    console.error(err);
+    return {
+      posts: [] as LinkedInPost[],
+      bio: {} as LinkedInBio,
+    };
+  }
+}
+
+export const getStaticProps = (async (context) => {
+  const events = await fetchGithub();
+
+  const { posts, bio } = await fetchLinkedIn();
 
   return {
     props: { events, posts, bio },
