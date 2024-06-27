@@ -47,6 +47,7 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.7;
   }
 
+
   img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;

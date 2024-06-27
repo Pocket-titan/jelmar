@@ -13,13 +13,12 @@ import {
 import Socials from "components/Socials";
 import Link from "components/Link";
 import _ from "lodash";
-import { SVGAttributes, useEffect } from "react";
+import { SVGAttributes } from "react";
 import SpaceSvgs, { WAVE_HEIGHT } from "@components/SpaceSvgs";
 import LinkedInActivity, {
   LinkedInBio,
   LinkedInPost,
 } from "@components/LinkedInActivity";
-import Head from "next/head";
 import SEO from "@components/SEO";
 
 const Main = styled.main`
@@ -29,8 +28,8 @@ const Main = styled.main`
 `;
 
 const First = styled.div`
-  padding-bottom: ${WAVE_HEIGHT}px;
   position: relative;
+  padding-bottom: ${WAVE_HEIGHT}px;
 
   @media (${BREAKPOINTS.smAndSmaller}) {
   }
@@ -221,21 +220,6 @@ const Home = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
-      {/* <Head>
-        <meta
-          key="theme_color_light"
-          name="theme-color"
-          content={LIGHT_COLORS.background}
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          key="theme_color_dark"
-          name="theme-color"
-          content={DARK_COLORS.background}
-          media="(prefers-color-scheme: dark)"
-        />
-      </Head> */}
-
       <SEO
         darkColor={DARK_COLORS.background}
         lightColor={LIGHT_COLORS.background}
