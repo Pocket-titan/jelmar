@@ -4,30 +4,38 @@ import { BREAKPOINTS, HEADER_HEIGHT } from "ts/theme";
 
 export const WAVE_HEIGHT = 74;
 
+type Timing = {
+  keyframes: [number, number];
+  duration: number;
+  offset: number;
+};
+
+const BASE_OFFSET = 2;
+
 const TIMES = [
-  [0, 15],
-  [-5, 60],
-  [-45, 30],
-  [-40, 30],
-  [-55, 15],
+  [0, 7],
+  [6, 29],
+  [11, 28],
+  [14, 25],
+  [19, 30],
 ];
 
-let times = TIMES.reduce((acc, [start, end], i) => {
-  const T = acc.length === 0 ? 0 : acc[acc.length - 1][1];
-  acc.push([start + T, T + end]);
-  return acc;
-}, [] as [number, number][]);
+function makeTimings(times: number[][]): Timing[] {
+  const totalTime = Math.max(...times.map(([start, end]) => end));
 
-const end_time = (times[times.length - 1] || [100, 100])[1];
+  return times.map(([start, end], i, arr) => {
+    return {
+      offset: BASE_OFFSET,
+      duration: totalTime,
+      keyframes: [(start / totalTime) * 100, (end / totalTime) * 100],
+      actualDuration: end - start,
+    };
+  });
+}
 
-times = times.map(([start, end]) => [
-  (start / end_time) * 100,
-  (end / end_time) * 100,
-]);
+const timings = makeTimings(TIMES);
 
 const Svg = styled.svg`
-  --offset: 0s;
-  --duration: 25s;
   --easing: cubic-bezier(0.45, 0.05, 0.55, 0.95);
   --width: 106px;
   --height: 106px;
@@ -44,6 +52,7 @@ const Svg = styled.svg`
   position: absolute;
   top: calc(-${HEADER_HEIGHT} - var(--height) + 50vh);
   left: calc(50vw - var(--width) / 2);
+  will-change: transform;
 
   z-index: -1;
   fill: var(--color-muted);
@@ -68,10 +77,10 @@ const RocketSvg = styled(Svg)`
     0% {
       transform: var(--pos1);
     }
-    ${times[0][0]}${"%"} {
+    ${timings[0].keyframes[0]}${"%"} {
       transform: var(--pos1);
     }
-    ${times[0][1]}${"%"} {
+    ${timings[0].keyframes[1]}${"%"} {
       transform: var(--pos2);
     }
     100% {
@@ -79,8 +88,8 @@ const RocketSvg = styled(Svg)`
     }
   }
 
-  animation: calc(1.5 * var(--duration)) cubic-bezier(0.55, 0.08, 0.68, 0.53)
-    var(--offset) infinite move_rocket;
+  animation: ${timings[0].duration}s cubic-bezier(0.55, 0.08, 0.68, 0.53)
+    ${timings[0].offset}s infinite move_rocket;
 `;
 
 const Rocket = () => (
@@ -112,10 +121,10 @@ const LanderSvg = styled(Svg)`
     0% {
       transform: var(--pos1);
     }
-    ${times[1][0]}${"%"} {
+    ${timings[1].keyframes[0]}${"%"} {
       transform: var(--pos1);
     }
-    ${times[1][1]}${"%"} {
+    ${timings[1].keyframes[1]}${"%"} {
       transform: var(--pos2);
     }
     100% {
@@ -123,8 +132,8 @@ const LanderSvg = styled(Svg)`
     }
   }
 
-  animation: calc(1.5 * var(--duration)) cubic-bezier(0.17, 0.84, 0.44, 1)
-    var(--offset) infinite move_lander;
+  animation: ${timings[1].duration}s cubic-bezier(0.17, 0.84, 0.44, 1)
+    ${timings[1].offset}s infinite move_lander;
 `;
 
 const Lander = () => (
@@ -145,16 +154,18 @@ const RoverSvg = styled(Svg)`
   top: unset;
   bottom: -${WAVE_HEIGHT * 0.6}px; /* eyeballed */
 
+  will-change: transform, offset-distance;
+
   @keyframes move_rover {
     0% {
       offset-distance: 0%;
       transform: scaleX(-1) translateX(var(--width));
     }
-    ${times[2][0]}${"%"} {
+    ${timings[2].keyframes[0]}${"%"} {
       offset-distance: 0%;
       transform: scaleX(-1) translateX(var(--width));
     }
-    ${times[2][1]}${"%"} {
+    ${timings[2].keyframes[1]}${"%"} {
       offset-distance: 90%;
       transform: scaleX(-1) translateX(0px);
     }
@@ -167,8 +178,9 @@ const RoverSvg = styled(Svg)`
   offset-path: path(var(--wave-path));
   offset-distance: 0%;
   offset-anchor: bottom;
+
   transform: scaleX(-1) translateX(var(--width));
-  animation: calc(1.3 * var(--duration)) ease-in-out var(--offset) infinite
+  animation: ${timings[2].duration}s ease-in-out ${timings[2].offset}s infinite
     move_rover;
 `;
 
@@ -264,16 +276,19 @@ const SatelliteSvg = styled(Svg)`
     0% {
       transform: var(--pos1);
     }
-    ${times[3][0]}${"%"} {
+    ${timings[3].keyframes[0]}${"%"} {
       transform: var(--pos1);
     }
-    ${times[3][1]}${"%"} {
+    ${timings[3].keyframes[1]}${"%"} {
       transform: var(--pos2);
     }
     100% {
       transform: var(--pos2);
     }
   }
+
+  animation: ${timings[3].duration}s linear ${timings[3].offset}s infinite
+    fly_satellite;
 
   @media (${BREAKPOINTS.mdAndSmaller}) {
     --pos1: translate(
@@ -285,10 +300,25 @@ const SatelliteSvg = styled(Svg)`
       calc(50vw + var(--width) / 2),
       calc(-50vh - var(--height) / 2)
     );
-  }
 
-  animation: calc(1.3 * var(--duration)) linear var(--offset) infinite
-    fly_satellite;
+    @keyframes fly_satellite {
+      0% {
+        transform: var(--pos1);
+      }
+      ${timings[3].keyframes[0] + 15}${"%"} {
+        transform: var(--pos1);
+      }
+      ${timings[3].keyframes[1] + 20}${"%"} {
+        transform: var(--pos2);
+      }
+      100% {
+        transform: var(--pos2);
+      }
+    }
+
+    animation: ${timings[3].duration}s linear ${timings[3].offset}s infinite
+      fly_satellite;
+  }
 `;
 
 const Satellite = () => (
@@ -323,10 +353,10 @@ const StationSvg = styled(Svg)`
     0% {
       transform: var(--pos1);
     }
-    ${times[4][0]}${"%"} {
+    ${timings[4].keyframes[0]}${"%"} {
       transform: var(--pos1);
     }
-    ${times[4][1]}${"%"} {
+    ${timings[4].keyframes[1]}${"%"} {
       transform: var(--pos2);
     }
     100% {
@@ -338,7 +368,7 @@ const StationSvg = styled(Svg)`
     display: none;
   }
 
-  animation: calc(1.3 * var(--duration)) linear var(--offset) infinite
+  animation: ${timings[4].duration}s linear ${timings[4].offset}s infinite
     fly_station;
 `;
 

@@ -101,8 +101,8 @@ const Greeting = styled.h1`
     background-position: 100% 100%, 0 100%;
     background-repeat: no-repeat;
     /* transition: background-size 350ms ease 0s; */
-    animation: slideInFromLeft 600ms cubic-bezier(0.65, 0, 0.35, 1) 0s 1 normal
-      forwards;
+    animation: slideInFromLeft 600ms cubic-bezier(0.65, 0, 0.35, 1) 500ms 1
+      normal forwards;
     /* transition: background 350ms ease 0s; */
     /* transition --color-primary 350ms ease 0s, --color-secondary 350ms ease 0s; */
   }

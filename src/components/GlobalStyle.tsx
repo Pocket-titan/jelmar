@@ -6,29 +6,10 @@ import { keysToVariables } from "ts/utils";
 const GlobalStyle = createGlobalStyle`
   /* Variables */
   :root {
-    --duration: 10s;
     --font-monospace: "Fira Code";
     ${Object.entries(keysToVariables(VARIABLES))
       .map(([k, v]) => `${k}: ${v};`)
       .join("\n")}
-  }
-
-  @media ${BREAKPOINTS.xlAndLarger} {
-    :root {
-      --duration: 20s;
-    }
-  }
-
-  @media ${BREAKPOINTS.mdAndLarger} {
-    :root {
-      --duration: 16s;
-    }
-  }
-
-  @media ${BREAKPOINTS.smAndSmaller} {
-    :root {
-      --duration: 12s;
-    }
   }
 
   /* CSS reset */
