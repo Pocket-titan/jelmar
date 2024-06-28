@@ -10,15 +10,15 @@ type Timing = {
   offset: number;
 };
 
-const BASE_OFFSET = 2;
+const BASE_OFFSET = 0.5;
 
 const TIMES = [
   [0, 7],
-  [6, 29],
+  [6, 24],
   [11, 28],
-  [14, 25],
-  [19, 30],
-];
+  [7, 28],
+  [13, 28],
+].map(([start, end]) => [start / 1, end / 1]);
 
 function makeTimings(times: number[][]): Timing[] {
   const totalTime = Math.max(...times.map(([start, end]) => end));
@@ -132,7 +132,7 @@ const LanderSvg = styled(Svg)`
     }
   }
 
-  animation: ${timings[1].duration}s cubic-bezier(0.17, 0.84, 0.44, 1)
+  animation: ${timings[1].duration}s cubic-bezier(0.22, 0.61, 0.36, 1)
     ${timings[1].offset}s infinite move_lander;
 `;
 
@@ -316,7 +316,7 @@ const SatelliteSvg = styled(Svg)`
       }
     }
 
-    animation: ${timings[3].duration}s linear ${timings[3].offset}s infinite
+    animation: ${timings[3].duration + 5}s linear ${timings[3].offset}s infinite
       fly_satellite;
   }
 `;
@@ -368,8 +368,8 @@ const StationSvg = styled(Svg)`
     display: none;
   }
 
-  animation: ${timings[4].duration}s linear ${timings[4].offset}s infinite
-    fly_station;
+  animation: ${timings[4].duration + 5 + 6}s linear ${timings[4].offset}s
+    infinite fly_station;
 `;
 
 const Station = () => (
