@@ -19,8 +19,8 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const ContentWrapper = styled.div`
-  grid-column: 2 / 3;
+const ContentWrapper = styled.div<{ $toc: boolean }>`
+  grid-column: 2 / 4;
   padding-top: 0;
   display: flex;
   /* flex-direction: row-reverse;
@@ -34,39 +34,48 @@ const ContentWrapper = styled.div`
     padding-left: 16px;
     padding-right: 16px;
   }
+
+  ${(p) =>
+    p.$toc &&
+    `
+    @media (min-width: ${MIN_WIDTH_TO_SHOW_TOC}px) {
+      grid-column: 2 / 3;
+    }
+  `}
 `;
+
+const SIZE = 1100;
+const TOC_WIDTH = 200;
+const MIN_WIDTH_TO_SHOW_TOC = 1200;
 
 const Main = styled.main`
   display: grid;
-  grid-template-columns: 1fr minmax(0px, 1100px) 1fr;
+  grid-template-columns: 1fr minmax(0px, 900px) 200px 1fr;
   z-index: 1;
   flex: 1;
 `;
 
 const Article = styled.article<{ $toc: boolean }>`
-  flex: 1 1 ${(p) => (p.$toc ? "1100px" : "100%")};
-  max-width: min(${(p) => (p.$toc ? "1100px" : "100%")}, 100%);
+  flex: 1 1 ${(p) => (p.$toc ? `${SIZE}px` : "100%")};
+  max-width: min(${(p) => (p.$toc ? `${SIZE}px` : "100%")}, 100%);
   position: relative;
 `;
-
-const MIN_WIDTH_TO_SHOW_TOC = 1600;
 
 const Sidebar = styled.aside`
   display: none;
   top: 0px;
-  grid-column: 3 / 4;
+  grid-column: 3 / 5;
 
   /* margin-right: 32px; */
-  padding-left: 16px;
+  /* padding-left: 16px; */
+  padding-left: 12px;
 
   position: sticky;
 
   top: 75px;
   max-height: calc(100vh - 75px);
-  /* overflow: auto; */
   padding-bottom: 16px;
-  /* Optical alignment */
-  margin-top: 4px;
+  margin-top: 4px; /* Optical alignment */
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -77,6 +86,7 @@ const Sidebar = styled.aside`
   }
 
   @media (min-width: 1750px) {
+    padding-left: 16px;
     margin-right: 64px;
   }
 
@@ -147,7 +157,7 @@ const ArticleLayout = ({
       <DarkHeaderBackground />
 
       <Main>
-        <ContentWrapper className={ibmPlexMono.variable}>
+        <ContentWrapper $toc={toc} className={ibmPlexMono.variable}>
           {toc && headings[0].id !== "introduction" && (
             <a
               id="introduction"

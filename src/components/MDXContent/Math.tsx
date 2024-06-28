@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import type { PropsWithChildren } from "react";
 import type { MathMLElements } from "@michijs/htmltype";
 import { stringifyChildren } from "ts/utils";
@@ -7,17 +8,33 @@ import "temml/dist/Temml-Local.css";
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      math: React.DetailedHTMLProps<React.HTMLAttributes<MathMLElement>, MathMLElement> &
+      math: React.DetailedHTMLProps<
+        React.HTMLAttributes<MathMLElement>,
+        MathMLElement
+      > &
         MathMLElements["math"];
     }
   }
 }
 
-const Math = ({ inline = false, children }: PropsWithChildren<{ inline?: boolean }>) => {
+const Wrapper = styled.span<{ $inline?: boolean }>`
+  display: ${({ $inline }) => ($inline ? "inline" : "block")};
+  margin-top: ${({ $inline }) => ($inline ? "0" : "1em")};
+  margin-bottom: ${({ $inline }) => ($inline ? "0" : "1em")};
+`;
+
+const Math = ({
+  inline = false,
+  children,
+}: PropsWithChildren<{ inline?: boolean }>) => {
   return (
-    <span
+    <Wrapper
+      $inline={inline}
+      className="math-wrapper"
       dangerouslySetInnerHTML={{
-        __html: temml.renderToString(stringifyChildren(children), { displayMode: !inline }),
+        __html: temml.renderToString(stringifyChildren(children), {
+          displayMode: !inline,
+        }),
       }}
     />
   );

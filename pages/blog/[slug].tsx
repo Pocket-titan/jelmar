@@ -7,7 +7,6 @@ import ArticleLayout from "layouts/ArticleLayout";
 import { readFile, readFiles } from "ts/files";
 import MDXContent from "components/MDXContent";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
-import Head from "next/head";
 import SEO from "@components/SEO";
 
 type Params = {
@@ -20,20 +19,6 @@ const Post = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
-      {/* <Head>
-        <meta
-          key="theme_color_light"
-          name="theme-color"
-          content={LIGHT_COLORS.background}
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          key="theme_color_dark"
-          name="theme-color"
-          content={DARK_COLORS.background}
-          media="(prefers-color-scheme: dark)"
-        />
-      </Head> */}
       <SEO
         title={mdx.frontmatter?.title}
         description={mdx.frontmatter?.excerpt}

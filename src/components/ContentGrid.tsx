@@ -4,6 +4,8 @@ import Heading from "components/Heading";
 import { SHADOWS } from "ts/theme";
 
 const Wrapper = styled.div`
+  margin-bottom: 12px;
+
   &:not(:first-of-type) {
     margin-top: 64px;
   }

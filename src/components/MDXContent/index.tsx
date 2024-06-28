@@ -13,6 +13,8 @@ import ContentLink from "./ContentLink";
 import Cell from "./Notebook/Cell";
 import FileTree from "./FileTree";
 import Collapsed from "@components/Collapsed";
+import Quote from "./Quote";
+import OrderedList from "./OrderedList";
 
 export type Frontmatter = {
   title: string;
@@ -45,6 +47,7 @@ const components: MDXRemoteProps["components"] = {
   Code,
   Note,
   Image,
+  blockquote: Quote,
   pre: ({ children, ...props }) => {
     if (
       children &&
@@ -71,6 +74,7 @@ const components: MDXRemoteProps["components"] = {
   h3: (props) => <ContentHeading type="minor-heading" {...props} />,
   h4: (props) => <ContentHeading type="mini-heading" {...props} />,
   a: (props) => <ContentLink {...props} />,
+  ol: OrderedList,
   code: ({ children, ...props }) => {
     if (!children) {
       return null;

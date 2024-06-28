@@ -21,12 +21,15 @@ const TableOfContents = ({ headings }: { headings: Heading[] }) => {
 
   return (
     <Wrapper>
-      <TocHeading as="h2" type="section-title">
+      <TocHeading as="h3" type="section-title">
         Table of Contents
       </TocHeading>
 
       {!skipIntroduction && (
-        <ContentLinkHeading href="#introduction" style={getStylesForDepth(1, !activeHeadingId)}>
+        <ContentLinkHeading
+          href="#introduction"
+          style={getStylesForDepth(1, !activeHeadingId)}
+        >
           Introduction
         </ContentLinkHeading>
       )}
@@ -35,7 +38,10 @@ const TableOfContents = ({ headings }: { headings: Heading[] }) => {
         <ContentLinkHeading
           key={index}
           href={`#${heading.id}`}
-          style={getStylesForDepth(heading.level, activeHeadingId === heading.id)}
+          style={getStylesForDepth(
+            heading.level,
+            activeHeadingId === heading.id
+          )}
         >
           {heading.text}
         </ContentLinkHeading>
@@ -46,8 +52,6 @@ const TableOfContents = ({ headings }: { headings: Heading[] }) => {
 
 const useActiveHeading = (headings: { id: string }[]) => {
   const [activeHeadingId, setActiveHeading] = useState(null);
-
-  console.log(activeHeadingId);
 
   useEffect(() => {
     const handleScroll = throttle(() => {

@@ -83,7 +83,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   code {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   button {
@@ -154,7 +154,7 @@ const GlobalStyle = createGlobalStyle`
 
   /* Footnotes */
   .footnotes {
-    font-size: smaller;
+    font-size: small;
     color: var(--color-gray-700);
     border-top: 1.5px solid var(--color-gray-500);
     margin-top: 2.5em;

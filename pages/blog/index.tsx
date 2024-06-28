@@ -58,20 +58,6 @@ const SmallDate = styled.p`
 function Blog({ files }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      {/* <Head>
-        <meta
-          key="theme_color_light"
-          name="theme-color"
-          content={LIGHT_COLORS.subtleBackground}
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          key="theme_color_dark"
-          name="theme-color"
-          content={DARK_COLORS.subtleBackground}
-          media="(prefers-color-scheme: dark)"
-        />
-      </Head> */}
       <SEO
         title="Blog"
         darkColor={DARK_COLORS.subtleBackground}

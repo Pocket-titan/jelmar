@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Heading from "components/Heading";
 import { FaLink as LinkIcon } from "react-icons/fa";
-import { stringifyChildren } from "@ts/utils";
 import { HEADER_HEIGHT } from "@ts/theme";
 
 const SCROLL_MARGIN_TOP = HEADER_HEIGHT;
@@ -29,7 +28,11 @@ const Hidden = styled.div`
   border: 0;
 `;
 
-const ContentHeading = ({ children, id, ...props }: Parameters<typeof Heading>[0]) => {
+const ContentHeading = ({
+  children,
+  id,
+  ...props
+}: Parameters<typeof Heading>[0]) => {
   return (
     <Wrapper>
       <Heading {...props} style={{ position: "relative" }}>

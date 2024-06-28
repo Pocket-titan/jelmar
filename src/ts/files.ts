@@ -22,13 +22,17 @@ function makeExcerpt(source: string, characters: number = 150) {
   );
 }
 
-function maybeFixFrontmatter(source: string, frontmatter: { [key: string]: any }): Frontmatter {
+function maybeFixFrontmatter(
+  source: string,
+  frontmatter: { [key: string]: any }
+): Frontmatter {
   if (frontmatter.date && frontmatter.date instanceof Date) {
     frontmatter.date = frontmatter.date.toISOString();
   }
 
   if (!frontmatter.title) {
-    frontmatter.title = source.match(/^#\s+(.*)$/m)?.[1] ?? frontmatter.slug.replace(/-/g, " ");
+    frontmatter.title =
+      source.match(/^#\s+(.*)$/m)?.[1] ?? frontmatter.slug.replace(/-/g, " ");
   }
 
   if (!frontmatter.excerpt) {
@@ -44,7 +48,12 @@ function maybeFixFrontmatter(source: string, frontmatter: { [key: string]: any }
 
 function remarkGetCodeFile() {
   const mapChild = async (child: any) => {
-    if (child.type && child.type === "code" && child.type === "code" && child.value) {
+    if (
+      child.type &&
+      child.type === "code" &&
+      child.type === "code" &&
+      child.value
+    ) {
       // TODO
     }
 
@@ -68,10 +77,16 @@ function remarkGetCodeFile() {
             const filePath = attr.value.slice(5).trim();
 
             try {
-              const content = await fs.readFile(path.resolve(process.cwd(), filePath), "utf-8");
+              const content = await fs.readFile(
+                path.resolve(process.cwd(), filePath),
+                "utf-8"
+              );
               attr.value = content.trim();
             } catch (err) {
-              console.error(`Failed to load file at ${filePath} for Code element:`, err);
+              console.error(
+                `Failed to load file at ${filePath} for Code element:`,
+                err
+              );
             }
           }
 
@@ -107,8 +122,12 @@ async function doSerialize(source: string) {
 }
 
 async function readMarkdownFiles() {
-  const markdownFiles = await fs.readdir(path.resolve(process.cwd(), MARKDOWN_FOLDER));
-  return await Promise.all(markdownFiles.map(async (file) => await readMarkdownFile(file)));
+  const markdownFiles = await fs.readdir(
+    path.resolve(process.cwd(), MARKDOWN_FOLDER)
+  );
+  return await Promise.all(
+    markdownFiles.map(async (file) => await readMarkdownFile(file))
+  );
 }
 
 // Credit to joshwcomeau: https://stackoverflow.com/questions/73447710/parse-mdx-file-in-next-js
@@ -116,23 +135,21 @@ function getHeadings(source: string) {
   // Get each line individually, and filter out anything that
   // isn't a heading.
   const headingLines = source.split("\n").filter((line) => {
-    return line.match(/^###*\s/);
+    return line.match(/^##*\s/);
   });
 
   // Transform the string '## Some text' into an object
   // with the shape '{ text: 'Some text', level: 2 }'
   return headingLines.map((raw) => {
-    const text = raw.replace(/^###*\s/, "");
+    const text = raw.replace(/^##*\s/, "");
     const id = slug(text);
-    const max_heading_level = 4;
 
-    const levels = [...Array(max_heading_level - 1)].map((_, i) => i + 2).reverse();
+    const max_heading_level = 3;
+    const levels = [...Array(max_heading_level)].map((_, i) => i + 1).reverse();
 
     for (let level of levels) {
       if (raw.slice(0, level) === "#".repeat(level)) {
-        // Because we have an h1 at the top of the page, all of our headings should be h2 or lower.
-        // If we find an h1, we'll just make it an h2. Because we still want it to be level 1. YOU KNOW WHAT I MEAN
-        return { id, text, level: Math.max(level - 1, 1) };
+        return { id, text, level: Math.max(level, 1) };
       }
     }
 
