@@ -48,7 +48,8 @@ const Code = ({
   const fontSize = 12.8;
   const paddingY = 13;
   const lineHeight = 1.5;
-  const minHeight = 2 * paddingY + fontSize * currentValue.split("\n").length * lineHeight;
+  const minHeight =
+    2 * paddingY + fontSize * currentValue.split("\n").length * lineHeight;
 
   return (
     <pre {...props}>
@@ -56,13 +57,20 @@ const Code = ({
         <Floating>
           {hasCopyButton && (
             <CopyButton
-              id={(currentValue.slice(0, 10) + currentValue.slice(-10)).replaceAll(/\s/g, "")}
+              id={(
+                currentValue.slice(0, 10) + currentValue.slice(-10)
+              ).replaceAll(/\s/g, "")}
               onClick={() => {
-                navigator.permissions.query({ name: "clipboard-write" as any }).then((result) => {
-                  if (result.state === "granted" || result.state === "prompt") {
-                    navigator.clipboard.writeText(currentValue);
-                  }
-                });
+                navigator.permissions
+                  .query({ name: "clipboard-write" as any })
+                  .then((result) => {
+                    if (
+                      result.state === "granted" ||
+                      result.state === "prompt"
+                    ) {
+                      navigator.clipboard.writeText(currentValue);
+                    }
+                  });
               }}
             />
           )}
@@ -71,7 +79,10 @@ const Code = ({
         <FilenameContainer>
           {oldFilename && (
             <>
-              <FilenameWrapper className="to-hide" style={{ justifyContent: "flex-end" }}>
+              <FilenameWrapper
+                className="to-hide"
+                style={{ justifyContent: "flex-end" }}
+              >
                 <Filename title={oldFilename}>{oldFilename}</Filename>
               </FilenameWrapper>
               <div className="to-hide" style={{ flexShrink: 0 }}>
@@ -79,7 +90,9 @@ const Code = ({
               </div>
             </>
           )}
-          <FilenameWrapper style={{ justifyContent: oldFilename ? "flex-start" : "center" }}>
+          <FilenameWrapper
+            style={{ justifyContent: oldFilename ? "flex-start" : "center" }}
+          >
             <Filename title={filename}>{filename}</Filename>
           </FilenameWrapper>
         </FilenameContainer>
@@ -89,7 +102,9 @@ const Code = ({
           style={{
             minHeight: isMergeEditor ? "unset" : minHeight,
             paddingLeft: isMergeEditor ? "4px" : "var(--padding-left)",
-            paddingTop: filename ? "calc(var(--padding-y) + 1em + 10px)" : "var(--padding-y)",
+            paddingTop: filename
+              ? "calc(var(--padding-y) + 1em + 10px)"
+              : "var(--padding-y)",
           }}
           ref={(x) => (ref.current = x as any)}
         />
@@ -147,12 +162,30 @@ const FilenameContainer = styled.div`
   }
 `;
 
+const CodeLanguage = styled.div`
+  transition: color ${TRANSITION_DURATION}ms ease 0s,
+    opacity ${TRANSITION_DURATION}ms;
+  color: var(--color-gray-300);
+
+  font-size: 1rem;
+  padding: 10px 8px 0px;
+  text-transform: uppercase;
+  font-weight: 600 !important;
+  opacity: 1;
+
+  font-family: var(--font-ibm-plex-mono), monospace !important;
+
+  @media ${(p) => p.theme.breakpoints.mobile} {
+    opacity: 0;
+  }
+`;
+
 const CodeWrapper = styled.div`
   position: relative;
   margin-top: 1.25em;
   margin-bottom: 1.25em;
 
-  *:not(${Filename}) {
+  *:not(${Filename}):not(${CodeLanguage}) {
     font-family: var(--font-monospace), monospace !important;
     font-weight: 450 !important;
   }
@@ -175,7 +208,8 @@ const Floating = styled.div`
 `;
 
 const CopyButtonWrapper = styled.button`
-  transition: color ${TRANSITION_DURATION}ms ease 0s, opacity ${TRANSITION_DURATION}ms,
+  transition: color ${TRANSITION_DURATION}ms ease 0s,
+    opacity ${TRANSITION_DURATION}ms,
     background ${TRANSITION_DURATION}ms ease 0s;
   color: var(--color-gray-400);
   /* background: color-mix(in srgb, var(--color-code-base) 80%, var(--color-gray-400) 20%); */
@@ -207,7 +241,10 @@ const CopyIcon = styled(FaCopy)`
   font-size: 1rem;
 `;
 
-const CopyButton = ({ id, ...props }: { id: string } & HTMLAttributes<HTMLButtonElement>) => {
+const CopyButton = ({
+  id,
+  ...props
+}: { id: string } & HTMLAttributes<HTMLButtonElement>) => {
   const [content, setContent] = useState("Copy code");
 
   return (
@@ -224,7 +261,8 @@ const CopyButton = ({ id, ...props }: { id: string } & HTMLAttributes<HTMLButton
         id={id}
         content={content}
         style={{
-          background: "color-mix(in srgb, var(--color-gray-500) 20%, var(--color-muted) 80%)",
+          background:
+            "color-mix(in srgb, var(--color-gray-500) 20%, var(--color-muted) 80%)",
           color: "var(--color-gray-900)",
           fontSize: 14,
         }}
@@ -234,30 +272,14 @@ const CopyButton = ({ id, ...props }: { id: string } & HTMLAttributes<HTMLButton
   );
 };
 
-const CodeLanguage = styled.div`
-  transition: color ${TRANSITION_DURATION}ms ease 0s, opacity ${TRANSITION_DURATION}ms;
-  color: var(--color-gray-300);
-
-  font-size: 1rem;
-  padding: 10px 8px 0px;
-  text-transform: uppercase;
-  font-weight: 600 !important;
-  opacity: 1;
-
-  font-family: var(--font-ibm-plex-mono), monospace !important;
-
-  @media ${(p) => p.theme.breakpoints.mobile} {
-    opacity: 0;
-  }
-`;
-
 const EditorWrapper = styled.div`
   --padding-y: 13px;
   --padding-left: 16px;
 
   color: var(--color-code-mono-1);
   background: var(--color-code-base);
-  transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
+  transition: background ${TRANSITION_DURATION}ms ease 0s,
+    color ${TRANSITION_DURATION}ms ease 0s;
 
   padding: var(--padding-y) 16px var(--padding-y) var(--padding-left);
   border-radius: 5px;
@@ -333,7 +355,8 @@ const EditorWrapper = styled.div`
 
   /* Gutter (only for line numbers) */
   div.cm-gutters {
-    transition: background ${TRANSITION_DURATION}ms ease 0s, border ${TRANSITION_DURATION}ms ease 0s,
+    transition: background ${TRANSITION_DURATION}ms ease 0s,
+      border ${TRANSITION_DURATION}ms ease 0s,
       color ${TRANSITION_DURATION}ms ease 0s;
     --bg: var(--color-code-base);
     color: var(--color-code-mono-3);
@@ -356,11 +379,13 @@ const EditorWrapper = styled.div`
   .cm-changedText {
     --color: var(--color-code-diff-changed-text);
     transition: background ${TRANSITION_DURATION}ms ease 0s;
-    background: linear-gradient(var(--color), var(--color)) bottom/100% 2px no-repeat !important;
+    background: linear-gradient(var(--color), var(--color)) bottom/100% 2px
+      no-repeat !important;
   }
 
   .cm-deletedChunk {
-    transition: background ${TRANSITION_DURATION}ms ease 0s, color ${TRANSITION_DURATION}ms ease 0s;
+    transition: background ${TRANSITION_DURATION}ms ease 0s,
+      color ${TRANSITION_DURATION}ms ease 0s;
     background: var(--color-code-diff-deleted-line) !important;
     color: var(--color-code-mono-2) !important;
   }

@@ -1,9 +1,13 @@
 import styled from "styled-components";
-import { type PropsWithChildren, type ReactNode, useState, CSSProperties } from "react";
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  useState,
+  CSSProperties,
+} from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useSpring, animated, config } from "@react-spring/web";
 import useMeasure from "react-use-measure";
-import { useMediaQuery } from "@ts/hooks";
 
 const Container = styled.div`
   margin: 0.5em 0;
@@ -64,9 +68,19 @@ const ContentWrapper = styled(animated.div)`
   overflow: hidden;
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ $isExpanded: boolean }>`
   margin-top: 0.5em;
   padding-bottom: 0.5em;
+
+  @supports (content-visibility: hidden) {
+    & {
+      content-visibility: ${({ $isExpanded }) =>
+        $isExpanded ? "visible" : "hidden"};
+      opacity: ${({ $isExpanded }) => ($isExpanded ? 1 : 0)};
+      transition: content-visibility 350ms ease 0s, opacity 350ms ease 0s;
+      transition-behavior: allow-discrete;
+    }
+  }
 `;
 
 const Info = styled.em`
@@ -143,7 +157,7 @@ const Collapsed = ({
           )}
         </ButtonWrapper>
         <ContentWrapper style={{ ...styles }}>
-          <Content ref={measureRef} style={innerStyle}>
+          <Content $isExpanded={isExpanded} ref={measureRef} style={innerStyle}>
             {children}
           </Content>
         </ContentWrapper>

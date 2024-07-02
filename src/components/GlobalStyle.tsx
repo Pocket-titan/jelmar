@@ -161,6 +161,14 @@ const GlobalStyle = createGlobalStyle`
     padding-top: 0.5em;
   }
 
+  .footnotes ol {
+    list-style: decimal;
+  }
+
+  sup {
+    margin-left: 0.125em;
+  }
+
   /* Hide the section label for visual users. */
   .sr-only {
     position: absolute !important;

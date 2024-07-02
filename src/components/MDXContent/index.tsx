@@ -15,6 +15,7 @@ import FileTree from "./FileTree";
 import Collapsed from "@components/Collapsed";
 import Quote from "./Quote";
 import OrderedList from "./OrderedList";
+import FootnoteLabel from "./FootnoteLabel";
 
 export type Frontmatter = {
   title: string;
@@ -69,6 +70,7 @@ const components: MDXRemoteProps["components"] = {
 
     return <pre {...props}>{children}</pre>;
   },
+  FootnoteLabel,
   h1: (props) => <ContentHeading type="major-heading" {...props} />,
   h2: (props) => <ContentHeading type="normal-heading" {...props} />,
   h3: (props) => <ContentHeading type="minor-heading" {...props} />,

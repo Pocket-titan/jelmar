@@ -19,7 +19,7 @@ const Ol = styled.ol`
 `;
 
 const OrderedList = ({ children, ...props }: PropsWithChildren) => {
-  return <Ol>{children}</Ol>;
+  return <Ol {...props}>{children}</Ol>;
 };
 
 export default OrderedList;

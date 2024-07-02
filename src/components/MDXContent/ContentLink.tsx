@@ -31,7 +31,9 @@ const ContentLink = ({
   const safeRel = target === "_blank" ? "noopener noreferrer" : rel;
 
   const style = {
-    ...(linkType === "external" ? { display: "inline-flex", alignItems: "center" } : {}),
+    ...(linkType === "external"
+      ? { display: "inline", verticalAlign: "baseline" }
+      : {}),
     ...(linkType === "hash" ? { scrollMarginTop: HEADER_HEIGHT } : {}),
     ...(props.style || {}),
   };
@@ -46,7 +48,7 @@ const ContentLink = ({
       {...omit(props, ["style"])}
     >
       {children}
-      {linkType === "external" && <StyledExternalLinkIcon size={15} />}
+      {linkType === "external" && <StyledExternalLinkIcon />}
     </StyledLink>
   );
 };
@@ -56,7 +58,9 @@ const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   transition: color 350ms ease 0s;
 
   display: inline-block;
+  vertical-align: middle;
   margin-left: 0.2rem;
+  font-size: 0.9em;
 
   &:hover {
     color: var(--color-primary);

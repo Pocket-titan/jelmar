@@ -6,6 +6,18 @@ html[data-color-mode="light"] {
   background: white;
 }
 
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {}
+}
+
+@media (prefers-color-scheme: light) {
+  body {}
+}
+
 /* Not yet */
 /*
 html {

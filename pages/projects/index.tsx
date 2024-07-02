@@ -14,7 +14,6 @@ import ExternalLinkIcon from "@components/ExternalLinkIcon";
 import { CSSProperties } from "react";
 import { sortBy } from "lodash";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
-import Head from "next/head";
 import SEO from "@components/SEO";
 
 type Project = {
@@ -165,13 +164,13 @@ const Img = styled(NextImage)`
 
 const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   display: inline;
-  vertical-align: sub;
+  vertical-align: middle;
   margin-left: 0.3rem;
   margin-bottom: 1px;
+  font-size: 0.9em;
 `;
 
 const StyledLink = styled(Link)`
-  display: inline-flex;
   flex-direction: column;
   height: 100%;
   width: 100%;

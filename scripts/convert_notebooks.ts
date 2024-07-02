@@ -1,10 +1,25 @@
 import path from "path";
 import fs from "fs/promises";
+import { writeFileSync, mkdirSync } from "fs";
+import { fileURLToPath } from "url";
+import { gfm } from "micromark-extension-gfm";
+import { mdxjs } from "micromark-extension-mdxjs";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { mdxFromMarkdown, mdxToMarkdown } from "mdast-util-mdx";
+import { mathFromMarkdown, mathToMarkdown } from "mdast-util-math";
+import { gfmFromMarkdown, gfmToMarkdown } from "mdast-util-gfm";
+import { math } from "micromark-extension-math";
+import { toMarkdown } from "mdast-util-to-markdown";
+import { map } from "unist-util-map";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const MARKDOWN_FOLDER = "content/markdown";
 const NOTEBOOK_FOLDER = "content/notebooks";
 
 async function main() {
+  process.chdir(path.resolve(__dirname, ".."));
   await convertNotebookFiles(process.argv[2]);
 }
 
@@ -148,6 +163,22 @@ const parseTitleCell = ({ cell_type, source }: NotebookCell) => {
     .trim();
 };
 
+function saveDataUrl(src: string, folder: string, filename: string): string {
+  mkdirSync(path.resolve(process.cwd(), folder), { recursive: true });
+
+  try {
+    console.info(`Saving base64 image: ${folder}/${filename}...`);
+
+    writeFileSync(path.resolve(process.cwd(), folder, filename), src, {
+      encoding: "base64",
+    });
+  } catch (err) {
+    console.error("Something went wrong while saving a base64 image: ", err);
+  }
+
+  return `${folder.replace("public", "")}/${filename}`;
+}
+
 const mapCellOutput = async (
   output: NotebookOutput,
   i: string,
@@ -158,30 +189,88 @@ const mapCellOutput = async (
   if (output_type === "display_data") {
     if (data["image/png"] && isBase64(data["image/png"])) {
       const folder = `public/images/notebooks/${slug}`;
-      await fs.mkdir(path.resolve(process.cwd(), folder), { recursive: true });
+      const filename = `cell_output_${i}.png`;
 
-      try {
-        const filename = `cell_output_${i}.png`;
-        console.info(`Saving base64 image: ${slug}/${filename}...`);
-        await fs.writeFile(
-          path.resolve(process.cwd(), folder, filename),
-          data["image/png"],
-          {
-            encoding: "base64",
-          }
-        );
-        data["image/png"] = `${folder.replace("public", "")}/${filename}`;
-      } catch (err) {
-        console.error(
-          "Something went wrong while saving a base64 image: ",
-          err
-        );
-      }
+      const imgPath = saveDataUrl(data["image/png"], folder, filename);
+      data["image/png"] = imgPath;
     }
   }
 
   return output;
 };
+
+function reparseMarkdown(source: string, slug: string, nr: number) {
+  const doc = fromMarkdown(source, {
+    extensions: [math(), gfm(), mdxjs()],
+    mdastExtensions: [mathFromMarkdown(), gfmFromMarkdown(), mdxFromMarkdown()],
+  });
+
+  const tree = map(doc, (node, i) => {
+    if (node.type === "image") {
+      let attributes: any[] = [
+        {
+          type: "mdxJsxAttribute",
+          name: "src",
+          value: node.url,
+        },
+      ];
+
+      if (node.title) {
+        attributes.push({
+          type: "mdxJsxAttribute",
+          name: "alt",
+          value: node.title,
+        });
+      }
+
+      if (node.alt) {
+        attributes.push({
+          type: "mdxJsxAttribute",
+          name: "alt",
+          value: node.alt,
+        });
+      }
+
+      node = {
+        type: "mdxJsxFlowElement",
+        name: "Image",
+        attributes,
+        children: [],
+        position: node.position,
+      };
+    }
+
+    if (node.type === "mdxJsxFlowElement" && node.name === "Image") {
+      node.attributes = node.attributes.map((attr) => {
+        if (
+          attr.type === "mdxJsxAttribute" &&
+          attr.name === "src" &&
+          attr.value &&
+          typeof attr.value === "string" &&
+          attr.value.startsWith("data:image/png;base64")
+        ) {
+          const folder = `public/images/notebooks/${slug}`;
+          const filename = `markdown_image_${nr}_${i}.png`;
+
+          const imgPath = saveDataUrl(
+            attr.value.replace("data:image/png;base64,", ""),
+            folder,
+            filename
+          );
+          attr.value = imgPath;
+        }
+
+        return attr;
+      });
+    }
+
+    return node;
+  });
+
+  return toMarkdown(tree, {
+    extensions: [mathToMarkdown(), gfmToMarkdown(), mdxToMarkdown()],
+  });
+}
 
 async function convertCellToMDX(cell: NotebookCell, slug: string, nr: number) {
   let { metadata, source } = cell;
@@ -194,7 +283,12 @@ async function convertCellToMDX(cell: NotebookCell, slug: string, nr: number) {
   }
 
   if (cell.cell_type === "markdown") {
-    return source.join("") + "\n\n";
+    try {
+      return reparseMarkdown(source.join(""), slug, nr) + "\n";
+    } catch (err) {
+      console.warn(`Error parsing markdown, reverting to naive mode: ${err}`);
+      return source.join("") + "\n\n";
+    }
   }
 
   if (cell.cell_type === "code") {

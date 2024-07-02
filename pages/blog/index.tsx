@@ -8,8 +8,6 @@ import { capitalize, formatDate } from "ts/utils";
 import { FaChevronRight } from "react-icons/fa";
 import ContentGrid from "components/ContentGrid";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
-import Head from "next/head";
-import { useCssVariable } from "@ts/hooks";
 import SEO from "@components/SEO";
 
 const Arrow = styled(FaChevronRight)`
@@ -49,7 +47,7 @@ const Description = styled.p`
   flex: 1;
 `;
 
-const SmallDate = styled.p`
+const SmallDate = styled.span`
   margin-bottom: 8px;
   font-size: 13px;
   color: var(--color-gray-700);

@@ -21,8 +21,6 @@ const SEO = ({
   const { colorMode } = useConfig();
   const color = colorMode === "dark" ? darkColor : lightColor;
 
-  console.log("colorMode", colorMode);
-
   const metaTagTitle = title || "Jelmar.eu";
   const pageTitle = seoTitle || metaTagTitle;
 

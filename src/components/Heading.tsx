@@ -1,4 +1,9 @@
-import React, { CSSProperties, ComponentType, HTMLAttributes, PropsWithChildren } from "react";
+import React, {
+  CSSProperties,
+  ComponentType,
+  HTMLAttributes,
+  PropsWithChildren,
+} from "react";
 import styled from "styled-components";
 
 type HeadingType =
@@ -15,7 +20,11 @@ const Heading = ({
   type = "medium-title",
   as,
   ...props
-}: PropsWithChildren<{ type?: HeadingType; as?: string; style?: CSSProperties }> &
+}: PropsWithChildren<{
+  type?: HeadingType;
+  as?: string;
+  style?: CSSProperties;
+}> &
   HTMLAttributes<HTMLHeadingElement>) => {
   let Component: ComponentType<any>;
 
@@ -88,7 +97,7 @@ const MajorHeading = styled.h2`
   font-size: calc(26 / 16 * 1rem);
   color: var(--color-gray-1000);
   margin-top: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 `;
 
 const NormalHeading = styled.h3`
