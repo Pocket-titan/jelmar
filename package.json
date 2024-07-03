@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "build-script": "cd src/ts/script && webpack",
-    "convert-notebooks": "cd scripts && yarn run convert-notebooks"
+    "convert-notebooks": "cd scripts && yarn && yarn run convert-notebooks"
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.2",
