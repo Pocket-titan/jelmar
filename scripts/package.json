@@ -4,7 +4,7 @@
   "scripts": {
     "convert-notebooks": "NODE_OPTIONS='--no-warnings --experimental-specifier-resolution=node --loader ts-node/esm' ts-node convert_notebooks.ts"
   },
-  "devDependencies": {
+  "dependencies": {
     "image-size": "^1.1.1",
     "mdast-util-from-markdown": "^2.0.1",
     "mdast-util-to-markdown": "^2.1.0",
