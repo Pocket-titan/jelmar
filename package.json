@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "build-script": "cd src/ts/script && webpack",
-    "convert-notebooks": "NODE_OPTIONS='--no-warnings --experimental-specifier-resolution=node --loader ts-node/esm' ts-node scripts/convert_notebooks.ts"
+    "convert-notebooks": "cd scripts && yarn run convert-notebooks"
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.2",

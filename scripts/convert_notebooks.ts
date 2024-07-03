@@ -11,6 +11,7 @@ import { gfmFromMarkdown, gfmToMarkdown } from "mdast-util-gfm";
 import { math } from "micromark-extension-math";
 import { toMarkdown } from "mdast-util-to-markdown";
 import { map } from "unist-util-map";
+import getImageSize from "image-size";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -199,6 +200,18 @@ const mapCellOutput = async (
   return output;
 };
 
+function getAttrIndex<T>(attributes: T[], fn: (attr: T) => boolean): number {
+  return (
+    attributes.reduce((acc, attr, i) => {
+      if (fn(attr)) {
+        acc.push(i);
+      }
+
+      return acc;
+    }, [] as number[])[0] ?? -1
+  );
+}
+
 function reparseMarkdown(source: string, slug: string, nr: number) {
   const doc = fromMarkdown(source, {
     extensions: [math(), gfm(), mdxjs()],
@@ -241,27 +254,75 @@ function reparseMarkdown(source: string, slug: string, nr: number) {
     }
 
     if (node.type === "mdxJsxFlowElement" && node.name === "Image") {
-      node.attributes = node.attributes.map((attr) => {
-        if (
-          attr.type === "mdxJsxAttribute" &&
-          attr.name === "src" &&
-          attr.value &&
-          typeof attr.value === "string" &&
-          attr.value.startsWith("data:image/png;base64")
-        ) {
-          const folder = `public/images/notebooks/${slug}`;
-          const filename = `markdown_image_${nr}_${i}.png`;
+      const srcIndex = getAttrIndex(
+        node.attributes,
+        (attr) => attr.type === "mdxJsxAttribute" && attr.name === "src"
+      );
 
-          const imgPath = saveDataUrl(
-            attr.value.replace("data:image/png;base64,", ""),
-            folder,
-            filename
-          );
-          attr.value = imgPath;
-        }
+      if (srcIndex === -1) {
+        return node;
+      }
 
-        return attr;
-      });
+      const src = node.attributes[srcIndex];
+
+      if (
+        typeof src.value === "string" &&
+        src.value.startsWith("data:image/png;base64")
+      ) {
+        const folder = `public/images/notebooks/${slug}`;
+        const filename = `markdown_image_${nr}_${i}.png`;
+
+        const imgPath = saveDataUrl(
+          src.value.replace("data:image/png;base64,", ""),
+          folder,
+          filename
+        );
+        src.value = imgPath;
+      }
+
+      const widthIdx = getAttrIndex(
+        node.attributes,
+        (attr) => attr.type === "mdxJsxAttribute" && attr.name === "width"
+      );
+
+      const heightIdx = getAttrIndex(
+        node.attributes,
+        (attr) => attr.type === "mdxJsxAttribute" && attr.name === "height"
+      );
+
+      const dimensions = getImageSize(
+        path.join("public", src.value!.toString())
+      );
+
+      const widthAttr = {
+        type: "mdxJsxAttribute",
+        name: "width",
+        value: {
+          type: "mdxJsxAttributeValueExpression",
+          value: dimensions.width?.toString(),
+        },
+      };
+
+      const heightAttr = {
+        type: "mdxJsxAttribute",
+        name: "height",
+        value: {
+          type: "mdxJsxAttributeValueExpression",
+          value: dimensions.height?.toString(),
+        },
+      };
+
+      if (widthIdx !== -1) {
+        node.attributes[widthIdx] = widthAttr as any;
+      } else {
+        node.attributes.push(widthAttr as any);
+      }
+
+      if (heightIdx !== -1) {
+        node.attributes[heightIdx] = heightAttr as any;
+      } else {
+        node.attributes.push(heightAttr as any);
+      }
     }
 
     return node;

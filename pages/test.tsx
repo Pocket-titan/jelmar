@@ -1,57 +1,7 @@
 import ArticleLayout from "@layouts/ArticleLayout";
-import Collapsed from "@components/Collapsed";
-import Code from "@components/MDXContent/Code";
-import styled from "styled-components";
-import { PropsWithChildren, useState } from "react";
-import { useSpring, config, animated } from "@react-spring/web";
-import useMeasure from "react-use-measure";
+import Image from "@components/MDXContent/Image";
 
-const Details = styled.details``;
-
-const Summary = styled.summary`
-  list-style: none;
-
-  &::-webkit-details-marker {
-    display: none;
-  }
-`;
-
-const ContentWrapper = styled(animated.div)`
-  will-change: height;
-  overflow: visible;
-`;
-
-const Content = styled.div<{ $isExpanded: boolean }>``;
-
-const Comp = ({ children }: PropsWithChildren) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [measureRef, { height }] = useMeasure();
-
-  const styles = useSpring({
-    config: config.default,
-    from: {
-      height: 0,
-    },
-    to: {
-      height: isExpanded ? height : 0,
-    },
-  });
-
-  console.log(isExpanded, styles);
-
-  return (
-    <Details open={isExpanded}>
-      <Summary onClick={() => setIsExpanded((prev) => !prev)}>Click me</Summary>
-      <ContentWrapper style={{ ...styles }}>
-        <Content $isExpanded={isExpanded} ref={measureRef}>
-          {children}
-        </Content>
-      </ContentWrapper>
-    </Details>
-  );
-};
-
-const test = () => {
+const Test = () => {
   return (
     <ArticleLayout
       frontmatter={{
@@ -63,19 +13,47 @@ const test = () => {
         extension: "mdx",
       }}
     >
-      <h2>test</h2>
-      I'm typing normally!
-      <Collapsed>
-        <div>content goes here</div>
-        <Code language="javascript">{`console.log("hello world")`}</Code>
-      </Collapsed>
-      after that, we talk
-      <Comp>
-        <p>what's in here</p>
-        <Code language="javascript">{`console.log("hello world")`}</Code>
-      </Comp>
+      <h2>Test</h2>
+      <Image
+        src="/images/notebooks/test/cell_output_1_1.png"
+        caption="width, height"
+        width={556}
+        height={413}
+      />
+      width, height, maxWidth
+      <Image
+        src="/images/notebooks/test/cell_output_1_1.png"
+        width={556}
+        height={413}
+        maxWidth={200}
+      />
+      width, height, maxHeight
+      <Image
+        src="/images/notebooks/test/cell_output_1_1.png"
+        width={556}
+        height={413}
+        maxHeight={300}
+      />
+      width, height, maxWidth, maxHeight
+      <Image
+        src="/images/notebooks/test/cell_output_1_1.png"
+        width={556}
+        height={413}
+        maxHeight={200}
+        maxWidth={200}
+      />
+      maxWidth
+      <Image src="/images/notebooks/test/cell_output_1_1.png" maxWidth={200} />
+      maxHeight
+      <Image src="/images/notebooks/test/cell_output_1_1.png" maxHeight={200} />
+      maxWidth, maxHeight
+      <Image
+        src="/images/notebooks/test/cell_output_1_1.png"
+        maxHeight={200}
+        maxWidth={200}
+      />
     </ArticleLayout>
   );
 };
 
-export default test;
+export default Test;
