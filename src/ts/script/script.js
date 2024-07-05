@@ -49,7 +49,7 @@ var code_theme_light = {
 var LIGHT_COLORS = {
     // text: "#000",
     text: "hsl(340, 13%, 5%)", // Night
-    background: "white",
+    background: "hsl(0, 0%, 99.8%)",
     subtleBackground: "hsl(225deg, 25%, 95%)",
     blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
     muted: "hsl(218, 56%, 92%)",

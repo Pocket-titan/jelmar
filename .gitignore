@@ -35,5 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/data/*
-!/data/sico_spec*
+data/
+!data/sico_spec*

@@ -43,6 +43,7 @@ const Background = styled.div`
   height: 100vh;
   z-index: 1;
   background: var(--color-blurred-background);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   transition: opacity 500ms, background 350ms ease 0s;
 `;
@@ -167,7 +168,7 @@ const MobileNav = ({
           <Bottom
             style={{
               opacity: isOpen ? 1 : 0,
-              transition: `opacity 250ms ${isOpen ? 500 : 0}ms`,
+              transition: `opacity 300ms ease ${isOpen ? 500 : 0}ms`,
             }}
           >
             <DarkModeToggle size={32} tabIndex={isOpen ? 0 : -1} />

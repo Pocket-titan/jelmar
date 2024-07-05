@@ -70,8 +70,7 @@ const code_theme_light: CodeTheme = {
 export const LIGHT_COLORS = {
   // text: "#000",
   text: "hsl(340, 13%, 5%)", // Night
-
-  background: "white",
+  background: "hsl(0, 0%, 99.8%)", // Don't make this "white": weird bug in Safari where theme-color won't work sometimes?
   subtleBackground: "hsl(225deg, 25%, 95%)",
   blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
   muted: "hsl(218, 56%, 92%)",
@@ -156,7 +155,6 @@ const code_theme_dark: CodeTheme = {
 export const DARK_COLORS = {
   // text: "white",
   text: "hsl(280, 23%, 95%)", // Magnolia
-
   background: "hsl(223, 28%, 13%)",
   subtleBackground: "hsl(223, 28%, 13%)",
   blurredBackground: "hsla(223deg, 30%, 8%, 0.85)",

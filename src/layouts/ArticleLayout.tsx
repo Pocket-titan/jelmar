@@ -61,6 +61,8 @@ const Article = styled.article<{ $toc: boolean }>`
   position: relative;
 `;
 
+const DIST = 75;
+
 const Sidebar = styled.aside`
   display: none;
   top: 0px;
@@ -69,11 +71,10 @@ const Sidebar = styled.aside`
   /* margin-right: 32px; */
   /* padding-left: 16px; */
   padding-left: 12px;
-
   position: sticky;
 
-  top: 75px;
-  max-height: calc(100vh - 75px);
+  top: ${DIST}px;
+  max-height: calc(100vh - ${4 * DIST}px);
   padding-bottom: 16px;
   margin-top: 4px; /* Optical alignment */
 

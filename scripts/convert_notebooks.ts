@@ -27,12 +27,14 @@ async function main() {
 main();
 
 async function convertNotebookFiles(glob?: string) {
-  let notebookFiles = await fs.readdir(
-    path.resolve(process.cwd(), NOTEBOOK_FOLDER)
-  );
-  if (glob) {
-    notebookFiles = notebookFiles.filter((file) => file.match(glob));
-  }
+  let notebookFiles = (
+    await fs.readdir(path.resolve(process.cwd(), NOTEBOOK_FOLDER), {
+      withFileTypes: true,
+    })
+  )
+    .filter((file) => file.isFile() && (glob ? file.name.match(glob) : true))
+    .map((file) => file.name);
+
   console.log(`Converting ${notebookFiles.length} notebook files to MDX...`);
 
   for (let file of notebookFiles) {

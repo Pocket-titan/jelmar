@@ -59,7 +59,8 @@ const Button = styled.button`
 
 const Icon = styled(FaChevronDown)<{ $isExpanded: boolean }>`
   will-change: transform;
-  transform: ${({ $isExpanded }) => ($isExpanded ? "scaleY(-1)" : "none")};
+  transform: ${({ $isExpanded }) =>
+    $isExpanded ? "scaleY(-1) translateY(2px)" : "none"};
   transition: transform 400ms ease 0s;
 `;
 

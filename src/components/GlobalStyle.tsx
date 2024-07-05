@@ -147,9 +147,21 @@ const GlobalStyle = createGlobalStyle`
     margin-top: 1.5em;
   }
 
+  p {
+    text-wrap: pretty;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+
   p, a, h1, h2, h3, h4, h5, h6 {
     transition: color 350ms ease 0s;
     color: var(--color-text);
+  }
+
+  code.inline-code {
+    /* word-break: break-all; */
   }
 
   /* Footnotes */

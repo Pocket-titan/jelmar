@@ -8,6 +8,7 @@ import { syntaxColors } from "./highlighting";
 import { BREAKPOINTS, TRANSITION_DURATION } from "ts/theme";
 import { languages } from "./languages";
 import { FaArrowRightLong } from "react-icons/fa6";
+import dedent from "dedent";
 
 const Code = ({
   language = "markdown",
@@ -30,14 +31,14 @@ const Code = ({
     oldValue?: string;
   } & HTMLAttributes<HTMLPreElement>
 >) => {
-  const currentValue = value || stringifyChildren(children).trim();
+  const currentValue = dedent(value || stringifyChildren(children).trim());
   const isMergeEditor = oldValue !== undefined;
   const name = findName(language) || language;
   const prefix = findPrefix(name);
   const { ref } = useEditor(
     {
       value: currentValue,
-      oldValue,
+      oldValue: isMergeEditor ? dedent(oldValue) : undefined,
     },
     [languages[name], syntaxColors].filter((x) => !!x),
     wrapLines
