@@ -10,7 +10,7 @@ import { useSpring, animated, config } from "@react-spring/web";
 import useMeasure from "react-use-measure";
 
 const Container = styled.div`
-  margin: 0.5em 0;
+  margin: 0.75em 0;
   padding: 0em 0.5em;
 
   border: 1px solid var(--color-gray-500);

@@ -74,7 +74,7 @@ const Sidebar = styled.aside`
   position: sticky;
 
   top: ${DIST}px;
-  max-height: calc(100vh - ${4 * DIST}px);
+  max-height: calc(100svh - ${4 * DIST}px);
   padding-bottom: 16px;
   margin-top: 4px; /* Optical alignment */
 
@@ -191,7 +191,7 @@ const ArticleLayout = ({
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100svh;
   /* min-width: calc(100vw - var(--scrollbar-width)); */
   transition: background ${TRANSITION_DURATION}ms ease 0s;
   /* padding-left: calc(100vw - 100%); */

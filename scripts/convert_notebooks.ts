@@ -182,6 +182,11 @@ function saveDataUrl(src: string, folder: string, filename: string): string {
   return `${folder.replace("public", "")}/${filename}`;
 }
 
+function isPath(str: string) {
+  const unixPathPattern = /^(\/|~\/|\.\/)/;
+  return unixPathPattern.test(str);
+}
+
 const mapCellOutput = async (
   output: NotebookOutput,
   i: string,
@@ -189,13 +194,25 @@ const mapCellOutput = async (
 ) => {
   const { output_type, data } = output;
 
-  if (output_type === "display_data") {
-    if (data["image/png"] && isBase64(data["image/png"])) {
+  if (output_type === "display_data" && data["image/png"]) {
+    if (isBase64(data["image/png"])) {
       const folder = `public/images/notebooks/${slug}`;
       const filename = `cell_output_${i}.png`;
 
       const imgPath = saveDataUrl(data["image/png"], folder, filename);
       data["image/png"] = imgPath;
+    }
+
+    if (isPath(data["image/png"])) {
+      const { width, height } = getImageSize(
+        path.join("public", data["image/png"])
+      );
+
+      output.metadata = {
+        ...(output.metadata || {}),
+        height,
+        width,
+      };
     }
   }
 

@@ -3,6 +3,12 @@ import { GrReturn } from "react-icons/gr";
 import Code from "../Code";
 import { BREAKPOINTS } from "@ts/theme";
 import { isBase64 } from "@ts/utils";
+import {
+  ComponentProps,
+  DetailedHTMLProps,
+  HTMLAttributes,
+  useRef,
+} from "react";
 
 const CellWrapper = styled.div<{ $margin: string }>`
   .code-wrapper {
@@ -13,8 +19,8 @@ const CellWrapper = styled.div<{ $margin: string }>`
     margin-top: 0 !important;
   }
 
-  &:not(last-child) {
-    margin-bottom: 1em;
+  &:not(:last-child) {
+    margin-bottom: 1.25em;
   }
 `;
 
@@ -23,7 +29,11 @@ const MARGIN_BETWEEN_INPUT_AND_OUTPUT = "0.5em";
 const Cell = ({ cell: { source, metadata, outputs } }: { cell: CodeCell }) => {
   return (
     <CellWrapper
-      $margin={outputs.length === 0 ? "1.25em 0" : `1.25em 0 ${MARGIN_BETWEEN_INPUT_AND_OUTPUT}`}
+      $margin={
+        outputs.length === 0
+          ? "0.75em 0"
+          : `0.75em 0 ${MARGIN_BETWEEN_INPUT_AND_OUTPUT}`
+      }
     >
       <Code language={(metadata || {}).language}>{source.join("")}</Code>
       {outputs.length > 0 && <Outputs outputs={outputs} />}
@@ -38,7 +48,7 @@ const OutputsWrapper = styled.div`
   }
 
   margin-top: ${MARGIN_BETWEEN_INPUT_AND_OUTPUT};
-  margin-bottom: 1.25em;
+  margin-bottom: 0.75em;
 `;
 
 const OutputWrapper = styled.div`
@@ -79,10 +89,30 @@ const ImageWrapper = styled.div`
   justify-content: center;
 `;
 
-const Image = styled.img`
-  max-height: 350px;
+const StyledImage = styled.img`
   border-radius: 4px;
 `;
+
+const Image = ({
+  width,
+  height,
+  ...props
+}: {
+  width?: number;
+  height?: number;
+} & ComponentProps<typeof StyledImage>) => {
+  const aspectRatio = width && height ? width / height : null;
+
+  const style =
+    aspectRatio !== null
+      ? {
+          ...(aspectRatio > 1 ? { maxHeight: 325 } : {}),
+          ...(aspectRatio < 1 ? { maxHeight: 475 } : {}),
+        }
+      : {};
+
+  return <StyledImage style={style} {...props} />;
+};
 
 const Text = styled(Code)`
   flex: 1;
@@ -118,7 +148,7 @@ const Outputs = ({ outputs }: { outputs: Output[] }) => (
           break;
         }
         case "display_data": {
-          const { data } = x as DisplayOutput;
+          const { data, metadata } = x as DisplayOutput;
 
           if (!data || !data["image/png"]) {
             Component = null;
@@ -132,8 +162,14 @@ const Outputs = ({ outputs }: { outputs: Output[] }) => (
                 src={
                   isBase64(data["image/png"])
                     ? `data:image/png;base64,${data["image/png"]}`
-                    : data["image/png"]
+                    : (data["image/png"] as string)
                 }
+                {...(metadata.width && metadata.height
+                  ? {
+                      width: metadata.width,
+                      height: metadata.height,
+                    }
+                  : {})}
               />
             </ImageWrapper>
           );

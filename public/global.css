@@ -1,3 +1,5 @@
+@import url("Temml-STIX2.css");
+
 html[data-color-mode="dark"] {
   background: hsl(223, 28%, 13%);
 }

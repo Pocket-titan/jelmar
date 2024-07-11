@@ -10,6 +10,26 @@ import { languages } from "./languages";
 import { FaArrowRightLong } from "react-icons/fa6";
 import dedent from "dedent";
 
+// Dedent also does something if the input is already dedented, which is not what we want.
+// https://github.com/dmnd/dedent/issues/20
+function customDedent(str: string) {
+  const lines = str.split("\n");
+
+  let start = lines[0] && lines[0].length > 0 ? 1 : 0;
+
+  const minIndent = lines
+    .slice(start)
+    .filter((x) => x.length > 0)
+    .map((x) => x.match(/^\s*/)?.[0].length ?? 0)
+    .reduce((a, b) => Math.min(a, b), Infinity);
+
+  if (minIndent > 0) {
+    return dedent(str);
+  }
+
+  return str;
+}
+
 const Code = ({
   language = "markdown",
   hasCopyButton = false,
@@ -31,14 +51,17 @@ const Code = ({
     oldValue?: string;
   } & HTMLAttributes<HTMLPreElement>
 >) => {
-  const currentValue = dedent(value || stringifyChildren(children).trim());
+  const currentValue = customDedent(
+    value || stringifyChildren(children).trim()
+  );
+  // console.log(stringifyChildren(children).trim());
   const isMergeEditor = oldValue !== undefined;
   const name = findName(language) || language;
   const prefix = findPrefix(name);
   const { ref } = useEditor(
     {
       value: currentValue,
-      oldValue: isMergeEditor ? dedent(oldValue) : undefined,
+      oldValue: isMergeEditor ? customDedent(oldValue) : undefined,
     },
     [languages[name], syntaxColors].filter((x) => !!x),
     wrapLines
@@ -183,8 +206,8 @@ const CodeLanguage = styled.div`
 
 const CodeWrapper = styled.div`
   position: relative;
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
 
   *:not(${Filename}):not(${CodeLanguage}) {
     font-family: var(--font-monospace), monospace !important;

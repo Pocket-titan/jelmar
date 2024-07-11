@@ -39,18 +39,18 @@ const Svg = styled.svg`
   --easing: cubic-bezier(0.45, 0.05, 0.55, 0.95);
   --width: 106px;
   --height: 106px;
-  --ydist: 50vh; /* from the top, travel this distance to be below the content */
+  --ydist: 50svh; /* from the top, travel this distance to be below the content */
 
   @media (${BREAKPOINTS.mdAndSmaller}) {
-    --ydist: 75vh;
+    --ydist: 75svh;
   }
 
   @media (${BREAKPOINTS.smAndSmaller}) {
-    --ydist: 100vh;
+    --ydist: 100svh;
   }
 
   position: absolute;
-  top: calc(-${HEADER_HEIGHT} - var(--height) + 50vh);
+  top: calc(-${HEADER_HEIGHT} - var(--height) + 50svh);
   left: calc(50vw - var(--width) / 2);
   will-change: transform;
 
@@ -63,12 +63,12 @@ const Svg = styled.svg`
 const RocketSvg = styled(Svg)`
   --pos1: translate(
     calc(15vw + var(--width) / 2),
-    calc(-50vh + var(--ydist) + var(--height) / 2)
+    calc(-50svh + var(--ydist) + var(--height) / 2)
   );
 
   --pos2: translate(
     calc(15vw + var(--width) / 2),
-    calc(-50vh - var(--height) / 2)
+    calc(-50svh - var(--height) / 2)
   );
 
   transform: var(--pos1);
@@ -107,12 +107,12 @@ const Rocket = () => (
 const LanderSvg = styled(Svg)`
   --pos1: translate(
     calc(-15vw - var(--width) / 2),
-    calc(-50vh - var(--height) / 2)
+    calc(-50svh - var(--height) / 2)
   );
 
   --pos2: translate(
     calc(-15vw - var(--width) / 2),
-    calc(-50vh + var(--ydist) + var(--height) / 1)
+    calc(-50svh + var(--ydist) + var(--height) / 1)
   );
 
   transform: var(--pos1);
@@ -262,12 +262,12 @@ const Rover = () => {
 const SatelliteSvg = styled(Svg)`
   --pos1: translate(
     calc(-25vw - var(--width) / 2),
-    calc(50vh + var(--height) / 2)
+    calc(50svh + var(--height) / 2)
   );
 
   --pos2: translate(
     calc(40vw + var(--width) / 2),
-    calc(-50vh - var(--height) / 2)
+    calc(-50svh - var(--height) / 2)
   );
 
   transform: var(--pos1);
@@ -293,12 +293,12 @@ const SatelliteSvg = styled(Svg)`
   @media (${BREAKPOINTS.mdAndSmaller}) {
     --pos1: translate(
       calc(-50vw - var(--width) / 2),
-      calc(50vh + var(--height) / 2)
+      calc(50svh + var(--height) / 2)
     );
 
     --pos2: translate(
       calc(50vw + var(--width) / 2),
-      calc(-50vh - var(--height) / 2)
+      calc(-50svh - var(--height) / 2)
     );
 
     @keyframes fly_satellite {
@@ -337,13 +337,13 @@ const Satellite = () => (
 const StationSvg = styled(Svg)`
   --pos1: translate(
       calc(-50vw - var(--width) / 1.5),
-      calc(25vh + var(--height) / 1.75)
+      calc(25svh + var(--height) / 1.75)
     )
     rotate(315deg);
 
   --pos2: translate(
       calc(10vw + var(--width) / 2),
-      calc(-50vh - var(--height) / 1.75)
+      calc(-50svh - var(--height) / 1.75)
     )
     rotate(315deg);
 

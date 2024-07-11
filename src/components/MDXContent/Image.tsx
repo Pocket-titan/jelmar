@@ -141,7 +141,7 @@ const Image = ({
       >
         <StyledImage
           src={src}
-          sizes="75vw"
+          sizes="75vw,100vw"
           alt={alt || ""}
           style={imageStyle}
           {...props}

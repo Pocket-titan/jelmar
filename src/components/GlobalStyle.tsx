@@ -161,7 +161,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   code.inline-code {
-    /* word-break: break-all; */
+    word-break: break-all;
   }
 
   /* Footnotes */

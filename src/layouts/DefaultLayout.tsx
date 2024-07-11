@@ -46,7 +46,7 @@ const MaxWidthWrapper = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100svh;
   transition: background 350ms ease 0s;
 `;
 
