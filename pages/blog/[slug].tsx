@@ -22,7 +22,7 @@ const Post = ({
       <SEO
         title={mdx.frontmatter?.title}
         description={mdx.frontmatter?.excerpt}
-        type="article"
+        // type="article"
         darkColor={DARK_COLORS.background}
         lightColor={LIGHT_COLORS.background}
       />

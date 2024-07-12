@@ -44,6 +44,11 @@ const SEO = ({
       <meta property="og:image:width" content="1280" />
       <meta property="og:image:height" content="675" />
       <meta key="og:type" property="og:type" content={type} />
+      <meta
+        key="og:description"
+        name="og:description"
+        content={metaTagDescription}
+      />
     </Head>
   );
 };
