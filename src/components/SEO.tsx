@@ -5,7 +5,8 @@ import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
 
 const BASIC_DESCRIPTION = "Jelmar's personal website and blog.";
 
-const PROD_URL = "https://www.jelmar.eu";
+// const PROD_URL = "https://www.jelmar.eu";
+const PROD_URL = "https://portfolio-rho-six-35.vercel.app";
 
 const SEO = ({
   title,
