@@ -49,7 +49,7 @@ var code_theme_light = {
 var LIGHT_COLORS = {
     // text: "#000",
     text: "hsl(340, 13%, 5%)", // Night
-    background: "hsl(0, 0%, 99.8%)",
+    background: "hsl(0, 0%, 99.8%)", // Don't make this "white": weird bug in Safari where theme-color won't work sometimes?
     subtleBackground: "hsl(225deg, 25%, 95%)",
     blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
     muted: "hsl(218, 56%, 92%)",
@@ -357,7 +357,7 @@ function setInitialColorMode() {
     var prefersDark = colorMode === "dark";
     var root = document.documentElement;
     root.style.setProperty(THEME_CSS_PROP, colorMode);
-    root.setAttribute("data-color-mode", colorMode);
+    root.setAttribute("data-theme", colorMode);
     var colors = prefersDark ? DARK_COLORS : LIGHT_COLORS;
     Object.entries(keysToVariables(colors, "color")).forEach(function (_a) {
         var name = _a[0], color = _a[1];

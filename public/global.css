@@ -1,10 +1,10 @@
 @import url("Temml-STIX2.css");
 
-html[data-color-mode="dark"] {
+html[data-theme="dark"] {
   background: hsl(223, 28%, 13%);
 }
 
-html[data-color-mode="light"] {
+html[data-theme="light"] {
   background: white;
 }
 

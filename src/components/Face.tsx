@@ -24,7 +24,9 @@ const Face = () => {
         alt="Picture of the author"
         width={200}
         height={200}
+        placeholder="blur"
         loading="eager"
+        priority
       />
     </Wrapper>
   );

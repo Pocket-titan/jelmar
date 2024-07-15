@@ -26,7 +26,7 @@ function setInitialColorMode() {
 
   const root = document.documentElement;
   root.style.setProperty(THEME_CSS_PROP, colorMode);
-  root.setAttribute("data-color-mode", colorMode);
+  root.setAttribute("data-theme", colorMode);
 
   const colors = prefersDark ? DARK_COLORS : LIGHT_COLORS;
   Object.entries(keysToVariables(colors, "color")).forEach(([name, color]) => {

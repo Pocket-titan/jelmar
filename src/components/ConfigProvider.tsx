@@ -111,7 +111,7 @@ export const ConfigProvider = ({ children }: PropsWithChildren) => {
       const prefersDark = colorMode === "dark";
 
       let root = window.document.documentElement;
-      root.setAttribute("data-color-mode", colorMode);
+      root.setAttribute("data-theme", colorMode);
 
       let body = window.document.body;
       if (body.classList.contains(prefersDark ? "light" : "dark")) {

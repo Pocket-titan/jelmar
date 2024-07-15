@@ -98,18 +98,15 @@ const Image = ({
   height,
   ...props
 }: {
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
 } & ComponentProps<typeof StyledImage>) => {
-  const aspectRatio = width && height ? width / height : null;
+  const aspectRatio = width / height;
 
-  const style =
-    aspectRatio !== null
-      ? {
-          ...(aspectRatio > 1 ? { maxHeight: 325 } : {}),
-          ...(aspectRatio < 1 ? { maxHeight: 475 } : {}),
-        }
-      : {};
+  const style = {
+    ...(aspectRatio > 1 ? { maxHeight: 325 } : {}),
+    ...(aspectRatio < 1 ? { maxHeight: 475 } : {}),
+  };
 
   return <StyledImage style={style} {...props} />;
 };
@@ -164,12 +161,8 @@ const Outputs = ({ outputs }: { outputs: Output[] }) => (
                     ? `data:image/png;base64,${data["image/png"]}`
                     : (data["image/png"] as string)
                 }
-                {...(metadata.width && metadata.height
-                  ? {
-                      width: metadata.width,
-                      height: metadata.height,
-                    }
-                  : {})}
+                width={metadata.width}
+                height={metadata.height}
               />
             </ImageWrapper>
           );

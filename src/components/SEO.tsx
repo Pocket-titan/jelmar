@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useConfig } from "./ConfigProvider";
 import { DARK_COLORS, LIGHT_COLORS } from "@ts/theme";
 
-const BASIC_DESCRIPTION = "Jelmar's personal website and blog.";
+const BASIC_DESCRIPTION = "Personal website and blog.";
 
 // const PROD_URL = "https://www.jelmar.eu";
 const PROD_URL = "https://portfolio-rho-six-35.vercel.app";
