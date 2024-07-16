@@ -27,7 +27,7 @@ const Main = styled.main`
   flex: 1;
 
   @media (${BREAKPOINTS.smAndSmaller}) {
-    padding-top: 32px;
+    padding-top: 24px;
   }
 `;
 
@@ -72,6 +72,8 @@ const Right = styled.div`
   @media (${BREAKPOINTS.smAndSmaller}) {
     padding-left: 8px;
     padding-right: 8px;
+
+    font-size: 1.1rem;
   }
 `;
 
