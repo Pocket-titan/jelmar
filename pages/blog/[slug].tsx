@@ -25,6 +25,7 @@ const Post = ({
         // type="article"
         darkColor={DARK_COLORS.background}
         lightColor={LIGHT_COLORS.background}
+        ogImage={mdx.frontmatter?.image}
       />
       <ArticleLayout headings={headings} frontmatter={mdx.frontmatter}>
         <MDXContent {...mdx} />

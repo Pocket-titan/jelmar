@@ -20,7 +20,11 @@ const SEO = ({
   title?: string;
   seoTitle?: string;
   description?: string;
-  ogImage?: string;
+  ogImage?: {
+    src: string;
+    width?: number;
+    height?: number;
+  };
   type?: string;
   darkColor?: string;
   lightColor?: string;
@@ -33,7 +37,7 @@ const SEO = ({
 
   const metaTagDescription = description || BASIC_DESCRIPTION;
 
-  const image = PROD_URL + (ogImage || "/images/og-default.png");
+  const image = PROD_URL + (ogImage?.src || "/images/og-default.png");
 
   return (
     <Head>
@@ -42,8 +46,8 @@ const SEO = ({
       <meta key="theme-color" name="theme-color" content={color} />
       <meta key="og:title" property="og:title" content={pageTitle} />
       <meta key="og:image" property="og:image" content={image} />
-      <meta property="og:image:width" content="1280" />
-      <meta property="og:image:height" content="675" />
+      <meta property="og:image:width" content={`${ogImage?.width || 1280}`} />
+      <meta property="og:image:height" content={`${ogImage?.height || 675}`} />
       <meta key="og:type" property="og:type" content={type} />
       <meta
         key="og:description"

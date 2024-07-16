@@ -24,6 +24,11 @@ export type Frontmatter = {
   excerpt: string;
   tags: string[];
   extension: string;
+  image?: {
+    src: string;
+    width: number;
+    height: number;
+  };
 };
 
 export type MDX = MDXRemoteSerializeResult<

@@ -1,10 +1,12 @@
 import type { Frontmatter } from "src/components/MDXContent";
 import { serialize } from "next-mdx-remote/serialize";
+import getImageSize from "image-size";
 import { slug } from "github-slugger";
 import frontMatter from "front-matter";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
+import { existsSync } from "fs";
 import fs from "fs/promises";
 import path from "path";
 
@@ -22,7 +24,39 @@ function makeExcerpt(source: string, characters: number = 150) {
   );
 }
 
+function getImageProperties(file: string, frontmatter: { [key: string]: any }) {
+  try {
+    const a1 = [
+      "images",
+      "notebooks",
+      path.parse(file).name,
+      frontmatter.image,
+    ];
+    const p1 = path.resolve(process.cwd(), "public", ...a1);
+
+    if (existsSync(p1)) {
+      const { width, height } = getImageSize(p1);
+      return { src: path.join("/", ...a1), width: width!, height: height! };
+    }
+
+    const a2 = ["images", frontmatter.image];
+    const p2 = path.resolve(process.cwd(), "public", ...a2);
+
+    if (existsSync(p2)) {
+      const { width, height } = getImageSize(p2);
+      return { src: path.join("/", ...a2), width: width!, height: height! };
+    }
+  } catch (err) {
+    console.error(`Failed to get image dimensions for ${file}:`, err);
+  }
+
+  console.warn(`Failed to find image ${frontmatter.image} for ${file}`);
+
+  return undefined;
+}
+
 function maybeFixFrontmatter(
+  file: string,
   source: string,
   frontmatter: { [key: string]: any }
 ): Frontmatter {
@@ -41,6 +75,16 @@ function maybeFixFrontmatter(
 
   if (!frontmatter.tags) {
     frontmatter.tags = [];
+  }
+
+  if (frontmatter.image) {
+    const image = getImageProperties(file, frontmatter);
+
+    if (image) {
+      frontmatter.image = image;
+    } else {
+      delete frontmatter.image;
+    }
   }
 
   return frontmatter as Frontmatter;
@@ -168,6 +212,7 @@ async function readMarkdownFile(file: string) {
   const slug = file.replace(extension, "");
   const frontmatter = frontMatter(source);
   mdx.frontmatter = maybeFixFrontmatter(
+    file,
     source
       .split("\n")
       .slice(Math.max(0, frontmatter.bodyBegin - 1))

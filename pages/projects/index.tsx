@@ -82,6 +82,7 @@ const Main = styled.main`
 
 const Article = styled.article`
   height: 100%;
+  width: 100%;
 
   &:hover h3 {
     color: var(--color-primary);
@@ -91,12 +92,9 @@ const Article = styled.article`
 const Top = styled.div``;
 
 const Bottom = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Left = styled.div`
   flex: 1;
+  display: flex;
+  align-items: flex-start;
 `;
 
 const Title = styled.h3`
@@ -108,14 +106,6 @@ const Description = styled.p`
   margin-top: 6px;
   margin-bottom: 8px;
   flex: 1;
-`;
-
-const Right = styled.div`
-  margin-left: 32px;
-
-  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
-    margin-left: 16px;
-  }
 `;
 
 const Tags = styled.div`
@@ -156,7 +146,7 @@ const Tag = styled.div`
 
 const Img = styled(NextImage)`
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
   object-position: center;
   border-radius: 8px;
@@ -171,13 +161,43 @@ const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
 `;
 
 const StyledLink = styled(Link)`
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr minmax(25%, 150px);
+
   height: 100%;
   width: 100%;
 
   &:hover ${StyledExternalLinkIcon} {
     color: var(--color-primary);
   }
+
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
+    grid-template-columns: 1fr minmax(100px, 33%);
+  }
+`;
+
+const Left = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Right = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 32px;
+
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
+    margin-left: 16px;
+  }
+`;
+
+const ImageWrapper = styled.div`
+  /* min-width: 75px;
+  max-width: 125px;
+  min-height: 75px;
+  max-height: 200px; */
 `;
 
 const Project = ({ title, description, tags, url, image }: Project) => {
@@ -186,37 +206,40 @@ const Project = ({ title, description, tags, url, image }: Project) => {
   return (
     <Article>
       <StyledLink href={url}>
-        <Top>
-          <Title>
-            {capitalize(title)}
-            {isExternal && <StyledExternalLinkIcon />}
-          </Title>
-          {tags.length > 0 && (
-            <Tags>
-              {tags.map((tag) => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </Tags>
-          )}
-        </Top>
-        <Bottom>
-          <Left>
+        <Left>
+          <Top>
+            <Title>
+              {capitalize(title)}
+              {isExternal && <StyledExternalLinkIcon />}
+            </Title>
+            {tags.length > 0 && (
+              <Tags>
+                {tags.map((tag) => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </Tags>
+            )}
+          </Top>
+          <Bottom>
             <Description>{description}</Description>
-          </Left>
-          {image && (
-            <Right
-              style={{
-                minWidth: 75,
-                minHeight: 75,
-                maxWidth: 125,
-                maxHeight: 200,
-                ...(image.style || {}),
-              }}
-            >
-              <Img src={image.src} alt={title} loading="eager" />
-            </Right>
-          )}
-        </Bottom>
+          </Bottom>
+        </Left>
+        {image && (
+          <Right
+            style={{
+              ...(image.style || {}),
+            }}
+          >
+            <ImageWrapper>
+              <Img
+                src={image.src}
+                alt={title}
+                loading="eager"
+                placeholder="blur"
+              />
+            </ImageWrapper>
+          </Right>
+        )}
       </StyledLink>
     </Article>
   );
