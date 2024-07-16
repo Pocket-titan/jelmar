@@ -25,6 +25,10 @@ const Main = styled.main`
   padding-top: 64px;
   padding-bottom: 16px;
   flex: 1;
+
+  @media (${BREAKPOINTS.smAndSmaller}) {
+    padding-top: 32px;
+  }
 `;
 
 const First = styled.div`
