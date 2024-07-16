@@ -68,15 +68,13 @@ function Post({
         </Left>
         {image && (
           <Right>
-            <ImageWrapper>
-              <Img
-                src={image.src}
-                width={image.width}
-                height={image.height}
-                alt={title}
-                loading="eager"
-              />
-            </ImageWrapper>
+            <Img
+              src={image.src}
+              width={image.width}
+              height={image.height}
+              alt={title}
+              loading="eager"
+            />
           </Right>
         )}
       </StyledLink>
@@ -93,18 +91,6 @@ const Article = styled.article`
   }
 `;
 
-const StyledLink = styled(Link)`
-  display: grid;
-  grid-template-columns: 1fr minmax(25%, 150px);
-
-  height: 100%;
-  width: 100%;
-
-  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
-    grid-template-columns: 1fr minmax(100px, 33%);
-  }
-`;
-
 const Left = styled.div`
   display: flex;
   flex-direction: column;
@@ -114,19 +100,28 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  margin-left: 32px;
-
-  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
-    margin-left: 16px;
-  }
 `;
 
-const ImageWrapper = styled.div`
-  min-width: 75px;
-  max-width: 125px;
-  min-height: 75px;
-  max-height: 200px;
+const StyledLink = styled(Link)`
+  display: grid;
+  grid-template-columns: 1fr clamp(100px, 25%, 150px);
+  gap: 32px;
+
+  height: 100%;
+  width: 100%;
+
+  @media ${(p) => p.theme.breakpoints.mdAndSmaller} {
+    grid-template-columns: 1fr clamp(100px, 30%, 150px);
+    gap: 16px;
+  }
+
+  @media ${(p) => p.theme.breakpoints.smAndSmaller} {
+    grid-template-columns: 1fr;
+
+    ${Right} {
+      display: none;
+    }
+  }
 `;
 
 const Img = styled(NextImage)`
@@ -143,6 +138,7 @@ const Title = styled.h3`
 `;
 
 const Description = styled.p`
+  font-size: 1.1rem;
   transition: color 350ms ease 0s;
   color: var(--color-text);
   overflow-wrap: anywhere;

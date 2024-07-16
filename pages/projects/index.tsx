@@ -103,6 +103,7 @@ const Title = styled.h3`
 `;
 
 const Description = styled.p`
+  font-size: 1.1rem;
   margin-top: 6px;
   margin-bottom: 8px;
   flex: 1;
@@ -230,14 +231,7 @@ const Project = ({ title, description, tags, url, image }: Project) => {
               ...(image.style || {}),
             }}
           >
-            <ImageWrapper>
-              <Img
-                src={image.src}
-                alt={title}
-                loading="eager"
-                placeholder="blur"
-              />
-            </ImageWrapper>
+            <Img src={image.src} alt={title} loading="eager" />
           </Right>
         )}
       </StyledLink>

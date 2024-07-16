@@ -22,10 +22,10 @@ const Post = ({
       <SEO
         title={mdx.frontmatter?.title}
         description={mdx.frontmatter?.excerpt}
-        // type="article"
         darkColor={DARK_COLORS.background}
         lightColor={LIGHT_COLORS.background}
         ogImage={mdx.frontmatter?.image}
+        type="article"
       />
       <ArticleLayout headings={headings} frontmatter={mdx.frontmatter}>
         <MDXContent {...mdx} />
