@@ -22,7 +22,7 @@ import LinkedInActivity, {
 import SEO from "@components/SEO";
 
 const Main = styled.main`
-  padding-top: 64px;
+  padding-top: 48px;
   padding-bottom: 16px;
   flex: 1;
 
