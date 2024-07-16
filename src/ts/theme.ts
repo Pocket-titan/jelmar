@@ -72,7 +72,7 @@ export const LIGHT_COLORS = {
   text: "hsl(340, 13%, 5%)", // Night
   background: "hsl(0, 0%, 99.8%)", // Don't make this "white": weird bug in Safari where theme-color won't work sometimes?
   subtleBackground: "hsl(225deg, 25%, 95%)",
-  blurredBackground: "hsla(0deg, 0%, 100%, 0.85)",
+  blurredBackground: "hsla(0deg, 0%, 99.8%, 0.85)",
   muted: "hsl(218, 56%, 92%)",
   mutedContrast: "hsl(218, 56%, 96%)",
   primary: "hsl(221deg 80% 51%)",
@@ -157,7 +157,7 @@ export const DARK_COLORS = {
   text: "hsl(280, 23%, 95%)", // Magnolia
   background: "hsl(223, 28%, 13%)",
   subtleBackground: "hsl(223, 28%, 13%)",
-  blurredBackground: "hsla(223deg, 30%, 8%, 0.85)",
+  blurredBackground: "hsla(223deg, 28%, 13%, 0.85)",
   darkerBackground: "hsl(223, 25%, 9%)",
   muted: "hsl(223, 30%, 20%)",
   mutedContrast: "hsl(223, 30%, 15%)",
