@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { IBM_Plex_Mono } from "next/font/google";
 import { Frontmatter } from "components/MDXContent";
 import MaxWidthWrapper from "components/MaxWidthWrapper";
 import TableOfContents from "components/TableOfContents";
@@ -10,14 +9,7 @@ import { capitalize, formatDate } from "ts/utils";
 import { HEADER_HEIGHT, TRANSITION_DURATION } from "ts/theme";
 import { PropsWithChildren } from "react";
 import SmoothScrolling from "@components/SmoothScrolling";
-
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ["400", "500", "600"],
-  variable: "--font-ibm-plex-mono",
-  style: ["normal"],
-  subsets: ["latin-ext"],
-  display: "swap",
-});
+import { ibmPlexMono } from "@ts/fonts";
 
 const ContentWrapper = styled.div<{ $toc: boolean }>`
   grid-column: 2 / 4;
