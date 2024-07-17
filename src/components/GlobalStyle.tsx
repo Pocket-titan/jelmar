@@ -62,7 +62,7 @@ const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     width: 100vw;
 
-    font-size: 1.1875rem;
+    font-size: 1.13rem;
   }
 
   body.has-transition {
