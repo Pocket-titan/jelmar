@@ -7,7 +7,10 @@ export const syntaxColors = syntaxHighlighting(
       { tag: t.name, class: "tok-name" },
       { tag: t.variableName, class: "tok-variableName" },
       { tag: t.propertyName, class: "tok-propertyName" },
-      { tag: t.definition(t.variableName), class: "tok-definition tok-variableName" },
+      {
+        tag: t.definition(t.variableName),
+        class: "tok-definition tok-variableName",
+      },
       { tag: t.comment, class: "tok-comment" },
       { tag: t.atom, class: "tok-atom" },
 
@@ -25,7 +28,10 @@ export const syntaxColors = syntaxHighlighting(
       { tag: t.definition(t.className), class: "tok-className" },
       { tag: t.bool, class: "tok-bool" },
 
-      { tag: [t.function(t.variableName), t.function(t.propertyName)], class: "tok-function" },
+      {
+        tag: [t.function(t.variableName), t.function(t.propertyName)],
+        class: "tok-function",
+      },
       {
         tag: t.function(t.definition(t.variableName)),
         class: "tok-definition tok-function",
@@ -34,14 +40,14 @@ export const syntaxColors = syntaxHighlighting(
 
       { tag: t.operator, class: "tok-operator" },
       { tag: t.self, class: "tok-self" },
-      { tag: t.function(t.punctuation) },
-      { tag: t.special(t.logicOperator) },
+      { tag: t.function(t.punctuation), class: "tok-punctuation" },
+      { tag: t.special(t.logicOperator), class: "tok-logicOperator" },
       { tag: t.moduleKeyword, class: "tok-moduleKeyword tok-keyword" },
       { tag: t.controlOperator, class: "tok-controlOperator" },
 
       { tag: t.special(t.variableName), class: "tok-builtIn tok-variableName" },
-    ],
-    { all: { color: "var(--mono-1)" } }
+    ]
+    // { all: { color: "var(--mono-1)" } }
   )
 );
 
@@ -57,7 +63,8 @@ export const pythonHighlighting = styleTags({
   None: t.null,
   VariableName: t.variableName,
 
-  "TypeDef/VariableName TypeDef/MemberExpression/VariableName TypeDef/None": t.typeName,
+  "TypeDef/VariableName TypeDef/MemberExpression/VariableName TypeDef/None":
+    t.typeName,
   "CallExpression/VariableName": t.function(t.variableName),
   "FunctionDefinition/VariableName": t.definition(t.function(t.variableName)),
   "ClassDefinition/VariableName": t.definition(t.className),
@@ -100,13 +107,16 @@ export const jsHighlighting = styleTags({
   null: t.null,
   Star: t.modifier,
   VariableName: t.variableName,
-  "CallExpression/VariableName TaggedTemplateExpression/VariableName": t.function(t.variableName),
+  "CallExpression/VariableName TaggedTemplateExpression/VariableName":
+    t.function(t.variableName),
   VariableDefinition: t.definition(t.variableName),
   Label: t.labelName,
   PropertyName: t.propertyName,
   PrivatePropertyName: t.special(t.propertyName),
   "CallExpression/MemberExpression/PropertyName": t.function(t.propertyName),
-  "FunctionDeclaration/VariableDefinition": t.function(t.definition(t.variableName)),
+  "FunctionDeclaration/VariableDefinition": t.function(
+    t.definition(t.variableName)
+  ),
   "ClassDeclaration/VariableDefinition": t.definition(t.className),
   PropertyDefinition: t.definition(t.propertyName),
   PrivatePropertyDefinition: t.definition(t.special(t.propertyName)),
@@ -134,7 +144,8 @@ export const jsHighlighting = styleTags({
 
   TypeName: t.typeName,
   TypeDefinition: t.definition(t.typeName),
-  "type enum interface implements namespace module declare": t.definitionKeyword,
+  "type enum interface implements namespace module declare":
+    t.definitionKeyword,
   "abstract global Privacy readonly override": t.modifier,
   "is keyof unique infer": t.operatorKeyword,
 
@@ -150,7 +161,8 @@ export const jsHighlighting = styleTags({
 });
 
 export const rustHighlighting = styleTags({
-  "const macro_rules struct union enum type fn impl trait let static": t.definitionKeyword,
+  "const macro_rules struct union enum type fn impl trait let static":
+    t.definitionKeyword,
   "mod use crate": t.moduleKeyword,
   "pub unsafe async mut extern default move": t.modifier,
   "for if else loop while match continue break return await": t.controlKeyword,
@@ -171,8 +183,10 @@ export const rustHighlighting = styleTags({
   Lifetime: t.special(t.variableName),
   ScopeIdentifier: t.namespace,
   TypeIdentifier: t.typeName,
-  "MacroInvocation/Identifier MacroInvocation/ScopedIdentifier/Identifier": t.macroName,
-  "MacroInvocation/TypeIdentifier MacroInvocation/ScopedIdentifier/TypeIdentifier": t.macroName,
+  "MacroInvocation/Identifier MacroInvocation/ScopedIdentifier/Identifier":
+    t.macroName,
+  "MacroInvocation/TypeIdentifier MacroInvocation/ScopedIdentifier/TypeIdentifier":
+    t.macroName,
   '"!"': t.macroName,
   UpdateOp: t.updateOperator,
   LineComment: t.lineComment,

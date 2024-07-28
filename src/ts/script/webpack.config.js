@@ -29,8 +29,9 @@ module.exports = function (env) {
       path: path.resolve(__dirname),
     },
     optimization: {
+      usedExports: true,
       mangleExports: false,
-      minimize: false,
+      minimize: true,
     },
   };
 };

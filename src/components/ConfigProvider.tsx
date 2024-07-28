@@ -1,5 +1,3 @@
-"use client";
-
 import { last } from "lodash";
 import {
   type PropsWithChildren,

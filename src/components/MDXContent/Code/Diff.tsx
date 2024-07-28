@@ -1,47 +1,56 @@
-import React, { HTMLAttributes, PropsWithChildren, useState } from "react";
+import { useState, type HTMLAttributes, type PropsWithChildren } from "react";
 import styled from "styled-components";
-import { HighlightStyle, type LanguageSupport } from "@codemirror/language";
-import { Text, type Extension } from "@codemirror/state";
-import { highlightCode } from "@lezer/highlight";
-import { Decoration } from "@codemirror/view";
-import { Tooltip } from "react-tooltip";
+import { dedent, stringifyChildren } from "ts/utils";
 import { FaCopy } from "react-icons/fa";
-import { FaArrowRightLong } from "react-icons/fa6";
-import { last } from "lodash";
-import { dedent, stringifyChildren } from "@ts/utils";
-import { BREAKPOINTS, TRANSITION_DURATION } from "@ts/theme";
+import { Tooltip } from "react-tooltip";
+import { useEditor } from "ts/hooks";
 import { syntaxColors } from "./highlighting";
+import { BREAKPOINTS, TRANSITION_DURATION } from "ts/theme";
 import { languages } from "./languages";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const Code = ({
-  value,
-  children,
-  filename,
   language = "markdown",
   hasCopyButton = false,
-  lineWrapping = false,
-  lineNumbers = false,
+  wrapLines = false,
+  oldFilename,
+  filename,
+  value,
+  oldValue,
+  children,
   ...props
-}: PropsWithChildren<{
-  value?: string;
-  language?: string;
-  filename?: string;
-  hasCopyButton?: boolean;
-  lineWrapping?: boolean;
-  lineNumbers?: boolean;
-}> &
-  HTMLAttributes<HTMLPreElement>) => {
-  const currentValue = dedent(value ?? stringifyChildren(children));
-
-  console.log("currentValue", currentValue);
-
+}: PropsWithChildren<
+  {
+    value?: string;
+    language?: string;
+    oldFilename?: string;
+    filename?: string;
+    hasCopyButton?: boolean;
+    wrapLines?: boolean;
+    oldValue?: string;
+  } & HTMLAttributes<HTMLPreElement>
+>) => {
+  const currentValue = dedent(value || stringifyChildren(children));
+  // console.log(stringifyChildren(children).trim());
+  const isMergeEditor = oldValue !== undefined;
   const name = findName(language) || language;
   const prefix = findPrefix(name);
+  const { ref } = useEditor(
+    {
+      value: currentValue,
+      oldValue: isMergeEditor ? dedent(oldValue) : undefined,
+    },
+    [languages[name], syntaxColors].filter((x) => !!x),
+    wrapLines
+  );
 
-  const { code, className } = renderToString(currentValue, languages[name], {
-    lineNumbers,
-    lineWrapping,
-  });
+  // Precompute height to prevent layout shift. This will be wrong when the lines  wrap, but it's
+  // better than nothing.
+  const fontSize = 12.8;
+  const paddingY = 13;
+  const lineHeight = 1.5;
+  const minHeight =
+    2 * paddingY + fontSize * currentValue.split("\n").length * lineHeight;
 
   return (
     <pre {...props}>
@@ -69,7 +78,22 @@ const Code = ({
           <CodeLanguage className="code-language">{prefix}</CodeLanguage>
         </Floating>
         <FilenameContainer>
-          <FilenameWrapper>
+          {oldFilename && (
+            <>
+              <FilenameWrapper
+                className="to-hide"
+                style={{ justifyContent: "flex-end" }}
+              >
+                <Filename title={oldFilename}>{oldFilename}</Filename>
+              </FilenameWrapper>
+              <div className="to-hide" style={{ flexShrink: 0 }}>
+                <ArrowRight />
+              </div>
+            </>
+          )}
+          <FilenameWrapper
+            style={{ justifyContent: oldFilename ? "flex-start" : "center" }}
+          >
             <Filename title={filename}>{filename}</Filename>
           </FilenameWrapper>
         </FilenameContainer>
@@ -77,16 +101,14 @@ const Code = ({
         <EditorWrapper
           className="editor-wrapper"
           style={{
+            minHeight: isMergeEditor ? "unset" : minHeight,
+            paddingLeft: isMergeEditor ? "4px" : "var(--padding-left)",
             paddingTop: filename
               ? "calc(var(--padding-y) + 1em + 10px)"
               : "var(--padding-y)",
           }}
-        >
-          <div
-            className={`cm-editor ${className}`}
-            dangerouslySetInnerHTML={{ __html: code }}
-          />
-        </EditorWrapper>
+          ref={(x) => (ref.current = x as any)}
+        />
       </CodeWrapper>
     </pre>
   );
@@ -117,7 +139,6 @@ const FilenameWrapper = styled.div`
   flex: 1;
   display: flex;
   overflow: hidden;
-  justify-content: center;
 `;
 
 const FilenameContainer = styled.div`
@@ -267,68 +288,6 @@ const EditorWrapper = styled.div`
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 
-  /* Base theme */
-  .cm-editor {
-    display: flex !important;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .cm-editor .cm-scroller {
-    display: flex !important;
-    align-items: flex-start !important;
-    font-family: monospace;
-    overflow-x: auto;
-    position: relative;
-    height: 100%;
-  }
-
-  .cm-editor .cm-content {
-    box-sizing: border-box;
-    margin: 0;
-    min-height: 100%; /* For full height of viewport, not of content */
-    word-wrap: normal;
-    white-space: pre;
-  }
-
-  .cm-editor .cm-content.cm-lineWrapping {
-    white-space: break-spaces;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    flex-shrink: 1;
-  }
-
-  .cm-gutters {
-    display: flex;
-    flex-shrink: 0;
-    height: 100%;
-    position: sticky;
-    box-sizing: border-box;
-  }
-
-  .cm-gutter {
-    display: flex !important; /* Necessary -- prevents margin collapsing */
-    flex-direction: column;
-    flex-shrink: 0;
-    box-sizing: border-box;
-    min-height: 100%;
-    overflow: hidden;
-  }
-
-  .cm-lineNumbers .cm-gutterElement {
-    /* padding: 0 3px 0 5px; */
-    /* min-width: 20px; */
-    /* min-width: 14px; */
-    text-align: right;
-    white-space: nowrap;
-    box-sizing: border-box;
-  }
-
-  /* Own styles */
-  span {
-    color: var(--color-code-mono-1);
-  }
-
   * {
     line-height: 1.5 !important;
   }
@@ -340,7 +299,6 @@ const EditorWrapper = styled.div`
   div.cm-content {
     padding-top: 0px !important;
     padding-bottom: 0px !important;
-    tab-size: 4;
   }
 
   /* Syntax colors */
@@ -407,6 +365,31 @@ const EditorWrapper = styled.div`
     border-right: 1px solid var(--bg);
     padding-right: 7px;
   }
+
+  /* Lines */
+  span.line-number-hidden {
+    transition: color ${TRANSITION_DURATION}ms ease 0s;
+    color: var(--color-code-mono-3);
+  }
+
+  .cm-changedLine {
+    transition: background ${TRANSITION_DURATION}ms ease 0s;
+    background: var(--color-code-diff-changed-line) !important;
+  }
+
+  .cm-changedText {
+    --color: var(--color-code-diff-changed-text);
+    transition: background ${TRANSITION_DURATION}ms ease 0s;
+    background: linear-gradient(var(--color), var(--color)) bottom/100% 2px
+      no-repeat !important;
+  }
+
+  .cm-deletedChunk {
+    transition: background ${TRANSITION_DURATION}ms ease 0s,
+      color ${TRANSITION_DURATION}ms ease 0s;
+    background: var(--color-code-diff-deleted-line) !important;
+    color: var(--color-code-mono-2) !important;
+  }
 `;
 
 const nameMap = {
@@ -458,109 +441,5 @@ const findPrefix = (name: string) => {
 
   return null;
 };
-
-const getHighlightStyle = (theme: Extension): HighlightStyle =>
-  (last(theme as any) as any).value;
-
-const highlightStyle = getHighlightStyle(syntaxColors);
-
-console.log(
-  "highlightStyle.module.getRules()",
-  highlightStyle?.module?.getRules?.()
-);
-
-type Mark = Decoration & { class?: string; tagName?: string };
-
-type Config = {
-  lineNumbers?: boolean;
-  lineWrapping?: boolean;
-};
-
-function treeToString(code: string, language: LanguageSupport) {
-  const parser = language?.language?.parser || (language as any)?.parser;
-  const tree = parser.parse(code);
-
-  let str = "";
-  let open = 0;
-
-  highlightCode(
-    code,
-    tree,
-    highlightStyle,
-    (code, classes) => {
-      if (str.endsWith("</div>") || str === "") {
-        str += "<div class='cm-line'>";
-        open += 1;
-      }
-
-      const cls = classes
-        .split(" ")
-        .filter((x) => !x.startsWith("ͼ"))
-        .join(" ")
-        .trim();
-
-      str += `<span${cls ? ` class='${cls}'` : ""}>${code}</span>`;
-    },
-    () => {
-      if (open > 0) {
-        str += "</div>";
-        open -= 1;
-      } else if (str !== "") {
-        str += "<div class='cm-line'><br/></div>";
-      }
-    }
-  );
-
-  Array(open)
-    .fill(0)
-    .forEach(() => {
-      str += "</div>";
-    });
-
-  return str;
-}
-
-function codeToString(code: string) {
-  console.log('code.split("\n")', code.split("\n"));
-  return code
-    .split("\n")
-    .map((line) => `<div class="cm-line">${line}</div>`)
-    .join("\n");
-}
-
-function renderToString(
-  code: string,
-  language?: LanguageSupport,
-  config: Config = {}
-) {
-  const str = language ? treeToString(code, language) : codeToString(code);
-  const text = Text.of(code.split("\n"));
-
-  let className = "";
-  let gutterEl = "";
-
-  if (config.lineNumbers) {
-    const gutterNumEl = Array(text.lines)
-      .fill(0)
-      .map((_, i) => `<div class="cm-gutterElement">${i + 1}</div>`)
-      .join("");
-
-    gutterEl = `<div class="cm-gutters">
-    <div class="cm-gutter cm-lineNumbers">${gutterNumEl}</div>
-    </div>`;
-
-    className += "gutter";
-  }
-
-  return {
-    className,
-    code: `<div class="cm-scroller">${gutterEl}
-    <div class="cm-content${
-      config.lineWrapping ? " cm-lineWrapping" : ""
-    }">${str}</div>
-    </div>`,
-    codeLinesOnly: str,
-  };
-}
 
 export default Code;

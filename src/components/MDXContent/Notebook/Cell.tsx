@@ -3,12 +3,7 @@ import { GrReturn } from "react-icons/gr";
 import Code from "../Code";
 import { BREAKPOINTS } from "@ts/theme";
 import { isBase64 } from "@ts/utils";
-import {
-  ComponentProps,
-  DetailedHTMLProps,
-  HTMLAttributes,
-  useRef,
-} from "react";
+import { ComponentProps } from "react";
 
 const CellWrapper = styled.div<{ $margin: string }>`
   .code-wrapper {
@@ -138,7 +133,7 @@ const Outputs = ({ outputs }: { outputs: Output[] }) => (
           }
 
           Component = (
-            <Text language="text" wrapLines={false}>
+            <Text language="text" lineWrapping={false}>
               {data["text/plain"].join("")}
             </Text>
           );
@@ -172,7 +167,7 @@ const Outputs = ({ outputs }: { outputs: Output[] }) => (
           const { name, text } = x as StreamOutput;
 
           Component = (
-            <Text language="text" wrapLines={false}>
+            <Text language="text" lineWrapping={false}>
               {text.join("")}
             </Text>
           );

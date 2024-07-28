@@ -1,3 +1,4 @@
+import React, { PropsWithChildren } from "react";
 import path from "path";
 import fs from "fs/promises";
 import { writeFileSync, mkdirSync } from "fs";
@@ -11,7 +12,9 @@ import { gfmFromMarkdown, gfmToMarkdown } from "mdast-util-gfm";
 import { math } from "micromark-extension-math";
 import { toMarkdown } from "mdast-util-to-markdown";
 import { map } from "unist-util-map";
+import toJsxString from "react-element-to-jsx-string";
 import getImageSize from "image-size";
+import { omit } from "lodash";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -397,6 +400,8 @@ async function convertCellToMDX(cell: NotebookCell, slug: string, nr: number) {
       )
     );
 
+    // return toJsxString(CellMarkup({ cell })) + "\n\n";
+
     return `<Cell cell={${JSON.stringify({
       ...cell,
       outputs,
@@ -407,6 +412,35 @@ async function convertCellToMDX(cell: NotebookCell, slug: string, nr: number) {
 
   return "";
 }
+
+const CellMarkup = ({ cell }: { cell: CodeCell }) => {
+  return (
+    <Cell cell={omit(cell, ["source", "outputs"])}>
+      <Code language={(cell.metadata || {}).language}>
+        {cell.source.join("")}
+      </Code>
+      {cell.outputs.length > 0 && <Outputs outputs={cell.outputs}></Outputs>}
+    </Cell>
+  );
+};
+
+const Outputs = ({ outputs }: { outputs: CodeCell["outputs"] }) => {
+  return <div></div>;
+};
+
+const Cell = ({
+  cell,
+  children,
+}: PropsWithChildren<{ cell: Omit<CodeCell, "source" | "outputs"> }>) => {
+  return <div>{children}</div>;
+};
+
+const Code = ({
+  language,
+  children,
+}: PropsWithChildren<{ language?: string }>) => {
+  return <div>{children}</div>;
+};
 
 type NotebookOutputData = {
   "text/plain"?: string[];

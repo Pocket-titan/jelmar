@@ -4,6 +4,7 @@ import {
   type MDXRemoteProps,
 } from "next-mdx-remote";
 import styled from "styled-components";
+import Diff from "./Code/Diff";
 import Code from "./Code";
 import Math from "./Math";
 import Note from "./Note";
@@ -50,10 +51,10 @@ const components: MDXRemoteProps["components"] = {
   FileTree,
   Cell,
   Math,
-  Code,
-  Note,
-  Image,
-  blockquote: Quote,
+  Diff,
+  Code: ({ children, ...props }) => {
+    return <Code {...props}>{children}</Code>;
+  },
   pre: ({ children, ...props }) => {
     if (
       children &&
@@ -75,13 +76,6 @@ const components: MDXRemoteProps["components"] = {
 
     return <pre {...props}>{children}</pre>;
   },
-  FootnoteLabel,
-  h1: (props) => <ContentHeading type="major-heading" {...props} />,
-  h2: (props) => <ContentHeading type="normal-heading" {...props} />,
-  h3: (props) => <ContentHeading type="minor-heading" {...props} />,
-  h4: (props) => <ContentHeading type="mini-heading" {...props} />,
-  a: (props) => <ContentLink {...props} />,
-  ol: OrderedList,
   code: ({ children, ...props }) => {
     if (!children) {
       return null;
@@ -115,6 +109,16 @@ const components: MDXRemoteProps["components"] = {
       </InlineCode>
     );
   },
+  Note,
+  Image,
+  blockquote: Quote,
+  FootnoteLabel,
+  h1: (props) => <ContentHeading type="major-heading" {...props} />,
+  h2: (props) => <ContentHeading type="normal-heading" {...props} />,
+  h3: (props) => <ContentHeading type="minor-heading" {...props} />,
+  h4: (props) => <ContentHeading type="mini-heading" {...props} />,
+  a: (props) => <ContentLink {...props} />,
+  ol: OrderedList,
 };
 
 const MDXContent = (props: MDXRemoteProps) => {

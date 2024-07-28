@@ -1,19 +1,22 @@
 {
-  "private": true,
-  "type": "module",
+  "name": "testy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
   "scripts": {
-    "convert-notebooks": "NODE_OPTIONS='--no-warnings --experimental-specifier-resolution=node --loader ts-node/esm' ts-node convert_notebooks.ts"
+    "convert-notebooks": "tsx convert_notebooks.tsx"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.2"
   },
   "dependencies": {
-    "image-size": "^1.1.1",
     "mdast-util-from-markdown": "^2.0.1",
     "mdast-util-to-markdown": "^2.1.0",
     "micromark-extension-gfm": "^3.0.0",
-    "micromark-extension-math": "^3.0.0",
+    "micromark-extension-math": "^3.1.0",
     "micromark-extension-mdxjs": "^3.0.0",
-    "ts-loader": "^9.5.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.2",
+    "react": "^18.3.1",
+    "react-element-to-jsx-string": "^15.0.0",
     "unist-util-map": "^4.0.0"
   }
 }
