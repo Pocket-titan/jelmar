@@ -2,7 +2,8 @@ import styled from "styled-components";
 import type { PropsWithChildren } from "react";
 import type { MathMLElements } from "@michijs/htmltype";
 import { stringifyChildren } from "ts/utils";
-import temml from "temml";
+//@ts-expect-error
+import temml from "temml/dist/temml.cjs";
 
 declare global {
   namespace JSX {

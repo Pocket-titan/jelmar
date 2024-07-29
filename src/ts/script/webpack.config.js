@@ -30,7 +30,7 @@ module.exports = function (env) {
     },
     optimization: {
       mangleExports: false,
-      minimize: false,
+      minimize: true,
     },
   };
 };
