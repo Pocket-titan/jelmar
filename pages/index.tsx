@@ -365,11 +365,27 @@ async function fetchGithub() {
 }
 
 async function fetchLinkedIn() {
+  // const app_file_server_url="https://data.accentapi.com/feed/";
+  // const check_url=post_url&&post_url.includes('&')?encodeURIComponent(post_url):post_url;
+  // const free_data_url=app_file_server_url.replace("feed/","get_fresh_url_tags.php")+'?post_id='+post_id+'&url='+check_url
+
   try {
     const feed = await fetch("https://data.accentapi.com/feed/25417027.json");
     const json = await feed.json();
-    const posts = (json.posts || []) as LinkedInPost[];
+
+    const posts = (await Promise.all(
+      (json.posts || []).map(async (post: any) => {
+        // if (post.post_url) {
+        //   const res = await fetch(post.post_url);
+        //   const html = await res.text();
+        //   console.log("html", html);
+        // }
+
+        return post;
+      })
+    )) as LinkedInPost[];
     const bio = (json.bio || {}) as LinkedInBio;
+
     return { posts, bio };
   } catch (err) {
     console.error(err);
@@ -382,7 +398,6 @@ async function fetchLinkedIn() {
 
 export const getStaticProps = (async (context) => {
   const events = await fetchGithub();
-
   const { posts, bio } = await fetchLinkedIn();
 
   return {

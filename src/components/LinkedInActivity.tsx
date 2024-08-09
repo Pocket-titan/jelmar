@@ -153,7 +153,8 @@ const Post = ({ post, bio }: { post: LinkedInPost; bio: LinkedInBio }) => {
         </Right>
       </First>
       <Second dangerouslySetInnerHTML={{ __html: description }} />
-      <Images images={post.images} />
+      <Images images={post.images_sk_img || []} />
+      {post.opengraph && post.opengraph}
     </MyListItem>
   );
 };
@@ -257,6 +258,7 @@ type LinkedInPost = {
   date_time: string;
   post_date_time: string;
   post_date: string;
+  opengraph?: any;
   description: string;
   images: string[];
   images_sk_img: string[];
