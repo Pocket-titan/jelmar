@@ -1,3 +1,5 @@
+import { Feed } from "feed";
+import { Frontmatter } from "@components/MDXContent";
 import type { ReactNode } from "react";
 
 export function capitalize(str: string): string {
@@ -128,3 +130,52 @@ export function isBase64(str: string) {
     return false;
   }
 }
+
+
+
+export const generateFeed = async (posts: Frontmatter[], kind: string) => {
+  const feed = new Feed({
+    title: "Jelmar's blog",
+    id: "https://jelmar.eu/blog",
+    link: "https://jelmar.eu/blog",
+    description: "Jelmar's blog feed",
+    favicon: "http://jelmar.eu/favicon.ico",
+    language: "en",
+    copyright: `All rights reserved ${new Date(Date.now()).getFullYear()}, Jelmar Gerritsen`,
+    feedLinks: {
+      json: "https://jelmar.eu/json",
+      atom: "https://jelmar.eu/atom",
+      rss: "https://jelmar.eu/rss",
+    },
+    author: {
+      name: "Jelmar Gerritsen",
+      email: "jelmargerritsen@gmail.com",
+      link: "https://jelmar.eu",
+    },
+  });
+
+  feed.addCategory("Science");
+
+  posts.forEach((post) => {
+    feed.addItem({
+      title: post.title,
+      id: post.slug,
+      link: `https://jelmar.eu/blog/${post.slug}`,
+      description: post.excerpt,
+      date: new Date(post.date),
+      image: post.image ? `https://jelmar.eu${post.image.src}` : undefined,
+    });
+  });
+
+  if (kind === "atom") {
+    return feed.atom1();
+  }
+
+  if (kind === "json") {
+    return feed.json1();
+  }
+
+  if (kind === "rss") {
+    return feed.rss2();
+  }
+};
